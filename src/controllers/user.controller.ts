@@ -13,23 +13,19 @@ export async function getUserById(req:Request,res:Response){
     return res.json(response)
 }
 
-// export async function createUser(req:Request,res:Response) {
-//     try {
-//         const { Email , name } = req.body;
-//         console.log(Email,name);
-//         const response = await createUserService(Email,name);
-//         return res.status(201).json({success:true,data:response});
+export async function createUser(req:Request,res:Response) {
+    try {
+        const { Email , name } = req.body;
+        console.log(Email,name);
+        const response = await createUserService(Email,name);
+        return res.status(201).json({success:true,data:response});
 
-//     } catch (error:any) {
-//         console.log("Error in create user controller");
-//         res.status(500).json({success:false,message: error.message})
-//     }
-// }
-
-export async function createUser(req: Request, res: Response) {
-    console.log(req.body);
-    res.json({});
+    } catch (error:any) {
+        console.log("Error in create user controller");
+        res.status(500).json({success:false,message: error.message})
+    }
 }
+
 
 export async function updateUser (req:Request,res:Response){
     try {

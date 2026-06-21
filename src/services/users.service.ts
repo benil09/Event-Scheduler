@@ -1,6 +1,7 @@
 
 
 import {getAllUsers, getUserById,createUserRep,updateUserRep, deleteUserRep} from "../repositories/user.repository.js"
+import { notFound } from "../utils/api-error.js";
 
 
 export async function getAllUsersService(){
@@ -11,7 +12,7 @@ export async function getUserByIdService(id:number){
 
     const resp= await getUserById(id);
     if(!resp){
-        throw new Error("User not found")
+        throw  notFound("User not found")
     }
     return resp;
 }

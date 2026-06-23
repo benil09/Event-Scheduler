@@ -1,7 +1,7 @@
 import express from "express"
-import { getAllUsers,getUserById,createUser } from "../controllers/user.controller.js";
+import { getAllUsers,getUserById,createUser, updateUser, deleteUser } from "../controllers/user.controller.js";
 import { validate } from "../middlewares/validate.js";
-import { createUserSchema } from "../dtos/user.dto.js";
+import { createUserSchema, updateUserSchema } from "../dtos/user.dto.js";
 
  const userRouter  = express.Router();
 
@@ -9,6 +9,8 @@ import { createUserSchema } from "../dtos/user.dto.js";
 userRouter.get("/",getAllUsers);
 userRouter.get("/:id",getUserById);
 userRouter.post("/createUser",validate(createUserSchema),createUser)
+userRouter.put("/:id",validate(updateUserSchema),updateUser)
+userRouter.delete("/:id",deleteUser)
 
 
 export default userRouter;

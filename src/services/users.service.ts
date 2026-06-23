@@ -1,7 +1,7 @@
 
 
-import { createUserDto } from "../dtos/user.dto.js";
-import {getAllUsers, getUserById,createUserRep, findByEmail} from "../repositories/user.repository.js"
+import { createUserDto, updateUserDto } from "../dtos/user.dto.js";
+import {getAllUsers, getUserById,createUserRep, findByEmail, updateUserRep, deleteUserRep} from "../repositories/user.repository.js"
 import { conflict, notFound } from "../utils/api-error.js";
 
 
@@ -33,5 +33,39 @@ export  const createUserService = async (data:createUserDto)=>{
 
     return response;
 }
+
+export const updateUserService = async (id: number, data: updateUserDto) => {
+    const user = await getUserById(id);
+    if (!user) {
+        throw notFound("User not found");
+    }
+
+    if (data.Email) {
+        const existingUser = await findByEmail(data.Email);
+        if (existingUser && existingUser.id !== id) {
+            throw conflict("Email already in use");
+        }
+    }
+
+    const response = await updateUserRep(id, data);
+    if (!response) {
+        throw new Error("Unable to update user");
+    }
+    return response;
+}
+
+export const deleteUserService = async (id: number) => {
+    const user = await getUserById(id);
+    if (!user) {
+        throw notFound("User not found");
+    }
+
+    const response = await deleteUserRep(id);
+    if (!response) {
+        throw new Error("Unable to delete user");
+    }
+    return response;
+}
+
 
 

@@ -4,11 +4,13 @@ import { createUserDto, updateUserDto } from "../dtos/user.dto.js";
 import {getAllUsers, getUserById,createUserRep, findByEmail, updateUserRep, deleteUserRep} from "../repositories/user.repository.js"
 import { conflict, notFound } from "../utils/api-error.js";
 
-
+// find all user service
 export async function getAllUsersService(){
     const resp= await getAllUsers();
     return resp;
 }
+
+// find user by id service 
 export async function getUserByIdService(id:number){
 
     const resp= await getUserById(id);
@@ -18,6 +20,7 @@ export async function getUserByIdService(id:number){
     return resp;
 }
 
+// create user service
 export  const createUserService = async (data:createUserDto)=>{
 
     //check if the user already exists or not 
@@ -34,6 +37,7 @@ export  const createUserService = async (data:createUserDto)=>{
     return response;
 }
 
+// update user service
 export const updateUserService = async (id: number, data: updateUserDto) => {
     const user = await getUserById(id);
     if (!user) {
@@ -54,6 +58,7 @@ export const updateUserService = async (id: number, data: updateUserDto) => {
     return response;
 }
 
+// delete user service
 export const deleteUserService = async (id: number) => {
     const user = await getUserById(id);
     if (!user) {

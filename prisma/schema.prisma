@@ -14,8 +14,8 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  EventTypes EventTypes[] 
-  
+  EventTypes EventTypes[]
+
   @@map("users")
 }
 
@@ -25,6 +25,7 @@ model EventTypes {
   hostId          Int
   title           String
   description     String?
+  slug            String   @unique
   locationType    String   @default("online")
   locationValue   String?
   durationMin     Int
@@ -34,7 +35,8 @@ model EventTypes {
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
-  host User @relation(fields: [hostId] , references:[id],onDelete:Cascade)
+  host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
 
+  @@unique([hostId, slug])
   @@map("event_types")
 }

@@ -11,10 +11,16 @@ model User {
   id        Int      @id @unique @default(autoincrement())
   Email     String   @unique
   name      String
+  slug      String   @unique
+  timezone  String   @default("UTC")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  EventTypes EventTypes[]
+  EventTypes            EventTypes[]
+  AvailabilityRule      AvailabilityRule[]
+  AvailabilityException AvailabilityException[]
+  Slots                 Slot[]
+  Bookings              Booking[]               @relation("HostBookings")
 
   @@map("users")
 }
@@ -37,6 +43,95 @@ model EventTypes {
 
   host User @relation(fields: [hostId], references: [id], onDelete: Cascade)
 
+  Slots    Slot[]
+  Bookings Booking[]
+
   @@unique([hostId, slug])
   @@map("event_types")
+}
+
+model AvailabilityRule {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  weekday   Int
+  startTime String
+  endTime   String
+  isActive  Boolean  @default(true)
+  timezone  String   @default("UTC")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, weekday]) //composite index -> alot of time we want to check the availability of a user on a particular day
+  @@map("availability_rules")
+}
+
+model AvailabilityException {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  date      DateTime @db.Date
+  type      String
+  startTime String?
+  endTime   String?
+  timezone  String   @default("UTC")
+  reason    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId, date]) // composite index -> alot of time we want to check the availability of a user on a particular date
+  @@map("availability_exceptions")
+}
+
+model Slot {
+  id          Int      @id @default(autoincrement())
+  hostId      Int
+  eventTypeId Int
+  startAt     DateTime
+  endAt       DateTime
+  status      String   @default("AVAILABLE")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  eventType EventTypes @relation(fields: [eventTypeId], references: [id], onDelete: Cascade)
+  host      User       @relation(fields: [hostId], references: [id], onDelete: Cascade)
+
+  Bookings Booking[]
+
+  // for creating indexes it is important to know the query patterns , if we dont know the query pattern for our db
+  // randomly adding indexes is useless
+  @@unique([eventTypeId, startAt, endAt])
+  @@index([startAt, status, eventTypeId])
+  @@index([hostId, startAt])
+  @@map("slots")
+}
+
+model Booking {
+  id              Int       @id @default(autoincrement())
+  hostId          Int
+  eventTypeId     Int
+  slotId          Int
+  inviteeEmail    String
+  inviteeNote     String?
+  inviteeName     String?
+  status          String    @default("PENDING")
+  meetLink        String?
+  calenderEventId String?
+  cancelledAt     DateTime?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  host      User       @relation("HostBookings", fields: [hostId], references: [id], onDelete: Cascade)
+  eventType EventTypes @relation(fields: [eventTypeId], references: [id], onDelete: Cascade)
+  slot      Slot       @relation(fields: [slotId], references: [id], onDelete: Restrict)
+
+  @@unique([slotId, inviteeEmail])
+  @@index([hostId])
+  @@index([status])
+  @@index([inviteeEmail, status])
+  @@map("bookings")
 }

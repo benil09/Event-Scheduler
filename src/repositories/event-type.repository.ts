@@ -79,12 +79,11 @@ export async function slugExistsForHost(hostId: number, slug: string) {
     return count > 0;
 }
 
-export async function findActiveEventTypesByHost(hostId: number,slug:string) {
+export async function findActiveEventTypesByHost(hostId: number) {
    const eventTypes = await prisma.eventTypes.findMany({
     where:{
         hostId,
         isActive:true,
-        slug
     }
    })
    return eventTypes;

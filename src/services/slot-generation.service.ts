@@ -66,8 +66,8 @@ export function splitIntoSlots(windows:TimeWindow[], durationInMinutes:number , 
     for(const window of windows){
         let cursor = window.start
 
-        while(cursor.plus({minute:totalMinutes}) <= window.end ){
-            const slotStart = cursor.plus({minutes:bufferAfterMinutes})
+        while(cursor.plus({minutes:totalMinutes}) <= window.end ){
+            const slotStart = cursor.plus({minutes:bufferBeforeMinutes})
             const slotEnd = slotStart.plus({minutes:durationInMinutes})
 
             slots.push({start : slotStart , end : slotEnd })
@@ -85,6 +85,7 @@ export function subtractWindows(windows:TimeWindow[],block:TimeWindow):TimeWindo
         const result :TimeWindow[] = [];
 
         for(const window of windows ){
+            //Luxon has an Interval class. Instead of manually checking, Does A overlap B? Luxon already knows how.
             const interval = Interval.fromDateTimes(window.start,window.end)
             const blockIntervals = Interval.fromDateTimes(block.start,block.end)
 
@@ -103,6 +104,7 @@ export function subtractWindows(windows:TimeWindow[],block:TimeWindow):TimeWindo
         return result.filter(win=>win.start <= win.end); // drop zero length interval
 }   
 
+//Its entire job is to answer one simple question: “Can this slot still be booked?”If the answer is No, don’t show it.
 export function overlapsBooked(slot:TimeWindow,bookedSlots:TimeWindow[],bufferBeforeMinutes:number , bufferAfterMinutes:number):boolean{
     const paddedStart = slot.start.minus({minutes:bufferBeforeMinutes})
     const paddedEnd = slot.end.plus({minutes:bufferAfterMinutes})
@@ -115,9 +117,9 @@ export function overlapsBooked(slot:TimeWindow,bookedSlots:TimeWindow[],bufferBe
         return interval.overlaps(bookedInterval);
     }
     );
-}
+}           
 
-export function applyExceptionsForDate(date:DateTime , baseWindows:TimeWindow[] , exceptions:Array<{type:"BLOCK_FULL_DAY"| "BLOCK_PARTIAL" | "ADD_AVAILABLE_WINDOW" ,startTime:string | null  , endTime:string | null ,timeZone: string ,isAvailable:boolean}> ): TimeWindow[]{
+export function applyExceptionsForDate(date:DateTime , baseWindows:TimeWindow[] , exceptions:Array<{type:string ,startTime:string | null  , endTime:string | null ,timeZone: string }> ): TimeWindow[]{
     let windows = [... baseWindows]
 
     for(const ex of exceptions){
@@ -147,8 +149,15 @@ export function applyExceptionsForDate(date:DateTime , baseWindows:TimeWindow[] 
 export function windowsForWeekdayRule(date:DateTime , weekday:number , startTime:string , endTime:string , timeZone : string ):TimeWindow[]{
     if(date.weekday !== weekday) return [];
 
-    const start = parseTimeOnDate(date , startTime , timeZone);
-    const end = parseTimeOnDate(date , endTime , timeZone);
+    const localDate = date.setZone(timeZone).startOf('day')
+    const luxonWeekday = weekday === 0 ? 7 : weekday;
 
+    if(date.weekday !== luxonWeekday) return [];
+
+    const start = parseTimeOnDate(localDate , startTime , timeZone);
+    const end = parseTimeOnDate(localDate , endTime , timeZone);
+
+    if(!start.isValid && !end.isValid && start >= end) return [];
+    
     return [{start , end}]
 }

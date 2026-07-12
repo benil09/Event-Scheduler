@@ -20,6 +20,7 @@ import {
 } from "../dtos/availability-rule.dto.js";
 import { forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
+import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
 
 // Helper function to verify user existence
 async function verifyUserExists(userId: number) {
@@ -44,7 +45,9 @@ export async function getActiveAvailabilityRulesByUserService(userId: number) {
 // Create an availability rule
 export async function createAvailabilityRuleService(userId: number, data: CreateAvailabilityRuleDto) {
     await verifyUserExists(userId);
-    return await createAvailabilityRuleRepo(userId, data);
+    const result = await createAvailabilityRuleRepo(userId, data);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Update an availability rule
@@ -56,7 +59,9 @@ export async function updateAvailabilityRuleService(id: number, userId: number, 
     if (rule.userId !== userId) {
         throw forbidden("Unauthorized");
     }
-    return await updateAvailabilityRuleRepo(id, data);
+    const result = await updateAvailabilityRuleRepo(id, data);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Delete an availability rule
@@ -68,7 +73,9 @@ export async function deleteAvailabilityRuleService(id: number, userId: number) 
     if (rule.userId !== userId) {
         throw forbidden("Unauthorized");
     }
-    return await removeAvailabilityRuleRepo(id);
+    const result = await removeAvailabilityRuleRepo(id);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Get all exceptions for a user
@@ -80,7 +87,9 @@ export async function getExceptionsByUserService(userId: number) {
 // Create an exception
 export async function createExceptionService(userId: number, data: createAvailabilityExceptionDto) {
     await verifyUserExists(userId);
-    return await createException(userId, data);
+    const result = await createException(userId, data);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Update an exception
@@ -92,7 +101,9 @@ export async function updateExceptionService(id: number, userId: number, data: U
     if (exception.userId !== userId) {
         throw forbidden("Unauthorized");
     }
-    return await updateException(id, data);
+    const result = await updateException(id, data);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Delete an exception
@@ -104,7 +115,9 @@ export async function deleteExceptionService(id: number, userId: number) {
     if (exception.userId !== userId) {
         throw forbidden("Unauthorized");
     }
-    return await removeException(id);
+    const result = await removeException(id);
+    await regenerateHostSlotsWorkflow({ hostId: userId });
+    return result;
 }
 
 // Get exceptions in range

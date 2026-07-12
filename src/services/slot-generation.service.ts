@@ -148,8 +148,6 @@ export function applyExceptionsForDate(date:DateTime , baseWindows:TimeWindow[] 
 }
 
 export function windowsForWeekdayRule(date:DateTime , weekday:number , startTime:string , endTime:string , timeZone : string ):TimeWindow[]{
-    if(date.weekday !== weekday) return [];
-
     const localDate = date.setZone(timeZone).startOf('day')
     const luxonWeekday = weekday === 0 ? 7 : weekday;
 

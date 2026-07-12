@@ -11,3 +11,42 @@ export async function getAllBookedSlotsByHostInRangeRepo(hostId:number,startDate
         }
     })
 }
+
+export async function upsertAvailableSlotRepo(hostId: number, eventTypeId: number, startAt: Date, endAt: Date) {
+    return prisma.slot.upsert({
+        where: {
+            eventTypeId_startAt_endAt: {
+                eventTypeId,
+                startAt,
+                endAt,
+            }
+        },
+        create: {
+            hostId,
+            eventTypeId,
+            startAt,
+            endAt,
+            status: 'AVAILABLE',
+        },
+        update: {
+            status: 'AVAILABLE',
+        }
+    });
+}
+
+export async function getFutureBookedOrBlockedSlotsRepo(eventTypeId: number, fromDate: Date) {
+    return prisma.slot.findMany({
+        where: {
+            eventTypeId,
+            startAt: { gte: fromDate },
+            status: { in: ["BOOKED", "BLOCKED"] }
+        }
+    });
+}
+
+export async function updateSlotStatusRepo(id: string, status: 'AVAILABLE' | 'BOOKED' | 'BLOCKED') {
+    return prisma.slot.update({
+        where: { id },
+        data: { status }
+    });
+}

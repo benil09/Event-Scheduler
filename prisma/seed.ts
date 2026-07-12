@@ -13,6 +13,7 @@ async function main() {
     data: {
       Email: "john.doe@example.com",
       name: "John Doe",
+      slug: "john-doe",
     },
   });
 
@@ -20,7 +21,7 @@ async function main() {
     data: {
       Email: "jane.smith@example.com",
       name: "Jane Smith",
-      slug
+      slug: "jane-smith",
     },
   });
 

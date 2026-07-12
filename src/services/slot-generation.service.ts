@@ -91,6 +91,7 @@ export function subtractWindows(windows:TimeWindow[],block:TimeWindow):TimeWindo
 
             if(!interval.overlaps(blockIntervals)){
                 result.push(window);
+                continue;
             } else {
                 if(block.start > window.start){
                     result.push({start:window.start , end:block.start})

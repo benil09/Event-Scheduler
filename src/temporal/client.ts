@@ -50,7 +50,7 @@ export async function startWorkflow(
 
 // async mechanism to start the workflow
 export async function regenerateHostSlotsWorkflow(input : RegenerateHostSlotInput){
-    return startWorkflow('RegenerateHostSlotsWorkflow' , 
+    return startWorkflow('regenerateHostSlotsWorkflow' , 
                          `regenerate-host-slots-${input.hostId}-${Date.now()}` ,
                          [input])
 }

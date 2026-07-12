@@ -30,6 +30,7 @@ availabilityRouter.post("/rules", validate(createAvailabilityRuleSchema), create
 availabilityRouter.patch("/rules/:id", validate(updateAvailabilityRuleBaseSchema), updateAvailabilityRule);
 availabilityRouter.delete("/rules/:id", deleteAvailabilityRule);
 
+
 // Exceptions
 availabilityRouter.get("/exceptions", getExceptionsByUser);
 availabilityRouter.post("/exceptions", validate(createAvailabilityExceptionBaseSchema), createException);

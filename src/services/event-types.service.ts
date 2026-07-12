@@ -4,6 +4,7 @@ import { CreateEventTypeDto,UpdateEventTypeDto } from "../dtos/event-type.dto.js
 import slug from "slug";
 import { conflict, forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
+import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
 
 
 export async function getEventTypesByUserIdService (hostId: number){
@@ -30,8 +31,10 @@ export async function createEventTypeService(hostId:number,data:CreateEventTypeD
     if(isSlugTaken){
         throw conflict("slug is already taken , please try another")
     }
-
-    return createEventTypeRepo(hostId,{...data ,slug:slugPassed});  
+    const eventType =  createEventTypeRepo(hostId,{...data ,slug:slugPassed})
+    await regenerateHostSlotsWorkflow({hostId})
+    
+    return eventType;
 
 }
 

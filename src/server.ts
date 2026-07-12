@@ -11,11 +11,11 @@ dotenv.config()
 async function startServer() {
     await connectDB();
     app.listen(PORT, async () => {
-        console.log(`server is  running on port ${PORT}`);
+        console.log(`[Server]  server is  running on port ${PORT}`);
     });
 }
 
 startServer().catch((error)=>{
-        console.log("Error connecting the server : ",error);
+        console.log("[Server] Error connecting the server : ",error);
         process.exit(1);
 })

@@ -109,6 +109,7 @@ model Slot {
   @@map("slots")
 }
 
+// A User can have many booking but one booking belongs to only one user. 1:M relation
 model Booking {
   id              Int       @id @default(autoincrement())
   hostId          Int

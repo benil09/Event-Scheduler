@@ -6,11 +6,12 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "nodemon --watch src --ext ts --exec 'tsx src/server.ts'",
-    "dev:worker":"nodemon --watch src --ext ts --exec 'tsx src/temporal/worker.ts'",
+    "dev:worker": "nodemon --watch src --ext ts --exec 'tsx src/temporal/worker.ts'",
     "prisma:format": "npx prisma format",
     "prisma:migrate": "npx prisma migrate dev",
     "prisma:generate": "npx prisma generate",
     "prisma:all": "npm run prisma:format && npm run prisma:migrate && npm run prisma:generate",
+    "prisma:studio":"npx prisma studio",
     "prisma:seed": "npx prisma db seed"
   },
   "keywords": [],
@@ -33,6 +34,7 @@
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
+    "@types/k6": "^2.0.0",
     "@types/luxon": "^3.7.2",
     "@types/node": "^25.9.3",
     "@types/pg": "^8.20.0",

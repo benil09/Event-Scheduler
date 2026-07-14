@@ -55,7 +55,10 @@ export async function updateEventTypeService(eventId:number , data:UpdateEventTy
         }
     }
 
-    return updateEventTypeRepo(eventId,data);
+    const updatedEvent = await updateEventTypeRepo(eventId,data);
+    await regenerateHostSlotsWorkflow({hostId});
+
+    return updatedEvent;
 
 }
 
@@ -69,7 +72,11 @@ export async function deleteEventTypeService(hostId:number , eventId:number){
     if(eventType.hostId !== hostId) {
         throw forbidden('You are not authorized to view this event type');
     }
-    return await deleteEventTypeRepo(eventId);
+
+    const removedEvent = await deleteEventTypeRepo(eventId);
+    await regenerateHostSlotsWorkflow({hostId});
+
+    return removedEvent;
 }
 
 export async function getEventTypePublic(EventSlug:string , hostId:number){

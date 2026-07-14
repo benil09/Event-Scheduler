@@ -1,9 +1,9 @@
 import express,{Express} from 'express'
 const app:Express = express();
 import userRouter from './routes/user.routes.js';
-import eventTypesRouter from './routes/event-types.route.js';
-import availabilityRouter from './routes/availability.route.js';
-import { publicEventRouter } from './routes/public-event.route.js';
+import eventTypesRouter from './routes/event-types.routes.js';
+import availabilityRouter from './routes/availability.routes.js';
+import { publicEventRouter } from './routes/public-event.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 
 

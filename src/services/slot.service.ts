@@ -19,11 +19,11 @@ export async function regenerateHostSlots(input:RegenerateHostSlotInput){
 
     const from = input.from 
         ? DateTime.fromISO(input.from,{zone:'utc'}).startOf('day')
-        : DateTime.now().startOf('day')
+        : DateTime.now().startOf('day').toUTC();
 
     const to = input.to 
         ? DateTime.fromISO(input.to,{zone:'utc'}).endOf('day') 
-        : from.plus({days:SLOT_GENERATION_DAYS}).endOf('day');
+        : from.plus({days:SLOT_GENERATION_DAYS}).endOf('day').toUTC();
 
     
     //Best Part

@@ -1,5 +1,5 @@
 import { getDbClient,type DbClient } from "./db-client.js";
-
+import {prisma} from "../config/database.js";
 
 export interface CreateBookingData {
     slotId: string;
@@ -42,6 +42,17 @@ export async function getBookingsByHost(hostId: number, db?: DbClient) {
         },
         orderBy: {
             createdAt: "desc",
+        },
+    });
+}
+
+export async function findBookingById(bookingId: number) {
+    return prisma.booking.findUnique({
+        where: { id: bookingId },
+        include: {
+            slot: true,
+            eventType: true,
+            host: true,
         },
     });
 }

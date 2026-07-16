@@ -54,3 +54,9 @@ export async function regenerateHostSlotsWorkflow(input: RegenerateHostSlotInput
         `regenerate-host-slots-${input.hostId}-${Date.now()}`,
         [input])
 }
+
+export async function sendBookingConfirmationEmailWorkflow(bookingId: number) {
+    return startWorkflow('sendBookingConfirmationEmailWorkflow',
+        `send-booking-confirmation-email-${bookingId}`,
+        [bookingId])
+}

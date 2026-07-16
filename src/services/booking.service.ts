@@ -8,7 +8,7 @@ import {
     lockSlotForUpdate,
     markSlotBooked,
 } from "../repositories/slots.repository.js";
-import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
+import { regenerateHostSlotsWorkflow, sendBookingConfirmationEmailWorkflow } from "../temporal/client.js";
 
 
 
@@ -80,7 +80,8 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
             tx
         );
     });
-    triggerSlotRegen(userId,booking.slot.startAt)
+    await triggerSlotRegen(userId,booking.slot.startAt)
+    await sendBookingConfirmationEmailWorkflow(booking.id)
     return formatBookingResponse(booking);
 
 }

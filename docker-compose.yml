@@ -24,3 +24,8 @@ services:
           TEMPORAL_CORS_ORIGIN: http://localhost:3000,http://localhost:5173
         ports:
             - "8080:8080"
+    mailhog:
+      image: mailhog/mailhog:latest
+      ports:
+        - "8025:8025" # web 
+        - "1025:1025" #smtp

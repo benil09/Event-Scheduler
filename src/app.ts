@@ -4,6 +4,7 @@ import userRouter from './routes/user.routes.js';
 import eventTypesRouter from './routes/event-types.routes.js';
 import availabilityRouter from './routes/availability.routes.js';
 import { publicEventRouter } from './routes/public-event.routes.js';
+import bookingRouter from './routes/booking.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 
 
@@ -25,5 +26,6 @@ app.use("/api/users",userRouter);// if the route starts with users the express a
 app.use("/api/event-types", eventTypesRouter);
 app.use("/api/availability", availabilityRouter);
 app.use("/api/public", publicEventRouter);
+app.use("/api/bookings", bookingRouter);
 app.use(errorHandler);
 export { app };

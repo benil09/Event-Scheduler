@@ -1,5 +1,3 @@
-import { prisma } from "../config/database.js";
-import { CreateBookingDto } from "../dtos/booking.dto.js";
 import { getDbClient,type DbClient } from "./db-client.js";
 
 
@@ -20,11 +18,30 @@ export async function createBooking( data:CreateBookingData,db?:DbClient ) {
 
     return client.booking.create({
         data: {
-            ...data,
+            slotId: data.slotId,
+            inviteeEmail: data.inviteeEmail,
+            inviteeName: data.inviteeName,
+            inviteeNote: data.inviteeNotes,
+            hostId: data.hostId,
+            eventTypeId: data.eventTypeId,
             status: "CONFIRMED",
         },
         include: {
             slot: true,
+        },
+    });
+}
+
+export async function getBookingsByHost(hostId: number, db?: DbClient) {
+    const client = getDbClient(db);
+    return client.booking.findMany({
+        where: { hostId },
+        include: {
+            slot: true,
+            eventType: true,
+        },
+        orderBy: {
+            createdAt: "desc",
         },
     });
 }

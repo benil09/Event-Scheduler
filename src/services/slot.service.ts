@@ -90,9 +90,9 @@ export async function regenerateHostSlots(input:RegenerateHostSlotInput){
 
         for(const slot of futureSlots){
             const key = `${slot.eventTypeId}|${slot.startAt.toISOString()}|${slot.endAt.toISOString()}`;
-            if(!generatedValidSlotKeys.has(key)){
+            if(!generatedValidSlotKeys.has(key) && slot.status !== 'BOOKED'){
                 // this slot is no longer valid
-                await updateSlotStatusRepo(slot.id, 'BLOCKED')
+                await updateSlotStatusRepo(slot.id, 'BOOKED')
             }
             existingSlots.add(key);
         }

@@ -1,15 +1,26 @@
 import { CreateBookingDto } from "../dtos/booking.dto.js";
 import { prisma } from "../config/database.js"
-import { createBooking } from "../repositories/booking.repository.js";
+import { createBooking, getBookingsByHost } from "../repositories/booking.repository.js";
 import { badRequest, notFound } from "../utils/api-error.js";
 import type { Slot } from "../../generated/prisma/client.js";
 import {
     findSlotById,
     lockSlotForUpdate,
     markSlotBooked,
-    markSlotBookedIfAvailable,
 } from "../repositories/slots.repository.js";
+import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
 
+
+
+// so once a booking is done we need to re-run the slot availability function and regenerate the slots for that day 
+ async function triggerSlotRegen(hostId: number, slotStartAt: Date) {
+    const date = slotStartAt.toISOString().split('T')[0];
+    await regenerateHostSlotsWorkflow({
+        hostId,
+        from: date,
+        to: date
+    });
+}
 
 
 function validateSlotForBooking(slot: Slot | null): Slot {
@@ -69,7 +80,11 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
             tx
         );
     });
-
+    triggerSlotRegen(userId,booking.slot.startAt)
     return formatBookingResponse(booking);
 
+}
+
+export async function getBookingsByHostService(hostId: number) {
+    return getBookingsByHost(hostId);
 }

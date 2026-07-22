@@ -1,0 +1,54 @@
+[2026-07-22T15:24:19.071Z] DELETE /api/bookings/1
+Payload: undefined
+Error: Booking ID is required
+Details: "ApiError: Booking ID is required\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at deleteBookingService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:95:19)\n    at deleteBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:23:28)\n    at Layer.handleRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/router/lib/layer.js:152:17)\n    at next (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/router/lib/route.js:157:13)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:37:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-07-22T15:24:44.503Z] DELETE /api/bookings/1
+Payload: {"bookingId":1}
+Error: Booking ID is required
+Details: "ApiError: Booking ID is required\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at deleteBookingService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:95:19)\n    at deleteBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:23:28)\n    at Layer.handleRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/router/lib/layer.js:152:17)\n    at next (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/router/lib/route.js:157:13)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:37:3)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-07-22T15:32:29.502Z] POST /api/bookings
+Payload: {"slotId":"cmrpxe6i40000i65onpwm8hty","inviteeEmail":"nilkamal@email.com","inviteeNotes":"Looking forward to the call","inviteeName":"Nilkamal"}
+Error: Slot has already started
+Details: "ApiError: Slot has already started\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at validateSlotForBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:36:15)\n    at <anonymous> (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:66:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:59:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------
+[2026-07-22T15:43:27.392Z] POST /api/bookings
+Payload: {"slotId":"cmrpxe6jj000wi65o6hfxwrhd","inviteeEmail":"nilkamal@email.com","inviteeNotes":"Looking forward to the call","inviteeName":"Nilkamal"}
+Error: 
+Invalid `client.booking.create()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27
+
+  16    
+  17      const client = getDbClient(db);
+  18 
+→ 19 return client.booking.create(
+Unique constraint failed on the fields: (`"slotId"`, `"inviteeEmail"`)
+Details: "PrismaClientKnownRequestError: \nInvalid `client.booking.create()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27\n\n  16    \n  17      const client = getDbClient(db);\n  18 \n→ 19 return client.booking.create(\nUnique constraint failed on the fields: (`\"slotId\"`, `\"inviteeEmail\"`)\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:59:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------
+[2026-07-22T15:44:14.192Z] POST /api/bookings
+Payload: {"slotId":"cmrpxe6jf000vi65o836sbxpq","inviteeEmail":"nilkamal@email.com","inviteeNotes":"Looking forward to the call","inviteeName":"Nilkamal"}
+Error: 
+Invalid `client.booking.create()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27
+
+  16    
+  17      const client = getDbClient(db);
+  18 
+→ 19 return client.booking.create(
+Unique constraint failed on the fields: (`"slotId"`, `"inviteeEmail"`)
+Details: "PrismaClientKnownRequestError: \nInvalid `client.booking.create()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27\n\n  16    \n  17      const client = getDbClient(db);\n  18 \n→ 19 return client.booking.create(\nUnique constraint failed on the fields: (`\"slotId\"`, `\"inviteeEmail\"`)\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:59:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------
+[2026-07-22T15:46:35.949Z] POST /api/bookings
+Payload: {"slotId":"cmrpxe6jf000vi65o836sbxpq","inviteeEmail":"nilkamal@email.com","inviteeNotes":"Looking forward to the call","inviteeName":"Nilkamal"}
+Error: 
+Invalid `client.booking.create()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27
+
+  16    
+  17      const client = getDbClient(db);
+  18 
+→ 19 return client.booking.create(
+Unique constraint failed on the fields: (`"slotId"`, `"inviteeEmail"`)
+Details: "PrismaClientKnownRequestError: \nInvalid `client.booking.create()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27\n\n  16    \n  17      const client = getDbClient(db);\n  18 \n→ 19 return client.booking.create(\nUnique constraint failed on the fields: (`\"slotId\"`, `\"inviteeEmail\"`)\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:59:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------

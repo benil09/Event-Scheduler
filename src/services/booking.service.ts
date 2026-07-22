@@ -8,7 +8,7 @@ import {
     lockSlotForUpdate,
     markSlotBooked,
 } from "../repositories/slots.repository.js";
-import { regenerateHostSlotsWorkflow, sendBookingConfirmationEmailWorkflow } from "../temporal/client.js";
+import { regenerateHostSlotsWorkflow, sendBookingConfirmationEmailWorkflow, sendCancellationEmailWorkflow } from "../temporal/client.js";
 
 
 
@@ -90,7 +90,7 @@ export async function getBookingsByHostService(hostId: number) {
     return getBookingsByHost(hostId);
 }
 
-export async function deleteBookingService(bookingId:number,userId:number){    
+export async function cancelBookingService(bookingId:number,userId:number){    
         if(!bookingId){
             throw badRequest("Booking ID is required");
         }
@@ -105,6 +105,7 @@ export async function deleteBookingService(bookingId:number,userId:number){
         if(booking.hostId !== userId){
             throw badRequest("Booking does not belong to the user");
         }
+        await sendCancellationEmailWorkflow(bookingId)
         await deleteBookingRepo(bookingId);
         return "Booking cancelled successfully";    
 }

@@ -1,4 +1,4 @@
-import { createBookingOptimistically, getBookingsByHostService,deleteBookingService } from "../services/booking.service.js";
+import { createBookingOptimistically, getBookingsByHostService, cancelBookingService } from "../services/booking.service.js";
 import { Request, Response } from "express";
 import { sendSuccess } from "../utils/api-response.js";
 
@@ -19,7 +19,7 @@ export async function getBookingsByHost(req: Request, res: Response) {
 
 export async function deleteBooking(req: Request, res: Response) {
     const userId = req.userId as number;
-    const bookingId = parseInt(req.params.bookingId as string);
-    const response = await deleteBookingService(bookingId, userId);
+    const bookingId = Number(req.params.id);
+    const response = await cancelBookingService(bookingId, userId);
     sendSuccess(res, response, 200, "Booking deleted successfully");
 }

@@ -60,3 +60,7 @@ export async function sendBookingConfirmationEmailWorkflow(bookingId: number) {
         `send-booking-confirmation-email-${bookingId}`,
         [bookingId])
 }
+
+export async function sendCancellationEmailWorkflow(bookingId:number){
+    return startWorkflow('sendCancellationEmailWorkflow',`send-cancellation-email-${bookingId}`, [bookingId])
+}

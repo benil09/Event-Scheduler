@@ -3,10 +3,9 @@ import { prisma } from "../src/config/database.js";
 async function main() {
   console.log("🌱 Starting database seeding...");
 
-  // Clear existing event types and users
-  await prisma.eventTypes.deleteMany({});
-  await prisma.user.deleteMany({});
-  console.log("Cleared existing database records.");
+  // Clear existing tables and reset auto-increment sequences
+  await prisma.$executeRawUnsafe(`TRUNCATE TABLE "users", "event_types", "availability_rules", "availability_exceptions", "slots", "bookings" RESTART IDENTITY CASCADE;`);
+  console.log("Cleared existing database records and reset ID sequences.");
 
   // 1. Create Users
   const john = await prisma.user.create({

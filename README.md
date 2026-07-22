@@ -284,18 +284,18 @@ The server will start running at `http://localhost:8000`.
 
 ---
 
-### User Endpoints (`/users`)
+### User Endpoints (`/api/users`)
 
 | Method | Endpoint | Auth | Description |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/users` | None | Fetch all registered users in the database. |
-| **GET** | `/users/:id` | None | Fetch a user profile by ID. |
-| **POST** | `/users/createUser` | None | Create a new user account (Validated via [createUserSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/user.dto.ts#L4-L9)). |
-| **PUT** | `/users/:id` | None | Update an existing user profile. |
-| **DELETE** | `/users/:id` | None | Remove a user and cascade delete their events/rules. |
+| **GET** | `/` | None | Fetch all registered users in the database. |
+| **GET** | `/:id` | None | Fetch a user profile by ID. |
+| **POST** | `/createUser` | None | Create a new user account (Validated via [createUserSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/user.dto.ts#L4-L9)). |
+| **PUT** | `/:id` | None | Update an existing user profile. |
+| **DELETE** | `/:id` | None | Remove a user and cascade delete their events/rules. |
 
-#### Create User Payload Examples
-`POST /users/createUser`
+#### Create User Payload Example
+`POST /api/users/createUser`
 ```json
 {
   "Email": "alex.green@example.com",
@@ -307,20 +307,20 @@ The server will start running at `http://localhost:8000`.
 
 ---
 
-### Event Type Endpoints (`/event-types`)
+### Event Type Endpoints (`/api/event-types`)
 
-*Note: Mutation requests require a valid user session. This is verified using the `x-user-id` HTTP header passing the authenticated user's ID.*
+*Note: Mutation requests require a valid host session. This is verified using the `x-user-id` HTTP header passing the authenticated user's ID.*
 
 | Method | Endpoint | Auth | Description |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/event-types/user/:hostId` | None | Get all event types configured by a host ID. |
-| **GET** | `/event-types/:eventId` | None | Get specific event type details by ID. |
-| **POST** | `/event-types` | `x-user-id` | Create a bookable event type (Validated via [createEventTypeSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/event-type.dto.ts#L4-L14)). |
-| **PUT** | `/event-types/:eventId` | `x-user-id` | Modify parameters of an existing event type. |
-| **DELETE** | `/event-types/:eventId` | `x-user-id` | Delete an event type. |
+| **GET** | `/user/:hostId` | None | Get all event types configured by a host ID. |
+| **GET** | `/:eventId` | None | Get specific event type details by ID. |
+| **POST** | `/` | `x-user-id` | Create a bookable event type (Validated via [createEventTypeSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/event-type.dto.ts#L4-L14)). |
+| **PUT** | `/:eventId` | `x-user-id` | Modify parameters of an existing event type. |
+| **DELETE** | `/:eventId` | `x-user-id` | Delete an event type. |
 
-#### Create Event Type Payload Examples
-`POST /event-types`
+#### Create Event Type Payload Example
+`POST /api/event-types`
 *Header: `x-user-id: 1`*
 ```json
 {
@@ -338,11 +338,64 @@ The server will start running at `http://localhost:8000`.
 
 ---
 
-### Public Scheduling Page Endpoint
+### Availability Rules & Exceptions Endpoints (`/api/availability`)
+
+*Note: All endpoints under availability require a valid host session passed via the `x-user-id` HTTP header.*
+
+#### 📅 Weekly Availability Rules
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/rules` | `x-user-id` | Retrieve all availability rules configured for the authenticated host. |
+| **GET** | `/rules/active` | `x-user-id` | Retrieve only the active weekly availability rules. |
+| **POST** | `/rules` | `x-user-id` | Create a new weekly availability rule (HH:MM time-validated). |
+| **PATCH** | `/rules/:id` | `x-user-id` | Update parameters of an existing availability rule. |
+| **DELETE** | `/rules/:id` | `x-user-id` | Delete an availability rule. |
+
+#### ⚠️ Custom Availability Exceptions
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/exceptions` | `x-user-id` | Fetch all custom availability exceptions (e.g. holidays/blocks) of the host. |
+| **POST** | `/exceptions` | `x-user-id` | Create a new availability exception (types: `BLOCK_FULL_DAY`, `BLOCK_PARTIAL`, `ADD_AVAILABLE_WINDOW`). |
+| **PATCH** | `/exceptions/:id` | `x-user-id` | Update an existing exception. |
+| **DELETE** | `/exceptions/:id` | `x-user-id` | Delete an exception. |
+
+---
+
+### Booking Endpoints (`/api/bookings`)
 
 | Method | Endpoint | Auth | Description |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/users/:userId/event-types/:slug` | None | Retrieve active event type details for booking pages (e.g. for widgets/calendars). |
+| **POST** | `/` | `x-user-id` | Books a specific generated slot. Accomplished via optimistic database transaction locks (`FOR UPDATE`) to prevent double-booking. Triggers background email via Temporal. |
+| **GET** | `/` | `x-user-id` | Retrieve all scheduled bookings where the authenticated user is the host. |
+
+#### Create Booking Payload Example
+`POST /api/bookings`
+*Header: `x-user-id: 1`*
+```json
+{
+  "slotId": "clt123abc456def789ghi",
+  "inviteeEmail": "guest@example.com",
+  "inviteeName": "John Guest",
+  "inviteeNotes": "Looking forward to our chat!"
+}
+```
+
+---
+
+### Public Scheduling Page Endpoints (`/api/public`)
+
+| Method | Endpoint | Auth | Description |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/users/:userId/event-types/:slug` | None | Retrieve public details for a booking page, including host profiles and a list of all current `AVAILABLE` future slots. |
+
+---
+
+## ⚙️ Background Tasks & Workflows (Temporal)
+
+The application utilizes **Temporal.io** as a distributed orchestration engine to run background processes and workflows asynchronously.
+
+*   **Slot Regeneration Workflow**: Whenever a user modifies their availability rules, creates exceptions, or books a slot, a Temporal workflow (`regenerateHostSlotsWorkflow`) is triggered to update the available calendar slots in the database.
+*   **Booking Email Confirmation**: After a booking is confirmed, a workflow (`sendBookingConfirmationEmailWorkflow`) initiates the activity to dispatch confirmation emails to the invitee via SMTP using Nodemailer (directed to MailHog).
 
 ---
 
@@ -350,9 +403,12 @@ The server will start running at `http://localhost:8000`.
 
 Defined scripts inside [package.json](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/package.json):
 
-*   `npm run dev`: Runs the compiler in watch mode via `nodemon` and executes typescript code files instantly with `tsx`.
-*   `npm run prisma:format`: Formats Prisma model configurations.
-*   `npm run prisma:migrate`: Creates and applies a SQL schema migration based on [schema.prisma](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/prisma/schema.prisma).
+*   `npm run dev`: Runs the API server in watch mode using `nodemon` and `tsx`.
+*   `npm run dev:worker`: Runs the Temporal worker process in watch mode to listen and process workflows/activities.
+*   `npm run prisma:format`: Formats Prisma database models.
+*   `npm run prisma:migrate`: Creates and applies database migrations.
 *   `npm run prisma:generate`: Re-generates the local Prisma Client definitions.
 *   `npm run prisma:all`: Format -> Migrate -> Re-generate all schemas sequentially.
-*   `npm run prisma:seed`: Populates the PostgreSQL database with seed files for local testing.
+*   `npm run prisma:seed`: Populates the PostgreSQL database with seed users and event types.
+*   `npm run prisma:studio`: Launches a local GUI for interacting with the database tables.
+

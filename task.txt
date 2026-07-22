@@ -2,3 +2,8 @@ Create Slot Booking feature
 
 1. how to use temporal
 
+
+Homework:
+
+1.Add a cancel booking api
+2.Send a cancel comfirmation through email

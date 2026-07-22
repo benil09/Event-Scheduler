@@ -56,3 +56,19 @@ export async function findBookingById(bookingId: number) {
         },
     });
 }
+
+
+export async function deleteBookingRepo(bookingId:number){
+    
+    return await prisma.booking.update({
+        where:{id:bookingId},
+        data:{
+            status:"CANCELLED",
+            slot:{
+                update:{status:"AVAILABLE"}
+            }
+        }
+    })
+
+    
+}

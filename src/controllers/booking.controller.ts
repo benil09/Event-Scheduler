@@ -1,6 +1,8 @@
-import { createBookingOptimistically, getBookingsByHostService } from "../services/booking.service.js";
+import { createBookingOptimistically, getBookingsByHostService,deleteBookingService } from "../services/booking.service.js";
 import { Request, Response } from "express";
 import { sendSuccess } from "../utils/api-response.js";
+
+
 
 export async function createBooking(req: Request, res: Response) {
     const userId = req.userId as number; // we will get it from headers
@@ -12,4 +14,12 @@ export async function getBookingsByHost(req: Request, res: Response) {
     const userId = req.userId as number;
     const response = await getBookingsByHostService(userId);
     sendSuccess(res, response, 200, "Bookings retrieved successfully");
+}
+
+
+export async function deleteBooking(req: Request, res: Response) {
+    const userId = req.userId as number;
+    const bookingId = parseInt(req.params.bookingId as string);
+    const response = await deleteBookingService(bookingId, userId);
+    sendSuccess(res, response, 200, "Booking deleted successfully");
 }

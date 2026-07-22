@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 
 import * as activities from "./activities/index.js";
 
-async function run(){
+async function startWorker(){
     const connection = await NativeConnection.connect({
         address:TEMPORAL_ADDRESS
     })
@@ -20,7 +20,7 @@ async function run(){
     await worker.run()
 }
 
-run().catch((err) => {
+startWorker().catch((err) => {
     console.error(`[Temporal] : Error Starting worker | ${err}`);
     process.exit(1);
 });

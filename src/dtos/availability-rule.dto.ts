@@ -1,8 +1,8 @@
 import {z} from 'zod'
 
 
-const timeRegex = /^([01]\d|2[0-3]):[0-5]\d$/;
-const dateRegex = /^\d{4}-(0[1-9]|1[0-2])-(0[1-9]|[12]\d|3[01])$/;
+const timeRegex = /^([0-1]?\d|2[0-3]):[0-5]\d$/;
+const dateRegex = /^\d{4}-(0?[1-9]|1[0-2])-(0?[1-9]|[12]\d|3[01])$/;
 
 export const createAvailabilityRuleBaseSchema = z.object({
     weekday:z.number().int().min(0).max(6),

@@ -1,6 +1,6 @@
 import { CreateBookingDto } from "../dtos/booking.dto.js";
 import { prisma } from "../config/database.js"
-import { createBooking, getBookingsByHost } from "../repositories/booking.repository.js";
+import { createBooking, deleteBookingRepo, findBookingById, getBookingsByHost } from "../repositories/booking.repository.js";
 import { badRequest, notFound } from "../utils/api-error.js";
 import type { Slot } from "../../generated/prisma/client.js";
 import {
@@ -88,4 +88,23 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
 
 export async function getBookingsByHostService(hostId: number) {
     return getBookingsByHost(hostId);
+}
+
+export async function deleteBookingService(bookingId:number,userId:number){    
+        if(!bookingId){
+            throw badRequest("Booking ID is required");
+        }
+
+        if(!userId){
+            throw badRequest("User ID is required");
+        }
+        const booking = await findBookingById(bookingId);
+        if(!booking){
+            throw notFound("Booking not found");
+        }
+        if(booking.hostId !== userId){
+            throw badRequest("Booking does not belong to the user");
+        }
+        await deleteBookingRepo(bookingId);
+        return "Booking cancelled successfully";    
 }

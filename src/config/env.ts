@@ -18,3 +18,8 @@ export const SMTP_PORT = Number(process.env.SMTP_PORT) || 1025;
 export const SMTP_USER = process.env.SMTP_USER || "";
 export const SMTP_PASSWORD = process.env.SMTP_PASSWORD || "";
 export const EMAIL_FROM = process.env.EMAIL_FROM || "[EMAIL_ADDRESS]";
+
+
+export const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID || '';
+export const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET||'';
+export const GOOGLE_REDIRECT_URI = process.env.GOOGLE_REDIRECT_URI || '';

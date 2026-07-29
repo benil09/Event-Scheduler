@@ -64,3 +64,11 @@ export async function sendBookingConfirmationEmailWorkflow(bookingId: number) {
 export async function sendCancellationEmailWorkflow(bookingId:number){
     return startWorkflow('sendCancellationEmailWorkflow',`send-cancellation-email-${bookingId}`, [bookingId])
 }
+
+export async function createGoogleCalendarEventWorkflow(bookingId: number) {
+    return startWorkflow(
+        'createGoogleCalendarEventWorkflow',
+        `create-google-calendar-event-${bookingId}`,
+        [bookingId]
+    );
+}

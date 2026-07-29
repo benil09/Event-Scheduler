@@ -6,6 +6,7 @@ import availabilityRouter from './routes/availability.routes.js';
 import { publicEventRouter } from './routes/public-event.routes.js';
 import bookingRouter from './routes/booking.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
+import googleRouter from './routes/google.routes.js';
 
 
 
@@ -40,5 +41,6 @@ app.use("/api/event-types", eventTypesRouter);
 app.use("/api/availability", availabilityRouter);
 app.use("/api/public", publicEventRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/integrations/google", googleRouter);
 app.use(errorHandler);
 export { app };

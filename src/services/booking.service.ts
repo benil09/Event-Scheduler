@@ -8,12 +8,15 @@ import {
     lockSlotForUpdate,
     markSlotBooked,
 } from "../repositories/slots.repository.js";
-import { regenerateHostSlotsWorkflow, sendBookingConfirmationEmailWorkflow, sendCancellationEmailWorkflow } from "../temporal/client.js";
-
-
+import {
+    regenerateHostSlotsWorkflow,
+    sendBookingConfirmationEmailWorkflow,
+    sendCancellationEmailWorkflow,
+    createGoogleCalendarEventWorkflow
+} from "../temporal/client.js";
 
 // so once a booking is done we need to re-run the slot availability function and regenerate the slots for that day 
- async function triggerSlotRegen(hostId: number, slotStartAt: Date) {
+async function triggerSlotRegen(hostId: number, slotStartAt: Date) {
     const date = slotStartAt.toISOString().split('T')[0];
     await regenerateHostSlotsWorkflow({
         hostId,
@@ -21,7 +24,6 @@ import { regenerateHostSlotsWorkflow, sendBookingConfirmationEmailWorkflow, send
         to: date
     });
 }
-
 
 function validateSlotForBooking(slot: Slot | null): Slot {
     if (!slot) {
@@ -54,7 +56,6 @@ function formatBookingResponse(booking: {
     };
 }
 
-
 export async function createBookingOptimistically(userId: number, dto: CreateBookingDto) {
     const booking = await prisma.$transaction(async (tx) => {
         const locked = await lockSlotForUpdate(dto.slotId, tx)
@@ -80,10 +81,10 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
             tx
         );
     });
-    await triggerSlotRegen(userId,booking.slot.startAt)
-    await sendBookingConfirmationEmailWorkflow(booking.id)
+    await triggerSlotRegen(userId, booking.slot.startAt);
+    await sendBookingConfirmationEmailWorkflow(booking.id);
+    await createGoogleCalendarEventWorkflow(booking.id);
     return formatBookingResponse(booking);
-
 }
 
 export async function getBookingsByHostService(hostId: number) {

@@ -1,414 +1,213 @@
-#  🗓️ Event-Scheduler
+# 🗓️ Event-Scheduler API
 
-[![Node.js Version](https://img.shields.io/badge/node-%3E%3D18.0.0-blue.svg)](https://nodejs.org/)
-[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-blue.svg)](https://www.typescriptlang.org/)
-[![Prisma ORM](https://img.shields.io/badge/Prisma-7.8-lightblue.svg)](https://www.prisma.io/)
-[![Express](https://img.shields.io/badge/Express-5.2-green.svg)](https://expressjs.com/)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL-blue.svg)](https://www.postgresql.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-%3E%3D18.0.0-339933.svg?style=flat&logo=node.js)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-6.0-3178C6.svg?style=flat&logo=typescript)](https://www.typescriptlang.org/)
+[![Express](https://img.shields.io/badge/Express-5.2-000000.svg?style=flat&logo=express)](https://expressjs.com/)
+[![Prisma](https://img.shields.io/badge/Prisma-7.8-2D3748.svg?style=flat&logo=prisma)](https://www.prisma.io/)
+[![PostgreSQL](https://img.shields.io/badge/PostgreSQL-12%2B-4169E1.svg?style=flat&logo=postgresql)](https://www.postgresql.org/)
+[![Temporal](https://img.shields.io/badge/Temporal-Orchestrator-7B2CBF.svg?style=flat)](https://temporal.io/)
 
-**Event-scheduler** is a high-performance, production-ready REST API backend for event scheduling, booking, and user availability management (inspired by Calendly). Built with a clean, decoupled architecture using **Node.js**, **Express**, **TypeScript**, and **Prisma ORM** with **PostgreSQL**.
-
----
-
-## 🚀 Key Features
-
-*   **User Profiles & Timezones**: Manage hosts, their unique scheduling slugs, and preferences (such as timezones).
-*   **Dynamic Event Types**: Custom bookable meeting durations, buffer times (before/after), location types (`online` / `in-person`), locations (e.g., Google Meet, Zoom), and status controls.
-*   **Availability Rules**: Granular control of weekly working hours (e.g., Monday 9 AM - 5 PM) tied to timezones.
-*   **Availability Exceptions**: Handle custom unavailable dates, holidays, or temporary schedule modifications.
-*   **Slots & Bookings Engine**: Automated calendar slots generation and booking management.
-*   **Zod Payload Validation**: Strict validation middleware on all write endpoints.
-*   **Standardized Error Handling**: Unified REST API responses and HTTP error abstractions.
+**Event-Scheduler** is a modern, high-performance appointment scheduling and booking backend engine (inspired by Calendly). Built with Node.js, Express, TypeScript, Prisma, PostgreSQL, and **Temporal.io**, it powers dynamic host availability, timezone management, double-booking prevention, and fault-tolerant background processing.
 
 ---
 
-## 🏛️ Project Architecture
+## 📌 Project Overview
 
-The project follows a modular **Controller-Service-Repository** pattern to ensure strict separation of concerns, easy testability, and high maintainability:
+Event-Scheduler simplifies calendar management and event booking for individuals and teams. Instead of back-and-forth emails to negotiate meeting times, hosts define their recurring weekly availability and specific exceptions. Invitees can view available time slots in real time and instantly book appointments.
 
-```text
- ┌──────────────────┐
- │ Client / Invitee │
- └────────┬─────────┘
-          │ HTTP Request
-          ▼
- ┌──────────────────┐
- │   Routes Layer   │
- └────────┬─────────┘
-          ├──────────────────────────┐
-          ▼ (Validate Payload)       ▼ (Verify Header)
- ┌──────────────────┐       ┌──────────────────┐
- │   Validate Mdw   │       │     Auth Mdw     │
- └────────┬─────────┘       └────────┬─────────┘
-          │                          │
-          └─────────────┬────────────┘
-                        ▼ (Call Handler)
-              ┌──────────────────┐
-              │ Controllers Layer│
-              └─────────┬────────┘
-                        ▼ (Business Logic)
-              ┌──────────────────┐
-              │  Services Layer  │
-              └─────────┬────────┘
-                        ▼ (Database Queries)
-              ┌──────────────────┐
-              │Repositories Layer│
-              └─────────┬────────┘
-                        ▼ (ORM Access)
-              ┌──────────────────┐
-              │   Prisma Client  │
-              └─────────┬────────┘
-                        ▼ (Query/Mutate)
-              ┌──────────────────┐
-              │ PostgreSQL DB    │
-              └──────────────────┘
-```
+### Core Problems Solved
+* **Automated Slot Calculation**: Converts weekly availability rules and custom holiday/block exceptions into bookable calendar slots with buffer times.
+* **Double-Booking Prevention**: Uses database transaction locks (`FOR UPDATE`) to guarantee atomic bookings even under concurrent traffic.
+* **Reliable Async Operations**: Offloads heavy tasks like slot regeneration, Google Calendar updates, and email notifications to Temporal background workflows.
+* **Multi-Timezone Conversion**: Seamlessly converts host availability across global timezones for international invitees.
 
-<details>
-<summary>👁️ Click to view Interactive Mermaid Diagram</summary>
+---
 
+## ✨ Outstanding Features
+
+* 📅 **Dynamic Weekly Availability & Exceptions**
+  * Define weekly working hours per day (e.g., Monday to Friday 09:00 - 17:00).
+  * Override regular schedules with custom exceptions (full-day blocks, partial unavailability, or added extra windows).
+  * Configure pre-meeting and post-meeting buffer times (e.g., 10 mins before/after).
+
+* 🔒 **Concurrency-Safe Atomic Booking**
+  * Employs optimistic/pessimistic PostgreSQL transaction locks to prevent race conditions when multiple users attempt to book the exact same slot simultaneously.
+
+* 🔄 **Event-Driven Workflow Orchestration (Temporal.io)**
+  * Asynchronous slot regeneration triggered upon schedule changes.
+  * Durable email notification queues for booking confirmations and cancellations.
+  * Fault-tolerant background retries and activity execution.
+
+* 📆 **Google Calendar Integration**
+  * Automated sync to create and update calendar events directly on the host's Google Calendar upon booking completion.
+
+* 🌐 **Global Timezone Support**
+  * Precise date-time transformations using Luxon to handle Daylight Saving Time (DST) and multi-region timezones accurately.
+
+* 🛡️ **Robust Validation & Error Handling**
+  * End-to-end type safety with TypeScript.
+  * Runtime request payload validation via Zod schemas.
+  * Unified REST API error handling middleware.
+
+---
+
+## 🛠️ Technologies Used & How They Help
+
+| Technology | Role | How It Helps |
+| :--- | :--- | :--- |
+| **Node.js & Express 5** | REST API Framework | Provides a lightweight, high-throughput asynchronous foundation for fast HTTP request handling. |
+| **TypeScript** | Language | Enforces compile-time type safety across controllers, services, and DTOs, reducing runtime bugs. |
+| **Prisma ORM** | Data Access | Generates type-safe database queries and handles seamless PostgreSQL schema migrations. |
+| **PostgreSQL** | Relational Database | Stores users, event types, availability rules, and slots with transactional integrity and row locking. |
+| **Temporal.io** | Workflow Engine | Guarantees durable background execution for slot regeneration, email dispatches, and third-party integrations. |
+| **Luxon** | Time & Date Utility | Simplifies complex timezone conversions, slot interval math, and buffer time calculations. |
+| **Zod** | Schema Validation | Validates incoming HTTP request bodies and query parameters before reaching business logic. |
+| **Nodemailer & MailHog** | Email Delivery | Delivers HTML booking notifications in production and captures SMTP emails locally in development. |
+| **Google APIs** | Calendar Integration | Connects with Google Calendar OAuth and Event APIs to synchronize host schedules automatically. |
+
+---
+
+## 🔄 Project Workflows
+
+### 1. Host Availability & Slot Generation Flow
 ```mermaid
-graph TD
-    Client[Client / Invitee] -->|HTTP Request| Route[Routes Layer]
-    Route -->|Validate Payload| Val[Validate Middleware]
-    Route -->|Verify Header| Auth[Auth Middleware]
-    Route -->|Call Handler| Controller[Controllers Layer]
-    Controller -->|Business Logic| Service[Services Layer]
-    Service -->|Database Queries| Repository[Repositories Layer]
-    Repository -->|ORM Access| Prisma[Prisma Client]
-    Prisma -->|Query/Mutate| PostgreSQL[(PostgreSQL Database)]
+sequenceDiagram
+    autonumber
+    actor Host
+    participant API as Express API
+    participant DB as PostgreSQL DB
+    participant Temporal as Temporal Orchestrator
+    participant Worker as Temporal Worker
+
+    Host->>API: Update Availability Rules / Exceptions
+    API->>DB: Save Rules & Exceptions
+    API->>Temporal: Trigger `slot-generation` Workflow
+    API-->>Host: 200 OK (Schedule Updated)
+    Temporal->>Worker: Execute Regenerate Slots Activity
+    Worker->>DB: Calculate & Store New Available Slots
 ```
 
-</details>
-
----
-
-## 📊 Database Schema (Prisma)
-
-The application utilizes a PostgreSQL relational database. Key relations and indexes are defined in [schema.prisma](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/prisma/schema.prisma):
-
-```text
-  ┌────────────────────────┐             ┌────────────────────────┐
-  │         users          │             │   availability_rules   │
-  ├────────────────────────┤             ├────────────────────────┤
-  │ id (PK)                │1  ──────── <│ id (PK)                │
-  │ Email                  │             │ userId (FK)            │
-  │ name                   │             │ weekday                │
-  │ slug                   │             │ startTime              │
-  │ timezone               │             │ endTime                │
-  │ createdAt / updatedAt  │             │ isActive / timezone    │
-  └────────────────────────┘             └────────────────────────┘
-              │ 1
-              │
-              │                               ┌────────────────────────┐
-              ├───────────────────────────── <│ availability_exceptions│
-              │ 1                             ├────────────────────────┤
-              │                               │ id (PK)                │
-              │                               │ userId (FK)            │
-              │                               │ date / type            │
-              │                               │ startTime / endTime    │
-              │                               └────────────────────────┘
-              │ 1
-              ├───────────────────────────── <│      event_types       │
-              │ 1                             ├────────────────────────┤
-              │                               │ id (PK)                │
-              │                               │ hostId (FK)            │
-              │                               │ title / description    │
-              │                               │ slug / locationType    │
-              │                               │ durationMin / isActive │
-              │                               └────────────────────────┘
-              │                                           │ 1
-              │                                           │
-              ├─────────────────┐                         │
-              │ 1               │ 1                       │
-              ▼                 ▼                         ▼
-  ┌────────────────────────┐    │            ┌────────────────────────┐
-  │        bookings        │    │            │         slots          │
-  ├────────────────────────┤    │            ├────────────────────────┤
-  │ id (PK)                │    │            │ id (PK)                │
-  │ hostId (FK) <──────────┼────┼────────── <│ hostId (FK)            │
-  │ eventTypeId (FK) <─────┼────┼────────── <│ eventTypeId (FK)       │
-  │ slotId (FK) <──────────┼────┘            │ startAt                │
-  │ inviteeEmail           │                 │ endAt                  │
-  │ inviteeName / Note     │                 │ status                 │
-  │ status / meetLink      │                 └────────────────────────┘
-  └────────────────────────┘
-```
-
-<details>
-<summary>👁️ Click to view Interactive Mermaid Diagram</summary>
-
+### 2. Invitee Booking Flow
 ```mermaid
-erDiagram
-    User ||--o{ EventTypes : hosts
-    User ||--o{ AvailabilityRule : defines
-    User ||--o{ AvailabilityException : exceptions
-    User ||--o{ Slot : has_slots
-    User ||--o{ Booking : host_bookings
-    EventTypes ||--o{ Slot : generates
-    EventTypes ||--o{ Booking : booked_under
-    Slot ||--o{ Booking : books_slot
+sequenceDiagram
+    autonumber
+    actor Invitee
+    participant API as Express API
+    participant DB as PostgreSQL DB
+    participant Temporal as Temporal Orchestrator
+    participant Google as Google Calendar API
 
-    User {
-        Int id PK
-        String Email UK
-        String name
-        String slug UK
-        String timezone
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    EventTypes {
-        Int id PK
-        Int hostId FK
-        String title
-        String description
-        String slug UK
-        String locationType
-        String locationValue
-        Int durationMin
-        Boolean isActive
-        Int bufferBeforeMin
-        Int bufferAfterMin
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    AvailabilityRule {
-        Int id PK
-        Int userId FK
-        Int weekday
-        String startTime
-        String endTime
-        Boolean isActive
-        String timezone
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    AvailabilityException {
-        Int id PK
-        Int userId FK
-        DateTime date
-        String type
-        String startTime
-        String endTime
-        String timezone
-        String reason
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    Slot {
-        Int id PK
-        Int hostId FK
-        Int eventTypeId FK
-        DateTime startAt
-        DateTime endAt
-        String status
-        DateTime createdAt
-        DateTime updatedAt
-    }
-
-    Booking {
-        Int id PK
-        Int hostId FK
-        Int eventTypeId FK
-        Int slotId FK
-        String inviteeEmail
-        String inviteeNote
-        String inviteeName
-        String status
-        String meetLink
-        String calenderEventId
-        DateTime cancelledAt
-        DateTime createdAt
-        DateTime updatedAt
-    }
+    Invitee->>API: Select Slot & Submit Booking (`POST /api/bookings`)
+    API->>DB: Begin Transaction & Lock Slot (`FOR UPDATE`)
+    alt Slot is AVAILABLE
+        API->>DB: Mark Slot as `BOOKED` & Create Booking Record
+        API->>DB: Commit Transaction
+        API->>Temporal: Dispatch Email & Calendar Workflows
+        API-->>Invitee: 201 Created (Booking Confirmed)
+        par Async Execution
+            Temporal->>Google: Create Google Calendar Event
+        and Async Execution
+            Temporal->>Temporal: Send Confirmation Email via SMTP
+        end
+    else Slot Already Booked
+        API->>DB: Rollback Transaction
+        API-->>Invitee: 409 Conflict (Slot Unavailable)
+    end
 ```
-
-</details>
 
 ---
 
-## 🛠️ Getting Started
+## 🚀 Quick Start Guide
 
-Follow these steps to run the development environment locally:
+Follow these instructions to run the project locally on your machine.
 
 ### 1. Prerequisites
-*   Node.js (v18 or higher)
-*   Docker & Docker Compose
-*   npm (v9 or higher)
+Ensure you have the following installed:
+* **Node.js**: v18.0.0 or higher
+* **Docker & Docker Compose**: For running PostgreSQL, Temporal, and MailHog services
+* **npm**: v9.0.0 or higher
 
-### 2. Set Up Environment Variables
-Create a `.env` file in the root directory (based on environment config in [src/config/env.ts](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/config/env.ts)):
+### 2. Environment Configuration
+Create a `.env` file in the root directory and configure the environment variables:
+
 ```env
 PORT=8000
-DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb?schema=public"
 NODE_ENV=development
+DATABASE_URL="postgresql://postgres:postgres@localhost:5432/mydb?schema=public"
+
+# Temporal Configuration
+TEMPORAL_ADDRESS="localhost:7233"
+
+# SMTP / MailHog Configuration
+SMTP_HOST="localhost"
+SMTP_PORT=1025
+SMTP_USER=""
+SMTP_PASS=""
+FROM_EMAIL="noreply@eventscheduler.com"
 ```
 
-### 3. Spin Up the Database
-Start the containerized PostgreSQL database:
+### 3. Start Infrastructure Services
+Start PostgreSQL, Temporal Orchestrator, and MailHog using Docker Compose:
+
 ```bash
-docker compose up -d postgres
+docker compose up -d
 ```
-*(Alternatively, you can run the helper script on macOS/Linux: `./scripts/start-dev.sh`)*
+
+This starts:
+* **PostgreSQL**: Port `5432`
+* **Temporal Server**: Port `7233`
+* **Temporal Web UI**: `http://localhost:8080`
+* **MailHog Web Dashboard**: `http://localhost:8025`
 
 ### 4. Database Setup & Seeding
-Format, migrate, and seed the database using Prisma commands:
+Execute database migrations and seed initial dummy data (hosts, event types, rules):
+
 ```bash
-# Run database formatting, migrations and client generation
+# Run database formatting, migrations, and generate Prisma client
 npm run prisma:all
 
-# Seed database with sample users and events
+# Seed initial test data
 npm run prisma:seed
 ```
 
-### 5. Start the Application
-Run the development server with live reload:
+### 5. Start Application Processes
+Open two terminal windows to run both the API server and the Temporal background worker:
+
+**Terminal 1 (API Server):**
 ```bash
 npm run dev
 ```
-The server will start running at `http://localhost:8000`.
 
----
-
-## 🔌 API Endpoints Reference
-
-### Health Check
-*   **`GET /health`**
-    *   **Description**: Verify application health and timestamp.
-    *   **Authentication**: None.
-
----
-
-### User Endpoints (`/api/users`)
-
-| Method | Endpoint | Auth | Description |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/` | None | Fetch all registered users in the database. |
-| **GET** | `/:id` | None | Fetch a user profile by ID. |
-| **POST** | `/createUser` | None | Create a new user account (Validated via [createUserSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/user.dto.ts#L4-L9)). |
-| **PUT** | `/:id` | None | Update an existing user profile. |
-| **DELETE** | `/:id` | None | Remove a user and cascade delete their events/rules. |
-
-#### Create User Payload Example
-`POST /api/users/createUser`
-```json
-{
-  "Email": "alex.green@example.com",
-  "name": "Alex Green",
-  "slug": "alex-green-scheduling",
-  "timezone": "America/New_York"
-}
+**Terminal 2 (Temporal Background Worker):**
+```bash
+npm run dev:worker
 ```
 
+The API will be available at `http://localhost:8000`.
+
 ---
 
-### Event Type Endpoints (`/api/event-types`)
+## 🔌 API Endpoints Summary
 
-*Note: Mutation requests require a valid host session. This is verified using the `x-user-id` HTTP header passing the authenticated user's ID.*
-
-| Method | Endpoint | Auth | Description |
+| Group | Route | Method | Description |
 | :--- | :--- | :--- | :--- |
-| **GET** | `/user/:hostId` | None | Get all event types configured by a host ID. |
-| **GET** | `/:eventId` | None | Get specific event type details by ID. |
-| **POST** | `/` | `x-user-id` | Create a bookable event type (Validated via [createEventTypeSchema](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/src/dtos/event-type.dto.ts#L4-L14)). |
-| **PUT** | `/:eventId` | `x-user-id` | Modify parameters of an existing event type. |
-| **DELETE** | `/:eventId` | `x-user-id` | Delete an event type. |
-
-#### Create Event Type Payload Example
-`POST /api/event-types`
-*Header: `x-user-id: 1`*
-```json
-{
-  "title": "45 Min Consultation",
-  "description": "One-on-one consultation slot.",
-  "locationType": "online",
-  "locationValue": "Google Meet",
-  "durationMin": 45,
-  "isActive": true,
-  "bufferBeforeMin": 5,
-  "bufferAfterMin": 5,
-  "slug": "consultation-45"
-}
-```
+| **System** | `/health` | `GET` | API Health and uptime check |
+| **Users** | `/api/users` | `GET`, `POST`, `PUT`, `DELETE` | Host profile & user management |
+| **Event Types** | `/api/event-types` | `GET`, `POST`, `PUT`, `DELETE` | Configure bookable event parameters & buffers |
+| **Availability** | `/api/availability/rules` | `GET`, `POST`, `PATCH`, `DELETE` | Weekly recurring working hours management |
+| **Exceptions** | `/api/availability/exceptions` | `GET`, `POST`, `PATCH`, `DELETE` | Specific date overrides, blocks, and windows |
+| **Bookings** | `/api/bookings` | `GET`, `POST` | Reserve slots atomically and retrieve host bookings |
+| **Public Page** | `/api/public/users/:userId/event-types/:slug` | `GET` | Public invitee view for available slots |
 
 ---
 
-### Availability Rules & Exceptions Endpoints (`/api/availability`)
+## 🔮 Future Implementation & Roadmap
 
-*Note: All endpoints under availability require a valid host session passed via the `x-user-id` HTTP header.*
-
-#### 📅 Weekly Availability Rules
-| Method | Endpoint | Auth | Description |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/rules` | `x-user-id` | Retrieve all availability rules configured for the authenticated host. |
-| **GET** | `/rules/active` | `x-user-id` | Retrieve only the active weekly availability rules. |
-| **POST** | `/rules` | `x-user-id` | Create a new weekly availability rule (HH:MM time-validated). |
-| **PATCH** | `/rules/:id` | `x-user-id` | Update parameters of an existing availability rule. |
-| **DELETE** | `/rules/:id` | `x-user-id` | Delete an availability rule. |
-
-#### ⚠️ Custom Availability Exceptions
-| Method | Endpoint | Auth | Description |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/exceptions` | `x-user-id` | Fetch all custom availability exceptions (e.g. holidays/blocks) of the host. |
-| **POST** | `/exceptions` | `x-user-id` | Create a new availability exception (types: `BLOCK_FULL_DAY`, `BLOCK_PARTIAL`, `ADD_AVAILABLE_WINDOW`). |
-| **PATCH** | `/exceptions/:id` | `x-user-id` | Update an existing exception. |
-| **DELETE** | `/exceptions/:id` | `x-user-id` | Delete an exception. |
+* 🔐 **OAuth 2.0 for Invitees**: Support social login (Google, Microsoft) for invitees during booking.
+* 👥 **Team & Collective Bookings**: Support multi-host availability matching and round-robin host assignment.
+* 🔔 **Webhook Subscriptions**: Enable real-time webhook notifications for external systems when events are booked, rescheduled, or cancelled.
+* 💳 **Payment Gateway Integration**: Seamless Stripe integration to charge for consultation bookings prior to confirmation.
+* 🔄 **Reschedule & Self-Service Cancellation Portal**: Allow invitees to modify or cancel existing bookings via secure single-use links.
+* 📊 **Analytics Dashboard**: Host metrics for total booking hours, peak booking days, and conversion rates.
 
 ---
-
-### Booking Endpoints (`/api/bookings`)
-
-| Method | Endpoint | Auth | Description |
-| :--- | :--- | :--- | :--- |
-| **POST** | `/` | `x-user-id` | Books a specific generated slot. Accomplished via optimistic database transaction locks (`FOR UPDATE`) to prevent double-booking. Triggers background email via Temporal. |
-| **GET** | `/` | `x-user-id` | Retrieve all scheduled bookings where the authenticated user is the host. |
-
-#### Create Booking Payload Example
-`POST /api/bookings`
-*Header: `x-user-id: 1`*
-```json
-{
-  "slotId": "clt123abc456def789ghi",
-  "inviteeEmail": "guest@example.com",
-  "inviteeName": "John Guest",
-  "inviteeNotes": "Looking forward to our chat!"
-}
-```
-
----
-
-### Public Scheduling Page Endpoints (`/api/public`)
-
-| Method | Endpoint | Auth | Description |
-| :--- | :--- | :--- | :--- |
-| **GET** | `/users/:userId/event-types/:slug` | None | Retrieve public details for a booking page, including host profiles and a list of all current `AVAILABLE` future slots. |
-
----
-
-## ⚙️ Background Tasks & Workflows (Temporal)
-
-The application utilizes **Temporal.io** as a distributed orchestration engine to run background processes and workflows asynchronously.
-
-*   **Slot Regeneration Workflow**: Whenever a user modifies their availability rules, creates exceptions, or books a slot, a Temporal workflow (`regenerateHostSlotsWorkflow`) is triggered to update the available calendar slots in the database.
-*   **Booking Email Confirmation**: After a booking is confirmed, a workflow (`sendBookingConfirmationEmailWorkflow`) initiates the activity to dispatch confirmation emails to the invitee via SMTP using Nodemailer (directed to MailHog).
-
----
-
-## 🛠️ Development Scripts Reference
-
-Defined scripts inside [package.json](file:///Users/nil09/Desktop/Lambda5/Event-Scheduler/package.json):
-
-*   `npm run dev`: Runs the API server in watch mode using `nodemon` and `tsx`.
-*   `npm run dev:worker`: Runs the Temporal worker process in watch mode to listen and process workflows/activities.
-*   `npm run prisma:format`: Formats Prisma database models.
-*   `npm run prisma:migrate`: Creates and applies database migrations.
-*   `npm run prisma:generate`: Re-generates the local Prisma Client definitions.
-*   `npm run prisma:all`: Format -> Migrate -> Re-generate all schemas sequentially.
-*   `npm run prisma:seed`: Populates the PostgreSQL database with seed users and event types.
-*   `npm run prisma:studio`: Launches a local GUI for interacting with the database tables.
-

@@ -3,15 +3,23 @@ Create Slot Booking feature
 1. how to use temporal
 
 
-Homework:
+Task:
 
 1.Add a cancel booking api 
 2.Send a cancel comfirmation through email
+3.Set-up temporal workflow for async processing of the cancellation email
 
 done ✅
 
 
 Next task : 
-implement auth part for the host
+implement Oauth2 for GCP calender integration
+
+done ✅
+
+Next Task :
+The Code which we are getting from the google for the refresh_token generation -> try to store that in redis cache with proper ttl.
+Whenever required fetch it from redis. 
+
 
 

@@ -28,3 +28,5 @@ export const GOOGLE_REFRESH_TOKEN = process.env.GOOGLE_REFRESH_TOKEN || '';
 export const GOOGLE_CALENDAR_ID = process.env.GOOGLE_CALENDAR_ID || '';
 
 
+export const REDIS_URI = process.env.REDIS_URI || '';
+

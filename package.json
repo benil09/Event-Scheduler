@@ -14,7 +14,6 @@
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "npx prisma db seed",
     "google:setup": "tsx src/utils/google-setup.ts"
-
   },
   "keywords": [],
   "author": "",
@@ -33,6 +32,7 @@
     "luxon": "^3.7.2",
     "nodemailer": "^9.0.3",
     "pg": "^8.21.0",
+    "redis": "^6.2.0",
     "slug": "^11.0.1",
     "zod": "^4.4.3"
   },

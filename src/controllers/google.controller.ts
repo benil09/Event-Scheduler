@@ -1,12 +1,14 @@
+import { redis } from "../config/redis.js";
 import { exchangeSetupCode } from "../services/googleCalneder.service.js"
 import { Request, Response } from "express";
-import {redis} from '../config/redis.js'
+
 
 
 export async function handleGoogleCallback(req: Request, res: Response) {
     const code = req.query.code as string;
-    await redis.set('google-calendar-token',code)
     const { refreshToken, email, name, avatar } = await exchangeSetupCode(code);
+    await redis.set('GOOGLE_REFRESH_TOKEN', refreshToken);
+
     res.status(200).json({
         success: true,
         data: {

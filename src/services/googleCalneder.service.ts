@@ -3,6 +3,7 @@ import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI, GOOGLE_REF
 import { google } from 'googleapis'
 import { findBookingById } from '../repositories/booking.repository.js'
 import { notFound } from '../utils/api-error.js'
+import { redis } from '../config/redis.js'
 
 
 
@@ -46,13 +47,15 @@ export function getSetupAuthUrl(){
     
 }
 
+// exchange the code which we get from google for refresh token
 export async function exchangeSetupCode(code:string){
     const client = getOauthClient();
         const {tokens} = await client.getToken(code);
+        console.log(tokens)
         if(!tokens.refresh_token){
         throw new Error('No refresh token returned - user may have denied')
     }
-
+    await redis.set("GOOGLE_REFRESH_TOKEN",tokens.refresh_token)
     client.setCredentials(tokens)
 
 
@@ -61,7 +64,7 @@ export async function exchangeSetupCode(code:string){
             auth:client
     })
 
-        const {data} = await oauth2.userinfo.get(); // failing
+        const {data} = await oauth2.userinfo.get(); 
         // instead of returning we should set this refresh token to redis
     return {
             refreshToken:tokens.refresh_token,
@@ -77,8 +80,12 @@ export async function getGoogleCalendarClient(){
     }
 
     const client = getOauthClient();
+    const refreshToken = await redis.get("GOOGLE_REFRESH_TOKEN")
+    if(!refreshToken){
+        throw new Error("Refresh token not found")
+    }
     client.setCredentials({
-       refresh_token:GOOGLE_REFRESH_TOKEN // this should be ideally returned from redis
+       refresh_token:refreshToken // this should be ideally returned from redis ✅
         
     })
 

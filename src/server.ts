@@ -13,7 +13,7 @@ async function startServer() {
     await connectDB();
     await connectRedis();
     app.listen(PORT, async () => {
-        console.log(`[Server]  server is  running on port ${PORT}`);
+        console.log(`[Server]   Server is  running on port ${PORT}`);
     });
 }
 

@@ -6,14 +6,14 @@ import { Request, Response } from "express";
 
 export async function handleGoogleCallback(req: Request, res: Response) {
     const code = req.query.code as string;
-    const { refreshToken, email, name, avatar } = await exchangeSetupCode(code);
-    await redis.set('GOOGLE_REFRESH_TOKEN', refreshToken);
+    const { email, name, avatar } = await exchangeSetupCode(code);
+    const refresh_token =await redis.get('GOOGLE_REFRESH_TOKEN')
+    console.log(refresh_token)
 
     res.status(200).json({
         success: true,
         data: {
             email,
-            refreshToken,
             name,
             avatar
         }

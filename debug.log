@@ -82,3 +82,16 @@ Payload: {"slotId":"cmrpxe6ku0027i65ou3m4btqg","inviteeEmail":"nilkamal@email.co
 Error: Slot is not available
 Details: "ApiError: Slot is not available\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at validateSlotForBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:34:15)\n    at <anonymous> (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:67:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:60:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
 -------------------
+[2026-08-05T19:35:10.584Z] POST /api/bookings
+Payload: {"slotId":"cms6cjs6o000ml55o67xou14v","inviteeEmail":"nilkamal.2023ug2027@iiitranchi.ac.in","inviteeNotes":"Looking forward to the call","inviteeName":"Nilkamal"}
+Error: 
+Invalid `client.booking.create()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27
+
+  16    
+  17      const client = getDbClient(db);
+  18 
+→ 19 return client.booking.create(
+Unique constraint failed on the fields: (`"slotId"`, `"inviteeEmail"`)
+Details: "PrismaClientKnownRequestError: \nInvalid `client.booking.create()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/booking.repository.ts:19:27\n\n  16    \n  17      const client = getDbClient(db);\n  18 \n→ 19 return client.booking.create(\nUnique constraint failed on the fields: (`\"slotId\"`, `\"inviteeEmail\"`)\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:60:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------

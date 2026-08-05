@@ -11,7 +11,7 @@ function getTransporter(){
     transporter = nodemailer.createTransport({
         host:SMTP_HOST,
         port:SMTP_PORT,
-        secure:false,
+        secure: SMTP_PORT === 465,
         auth: SMTP_USER && SMTP_PASSWORD ? {
             user:SMTP_USER,
             pass:SMTP_PASSWORD

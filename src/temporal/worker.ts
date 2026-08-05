@@ -3,6 +3,7 @@ import { TEMPORAL_ADDRESS, TEMPORAL_NAMESPACE, TEMPORAL_TASK_QUEUE } from "../co
 import { fileURLToPath } from "node:url";
 
 import * as activities from "./activities/index.js";
+import { connectRedis } from "../config/redis.js";
 
 async function startWorker(){
     const connection = await NativeConnection.connect({
@@ -19,6 +20,11 @@ async function startWorker(){
 
     await worker.run()
 }
+
+connectRedis().catch((err) => {
+    console.error(`[Redis] : Error Connecting redis | ${err}`);
+    process.exit(1);
+});
 
 startWorker().catch((err) => {
     console.error(`[Temporal] : Error Starting worker | ${err}`);

@@ -13,7 +13,8 @@
     "prisma:all": "npm run prisma:format && npm run prisma:migrate && npm run prisma:generate",
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "npx prisma db seed",
-    "google:setup": "tsx src/utils/google-setup.ts"
+    "google:setup": "tsx src/utils/google-setup.ts",
+    "benchmark": "tsx scripts/benchmark.ts"
   },
   "keywords": [],
   "author": "",

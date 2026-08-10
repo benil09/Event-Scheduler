@@ -5,6 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "build":"prisma generate && tsc",
+    "start":"node --enable-source-maps dist/server.js",
+    "start:worker":"node --enable-source-maps dist/temporal/worker.js",
     "dev": "nodemon --watch src --ext ts --exec 'tsx src/server.ts'",
     "dev:worker": "nodemon --watch src --ext ts --exec 'tsx src/temporal/worker.ts'",
     "prisma:format": "npx prisma format",

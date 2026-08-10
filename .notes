@@ -1,0 +1,15 @@
+DATABASE_URL=postgresql://pgadmin:@Nilkamal09.@.postgres.database.azure.com:5432/event-scheduler?sslmode=require
+tempotal_db_url=postgresql://pgadmin:@Nilkamal09.@.postgres.database.azure.com:5432/temporal?sslmode=require
+
+
+{
+  "endIpAddress": "117.233.174.32",
+  "id": "/subscriptions/015e114b-cc8f-4484-9594-3c07aeae5e4a/resourceGroups/event-scheduler-rg/providers/Microsoft.DBforPostgreSQL/flexibleServers/event-scheduler-22536/firewallRules/AllowMyLaptop",
+  "name": "AllowMyLaptop",
+  "resourceGroup": "event-scheduler-rg",
+  "startIpAddress": "117.233.174.32",
+  "systemData": null,
+  "type": "Microsoft.DBforPostgreSQL/flexibleServers/firewallRules"
+}
+
+Your ACR Name is: eventscheduleracr24944

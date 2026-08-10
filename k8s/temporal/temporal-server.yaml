@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: temporal-server
+  namespace: event-scheduler
+  labels:
+    app: temporal-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: temporal-server
+  template:
+    metadata:
+      labels:
+        app: temporal-server
+    spec:
+      enableServiceLinks: false
+      containers:
+      - name: temporal-server
+        image: temporalio/auto-setup:1.24.2
+        ports:
+        - name: rpc
+          containerPort: 7233
+        envFrom:
+        - configMapRef:
+            name: temporal-config
+        env:
+        - name: POSTGRES_USER
+          value: "pgadmin"
+        - name: POSTGRES_PWD
+          value: "Nilkamal09."
+        - name: BIND_ON_IP
+          value: "0.0.0.0"
+        - name: TEMPORAL_CLI_ADDRESS
+          value: "127.0.0.1:7233"
+        - name: TEMPORAL_BROADCAST_ADDRESS
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: BROADCAST_ADDRESS
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: temporal
+  namespace: event-scheduler
+spec:
+  selector:
+    app: temporal-server
+  ports:
+  - name: rpc
+    port: 7233
+    targetPort: 7233

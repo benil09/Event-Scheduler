@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: temporal-config
+  namespace: event-scheduler
+data:
+  DB: "postgres12"
+  DB_PORT: "5432"
+  POSTGRES_SEEDS: "event-scheduler-22536.postgres.database.azure.com"
+  DBNAME: "temporal"
+  VISIBILITY_DBNAME: "temporal_visibility"
+  POSTGRES_TLS_ENABLED: "true"
+  POSTGRES_TLS_DISABLE_HOST_VERIFICATION: "true"
+  SQL_TLS: "true"
+  SQL_TLS_ENABLED: "true"
+  SQL_TLS_DISABLE_HOST_VERIFICATION: "true"
+  SKIP_SCHEMA_SETUP: "true"
+  TEMPORAL_CLI_ADDRESS: "127.0.0.1:7233"

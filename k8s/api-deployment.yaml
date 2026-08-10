@@ -1,0 +1,139 @@
+# ---- 1. ConfigMap for API & Worker ----
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+  namespace: event-scheduler
+data:
+  PORT: "8000"
+  NODE_ENV: "production"
+  SLOT_GENERATION_DAYS: "30"
+  
+  # Mailer Config
+  SMTP_HOST: "smtp.gmail.com"
+  SMTP_PORT: "587"
+  EMAIL_FROM: "benil8235@gmail.com"
+
+  # Google Config
+  GOOGLE_SENDER_EMAIL: "benil8235@gmail.com"
+  GOOGLE_CALENDAR_ID: "primary"
+  GOOGLE_REDIRECT_URI: "http://localhost:8000/api/integrations/google/callback"
+
+  # Redis in-cluster service
+  REDIS_URI: "redis://redis-service:6379"
+
+  # Temporal configuration
+  TEMPORAL_ENABLED: "true"
+  TEMPORAL_ADDRESS: "temporal:7233"
+  TEMPORAL_NAMESPACE: "default"
+  TEMPORAL_TASK_QUEUE: "event-scheduler-task"
+---
+# ---- 2. In-Cluster Redis Deployment & Service ----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: redis
+  namespace: event-scheduler
+  labels:
+    app: redis
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: redis
+  template:
+    metadata:
+      labels:
+        app: redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        ports:
+        - containerPort: 6379
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "250m"
+            memory: "256Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: redis-service
+  namespace: event-scheduler
+spec:
+  selector:
+    app: redis
+  ports:
+  - port: 6379
+    targetPort: 6379
+---
+# ---- 3. API Server Deployment ----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-scheduler-api
+  namespace: event-scheduler
+  labels:
+    app: event-scheduler-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: event-scheduler-api
+  template:
+    metadata:
+      labels:
+        app: event-scheduler-api
+    spec:
+      imagePullSecrets:
+      - name: acr-secret
+      containers:
+      - name: api
+        image: eventscheduleracr24944.azurecr.io/event-scheduler-api:v1
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 8000
+        envFrom:
+        - secretRef:
+            name: app-secrets
+        - configMapRef:
+            name: app-config
+        resources:
+          requests:
+            cpu: "100m"
+            memory: "128Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+---
+# ---- 4. Azure Public Load Balancer Service ----
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-scheduler-service
+  namespace: event-scheduler
+spec:
+  type: LoadBalancer
+  selector:
+    app: event-scheduler-api
+  ports:
+  - name: http
+    port: 80
+    targetPort: 8000

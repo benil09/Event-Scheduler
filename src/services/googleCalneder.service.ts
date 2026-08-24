@@ -42,10 +42,10 @@ export function getSetupAuthUrl(frontendOrigin?: string) {
 export async function exchangeSetupCode(code: string) {
     const client = getOauthClient();
     const { tokens } = await client.getToken(code);
-    console.log(tokens);
+    console.log("[Google OAuth] Tokens received from Google:", { access_token: tokens.access_token ? 'Present' : 'Missing', refresh_token: tokens.refresh_token ? 'Present' : 'Missing' });
 
     if (!tokens.refresh_token) {
-        console.warn('No refresh_token returned by Google. User may have already granted consent.');
+        console.warn('[Google OAuth] No refresh_token returned by Google. User may have already granted consent.');
     } else {
         await redis.set("GOOGLE_REFRESH_TOKEN", tokens.refresh_token, { EX: 3600 * 24 * 7 })
     }
@@ -65,19 +65,24 @@ export async function exchangeSetupCode(code: string) {
     }
 }
 
-export async function getGoogleCalendarClient() {
+export async function getGoogleCalendarClient(userId?: number) {
     if (!isGoogleCalendarConfigured()) {
         throw new Error("Google Calendar is not configured")
     }
 
     const client = getOauthClient();
-    const refreshToken = await redis.get("GOOGLE_REFRESH_TOKEN")
+    let refreshToken = userId ? await redis.get(`user:${userId}:refresh_token`) : null;
     if (!refreshToken) {
-        throw new Error("Refresh token not found")
+        refreshToken = await redis.get("GOOGLE_REFRESH_TOKEN");
     }
+
+    if (!refreshToken) {
+        throw new Error(`Refresh token not found for host ${userId || ''}`);
+    }
+
     client.setCredentials({
         refresh_token: refreshToken
-    })
+    });
 
     return client;
 }
@@ -85,10 +90,11 @@ export async function getGoogleCalendarClient() {
 export async function createGoogleCalenderEvent(bookingId: number) {
     const booking = await findBookingById(bookingId);
     if (!booking || booking.status !== 'CONFIRMED') {
-        throw notFound("Booking not found")
+        throw notFound("Booking not found");
     }
 
-    const client = await getGoogleCalendarClient();
+    console.log(`[Google Calendar] Creating calendar event for booking #${bookingId} (Host ID: ${booking.hostId})...`);
+    const client = await getGoogleCalendarClient(booking.hostId);
 
     const calendar = google.calendar({
         version: 'v3',
@@ -96,7 +102,7 @@ export async function createGoogleCalenderEvent(bookingId: number) {
     });
 
     const event = await calendar.events.insert({
-        calendarId: GOOGLE_CALENDAR_ID,
+        calendarId: GOOGLE_CALENDAR_ID || 'primary',
         conferenceDataVersion: 1,
         sendUpdates: 'all',
         requestBody: {
@@ -107,11 +113,11 @@ export async function createGoogleCalenderEvent(bookingId: number) {
             ].filter(Boolean).join('\n\n'),
             start: {
                 dateTime: booking.slot.startAt.toISOString(),
-                timeZone: booking.host.timezone,
+                timeZone: booking.host.timezone || 'UTC',
             },
             end: {
                 dateTime: booking.slot.endAt.toISOString(),
-                timeZone: booking.host.timezone,
+                timeZone: booking.host.timezone || 'UTC',
             },
             attendees: [
                 { email: booking.host.Email, displayName: booking.host.name },
@@ -119,7 +125,7 @@ export async function createGoogleCalenderEvent(bookingId: number) {
             ],
             conferenceData: {
                 createRequest: {
-                    requestId: booking.id.toString(),
+                    requestId: `booking-${booking.id}-${Date.now()}`,
                     conferenceSolutionKey: {
                         type: 'hangoutsMeet',
                     }
@@ -128,5 +134,6 @@ export async function createGoogleCalenderEvent(bookingId: number) {
         }
     });
 
-    return event;
+    console.log(`[Google Calendar] Successfully created calendar event #${event.data.id} for booking #${bookingId}`);
+    return event.data;
 }

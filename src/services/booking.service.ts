@@ -1,5 +1,5 @@
 import { CreateBookingDto } from "../dtos/booking.dto.js";
-import { prisma } from "../config/database.js"
+import { prisma } from "../config/database.js";
 import { createBooking, deleteBookingRepo, findBookingById, getBookingsByHost } from "../repositories/booking.repository.js";
 import { badRequest, notFound } from "../utils/api-error.js";
 import type { Slot } from "../../generated/prisma/client.js";
@@ -14,15 +14,21 @@ import {
     sendCancellationEmailWorkflow,
     createGoogleCalendarEventWorkflow
 } from "../temporal/client.js";
+import { sendBookingConfirmationEmail, sendCancellationEmail } from "../mailer/booking.mailer.js";
+import { createGoogleCalenderEvent } from "./googleCalneder.service.js";
 
-// so once a booking is done we need to re-run the slot availability function and regenerate the slots for that day 
+// Re-run slot availability function and regenerate slots for that day
 async function triggerSlotRegen(hostId: number, slotStartAt: Date) {
-    const date = slotStartAt.toISOString().split('T')[0];
-    await regenerateHostSlotsWorkflow({
-        hostId,
-        from: date,
-        to: date
-    });
+    try {
+        const date = slotStartAt.toISOString().split('T')[0];
+        await regenerateHostSlotsWorkflow({
+            hostId,
+            from: date,
+            to: date
+        });
+    } catch (err) {
+        console.warn("[Temporal] Slot regen workflow skipped/failed:", err);
+    }
 }
 
 function validateSlotForBooking(slot: Slot | null): Slot {
@@ -58,7 +64,7 @@ function formatBookingResponse(booking: {
 
 export async function createBookingOptimistically(userId: number, dto: CreateBookingDto) {
     const booking = await prisma.$transaction(async (tx) => {
-        const locked = await lockSlotForUpdate(dto.slotId, tx)
+        const locked = await lockSlotForUpdate(dto.slotId, tx);
 
         if (locked.length === 0) {
             throw notFound("Slot not found");
@@ -67,7 +73,6 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
         const slot = validateSlotForBooking(await findSlotById(dto.slotId, tx));
 
         await markSlotBooked(dto.slotId, tx);
-
 
         return createBooking(
             {
@@ -81,9 +86,38 @@ export async function createBookingOptimistically(userId: number, dto: CreateBoo
             tx
         );
     });
-    await triggerSlotRegen(userId, booking.slot.startAt);
-    await sendBookingConfirmationEmailWorkflow(booking.id);
-    await createGoogleCalendarEventWorkflow(booking.id);
+
+    // 1. Regenerate Slots for Host
+    triggerSlotRegen(userId, booking.slot.startAt).catch(console.warn);
+
+    // 2. Send Booking Confirmation Email (Temporal Workflow -> Direct Fallback)
+    (async () => {
+        try {
+            const wfId = await sendBookingConfirmationEmailWorkflow(booking.id);
+            if (!wfId) {
+                console.log("[Booking Workflow] Temporal not active, sending email directly...");
+                await sendBookingConfirmationEmail(booking.id);
+            }
+        } catch (err) {
+            console.error("Failed to send booking confirmation email:", err);
+            await sendBookingConfirmationEmail(booking.id).catch(console.error);
+        }
+    })();
+
+    // 3. Create Google Calendar Event (Temporal Workflow -> Direct Fallback)
+    (async () => {
+        try {
+            const wfId = await createGoogleCalendarEventWorkflow(booking.id);
+            if (!wfId) {
+                console.log("[Booking Workflow] Temporal not active, creating Google Calendar event directly...");
+                await createGoogleCalenderEvent(booking.id);
+            }
+        } catch (err) {
+            console.error("Failed to create Google Calendar event:", err);
+            await createGoogleCalenderEvent(booking.id).catch(console.error);
+        }
+    })();
+
     return formatBookingResponse(booking);
 }
 
@@ -91,22 +125,34 @@ export async function getBookingsByHostService(hostId: number) {
     return getBookingsByHost(hostId);
 }
 
-export async function cancelBookingService(bookingId:number,userId:number){    
-        if(!bookingId){
-            throw badRequest("Booking ID is required");
-        }
+export async function cancelBookingService(bookingId: number, userId: number) {
+    if (!bookingId) {
+        throw badRequest("Booking ID is required");
+    }
 
-        if(!userId){
-            throw badRequest("User ID is required");
+    if (!userId) {
+        throw badRequest("User ID is required");
+    }
+    const booking = await findBookingById(bookingId);
+    if (!booking) {
+        throw notFound("Booking not found");
+    }
+    if (booking.hostId !== userId) {
+        throw badRequest("Booking does not belong to the user");
+    }
+
+    // Direct / Temporal Cancellation Email
+    (async () => {
+        try {
+            const wfId = await sendCancellationEmailWorkflow(bookingId);
+            if (!wfId) {
+                await sendCancellationEmail(bookingId);
+            }
+        } catch {
+            await sendCancellationEmail(bookingId).catch(console.error);
         }
-        const booking = await findBookingById(bookingId);
-        if(!booking){
-            throw notFound("Booking not found");
-        }
-        if(booking.hostId !== userId){
-            throw badRequest("Booking does not belong to the user");
-        }
-        await sendCancellationEmailWorkflow(bookingId)
-        await deleteBookingRepo(bookingId);
-        return "Booking cancelled successfully";    
+    })();
+
+    await deleteBookingRepo(bookingId);
+    return "Booking cancelled successfully";
 }

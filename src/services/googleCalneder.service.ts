@@ -1,31 +1,23 @@
-
-import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI,GOOGLE_CALENDAR_ID } from '../config/env.js'
+import { GOOGLE_CLIENT_ID, GOOGLE_CLIENT_SECRET, GOOGLE_REDIRECT_URI, GOOGLE_CALENDAR_ID } from '../config/env.js'
 import { google } from 'googleapis'
 import { findBookingById } from '../repositories/booking.repository.js'
 import { notFound } from '../utils/api-error.js'
 import { redis } from '../config/redis.js'
 
-
-
-const SCOPES = ["https://www.googleapis.com/auth/calendar",
+const SCOPES = [
+    "https://www.googleapis.com/auth/calendar",
     "https://www.googleapis.com/auth/calendar.events",
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-
 ]
 
-
-    
-export function isGoogleCalendarConfigured() :boolean{
-    return Boolean(GOOGLE_CLIENT_ID &&
-        GOOGLE_CLIENT_SECRET &&
-    GOOGLE_REDIRECT_URI)
+export function isGoogleCalendarConfigured(): boolean {
+    return Boolean(GOOGLE_CLIENT_ID && GOOGLE_CLIENT_SECRET && GOOGLE_REDIRECT_URI)
 }
 
 export function getOauthClient() {
-    if(!isGoogleCalendarConfigured()) {
+    if (!isGoogleCalendarConfigured()) {
         throw new Error("Google Calendar not configured")
-    
     }
 
     return new google.auth.OAuth2(
@@ -33,66 +25,64 @@ export function getOauthClient() {
         GOOGLE_CLIENT_SECRET,
         GOOGLE_REDIRECT_URI
     )
-
 }
 
-export function getSetupAuthUrl(){
+export function getSetupAuthUrl(frontendOrigin?: string) {
     const client = getOauthClient();
+    const state = frontendOrigin ? Buffer.from(frontendOrigin).toString('base64') : 'setup';
     return client.generateAuthUrl({
-        access_type:"offline",
-        scope:SCOPES,
-        prompt:"consent",
-        state:'setup'
+        access_type: "offline",
+        scope: SCOPES,
+        prompt: "consent",
+        state,
     })
-    
 }
 
-// exchange the code which we get from google for refresh token
-export async function exchangeSetupCode(code:string){
+// Exchange the code which we get from google for refresh token
+export async function exchangeSetupCode(code: string) {
     const client = getOauthClient();
-        const {tokens} = await client.getToken(code);
-        console.log(tokens)
-        if(!tokens.refresh_token){
-        throw new Error('No refresh token returned - user may have denied')
+    const { tokens } = await client.getToken(code);
+    console.log(tokens);
+
+    if (!tokens.refresh_token) {
+        console.warn('No refresh_token returned by Google. User may have already granted consent.');
+    } else {
+        await redis.set("GOOGLE_REFRESH_TOKEN", tokens.refresh_token, { EX: 3600 * 24 * 7 })
     }
-    await redis.set("GOOGLE_REFRESH_TOKEN",tokens.refresh_token,{EX:3600*24*7})
+
     client.setCredentials(tokens)
 
-
     const oauth2 = google.oauth2({
-            version:'v2',
-            auth:client
+        version: 'v2',
+        auth: client
     })
 
-    const {data} = await oauth2.userinfo.get(); 
-        // instead of returning we should set this refresh token to redis
+    const { data } = await oauth2.userinfo.get();
     return {
-            email:data.email??'-',
-            avatar:data.picture??'-',
-            name:data.name??'-'
+        email: data.email ?? '-',
+        avatar: data.picture ?? '-',
+        name: data.name ?? '-'
     }
 }
 
-export async function getGoogleCalendarClient(){
-    if(!isGoogleCalendarConfigured()){
-        throw new Error("Google Calendar is not configured ")
+export async function getGoogleCalendarClient() {
+    if (!isGoogleCalendarConfigured()) {
+        throw new Error("Google Calendar is not configured")
     }
 
     const client = getOauthClient();
     const refreshToken = await redis.get("GOOGLE_REFRESH_TOKEN")
-    if(!refreshToken){
+    if (!refreshToken) {
         throw new Error("Refresh token not found")
     }
     client.setCredentials({
-       refresh_token:refreshToken // this should be ideally returned from redis ✅
-        
+        refresh_token: refreshToken
     })
 
     return client;
 }
 
-
-export async function createGoogleCalenderEvent(bookingId:number){
+export async function createGoogleCalenderEvent(bookingId: number) {
     const booking = await findBookingById(bookingId);
     if (!booking || booking.status !== 'CONFIRMED') {
         throw notFound("Booking not found")
@@ -104,8 +94,9 @@ export async function createGoogleCalenderEvent(bookingId:number){
         version: 'v3',
         auth: client
     });
+
     const event = await calendar.events.insert({
-        calendarId:GOOGLE_CALENDAR_ID,
+        calendarId: GOOGLE_CALENDAR_ID,
         conferenceDataVersion: 1,
         sendUpdates: 'all',
         requestBody: {

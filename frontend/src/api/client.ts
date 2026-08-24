@@ -86,7 +86,14 @@ export const api = {
     return res.data;
   },
   createAvailabilityRule: async (data: { dayOfWeek: number; startTime: string; endTime: string }) => {
-    const res = await apiClient.post('/api/availability/rules', data);
+    const payload = {
+      weekday: Number(data.dayOfWeek),
+      startTime: data.startTime,
+      endTime: data.endTime,
+      isActive: true,
+      timezone: 'UTC',
+    };
+    const res = await apiClient.post('/api/availability/rules', payload);
     return res.data;
   },
   deleteAvailabilityRule: async (id: number) => {
@@ -100,7 +107,16 @@ export const api = {
     return res.data;
   },
   createAvailabilityException: async (data: { date: string; type: string; startTime?: string; endTime?: string; reason?: string }) => {
-    const res = await apiClient.post('/api/availability/exceptions', data);
+    const mappedType = data.type === 'UNAVAILABLE' ? 'BLOCK_FULL_DAY' : data.type;
+    const payload = {
+      date: data.date,
+      type: mappedType,
+      startTime: data.startTime,
+      endTime: data.endTime,
+      reason: data.reason || undefined,
+      timezone: 'UTC',
+    };
+    const res = await apiClient.post('/api/availability/exceptions', payload);
     return res.data;
   },
   deleteAvailabilityException: async (id: number) => {

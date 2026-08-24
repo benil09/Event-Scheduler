@@ -46,7 +46,11 @@ export async function getActiveAvailabilityRulesByUserService(userId: number) {
 export async function createAvailabilityRuleService(userId: number, data: CreateAvailabilityRuleDto) {
     await verifyUserExists(userId);
     const result = await createAvailabilityRuleRepo(userId, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 
@@ -60,7 +64,11 @@ export async function updateAvailabilityRuleService(id: number, userId: number, 
         throw forbidden("Unauthorized");
     }
     const result = await updateAvailabilityRuleRepo(id, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 
@@ -74,7 +82,11 @@ export async function deleteAvailabilityRuleService(id: number, userId: number) 
         throw forbidden("Unauthorized");
     }
     const result = await removeAvailabilityRuleRepo(id);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 
@@ -88,7 +100,11 @@ export async function getExceptionsByUserService(userId: number) {
 export async function createExceptionService(userId: number, data: createAvailabilityExceptionDto) {
     await verifyUserExists(userId);
     const result = await createException(userId, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 
@@ -102,7 +118,11 @@ export async function updateExceptionService(id: number, userId: number, data: U
         throw forbidden("Unauthorized");
     }
     const result = await updateException(id, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 
@@ -116,7 +136,11 @@ export async function deleteExceptionService(id: number, userId: number) {
         throw forbidden("Unauthorized");
     }
     const result = await removeException(id);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+    }
     return result;
 }
 

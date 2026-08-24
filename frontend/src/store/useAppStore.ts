@@ -218,7 +218,11 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       setApiUserId(get().currentUserId);
       const res = await api.getAvailabilityRules();
-      const rules = Array.isArray(res) ? res : (res.data || res.rules || []);
+      const rawRules = Array.isArray(res) ? res : (res.data || res.rules || []);
+      const rules = rawRules.map((r: any) => ({
+        ...r,
+        dayOfWeek: r.weekday !== undefined ? r.weekday : r.dayOfWeek,
+      }));
       set({ availabilityRules: rules });
     } catch (err: any) {
       console.error("Failed to fetch availability rules", err);

@@ -15,7 +15,10 @@ export const LoginPage: React.FC = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+    if (currentUserId && currentUserId > 0) {
+      navigate('/dashboard', { replace: true });
+    }
+  }, [currentUserId, navigate, fetchUsers]);
 
   const handleGoogleLogin = async () => {
     setLoadingGoogle(true);
@@ -79,7 +82,7 @@ export const LoginPage: React.FC = () => {
             type="button"
             onClick={handleGoogleLogin}
             disabled={loadingGoogle}
-            className="w-full py-4 px-4 rounded-2xl bg-black hover:bg-zinc-800 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-3 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70"
+            className="w-full py-4 px-4 rounded-2xl bg-black hover:bg-zinc-800 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-3 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70 cursor-pointer"
           >
             {loadingGoogle ? (
               <span className="animate-pulse">Connecting to Google...</span>
@@ -142,7 +145,7 @@ export const LoginPage: React.FC = () => {
 
           <button
             type="submit"
-            className="w-full py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 text-black font-bold text-xs flex items-center justify-center gap-2"
+            className="w-full py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 text-black font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
           >
             <span>Login with User ID</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -162,7 +165,7 @@ export const LoginPage: React.FC = () => {
                   key={u.id}
                   type="button"
                   onClick={() => handleQuickSelect(u.id)}
-                  className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
+                  className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
                     currentUserId === u.id
                       ? 'border-black bg-black text-white font-bold'
                       : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 text-zinc-900'

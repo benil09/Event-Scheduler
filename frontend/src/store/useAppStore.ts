@@ -94,14 +94,15 @@ interface AppState {
   removeAvailabilityException: (id: number) => Promise<boolean>;
 }
 
-const savedUserId = Number(localStorage.getItem('event_scheduler_user_id')) || 1;
+const rawSavedId = localStorage.getItem('event_scheduler_user_id');
+const savedUserId = rawSavedId && !isNaN(Number(rawSavedId)) ? Number(rawSavedId) : 0;
 const savedUserName = localStorage.getItem('event_scheduler_user_name') || '';
 const savedUserEmail = localStorage.getItem('event_scheduler_user_email') || '';
 const savedUserAvatar = localStorage.getItem('event_scheduler_user_avatar') || '';
 
 export const useAppStore = create<AppState>((set, get) => ({
   currentUserId: savedUserId,
-  currentUser: savedUserId ? {
+  currentUser: savedUserId > 0 ? {
     id: savedUserId,
     name: savedUserName || `Host #${savedUserId}`,
     email: savedUserEmail,
@@ -116,6 +117,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   error: null,
 
   setCurrentUserId: (id: number) => {
+    if (!id || isNaN(id) || id <= 0) return;
     localStorage.setItem('event_scheduler_user_id', String(id));
     setApiUserId(id);
     const existingUser = get().users.find(u => u.id === id);
@@ -133,6 +135,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   setGoogleUserProfile: (profile) => {
+    if (!profile.id || isNaN(profile.id) || profile.id <= 0) return;
     localStorage.setItem('event_scheduler_user_id', String(profile.id));
     if (profile.name) localStorage.setItem('event_scheduler_user_name', profile.name);
     if (profile.email) localStorage.setItem('event_scheduler_user_email', profile.email);
@@ -174,19 +177,25 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       const res = await api.getUsers();
       const userList = Array.isArray(res) ? res : (res.data || res.users || []);
-      const activeUser = userList.find((u: User) => u.id === get().currentUserId) || get().currentUser || userList[0] || null;
-      const activeId = activeUser ? activeUser.id : get().currentUserId;
-      setApiUserId(activeId);
+      
+      const currentId = get().currentUserId;
+      let activeUser = null;
+      if (currentId > 0) {
+        activeUser = userList.find((u: User) => u.id === currentId) || get().currentUser || null;
+      }
+      
       set({ 
         users: userList, 
         currentUser: activeUser,
-        currentUserId: activeId,
         isLoading: false 
       });
-      get().fetchEventTypes();
-      get().fetchBookings();
-      get().fetchAvailabilityRules();
-      get().fetchAvailabilityExceptions();
+
+      if (currentId > 0) {
+        get().fetchEventTypes();
+        get().fetchBookings();
+        get().fetchAvailabilityRules();
+        get().fetchAvailabilityExceptions();
+      }
     } catch (err: any) {
       console.error("Failed to fetch users", err);
       set({ error: err.message || 'Failed to fetch users', isLoading: false });
@@ -212,7 +221,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   fetchEventTypes: async () => {
     const userId = get().currentUserId;
-    if (!userId) return;
+    if (!userId || userId <= 0) return;
     try {
       setApiUserId(userId);
       const res = await api.getEventsByUser(userId);
@@ -269,7 +278,7 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   fetchBookings: async () => {
     const userId = get().currentUserId;
-    if (!userId) return;
+    if (!userId || userId <= 0) return;
     try {
       setApiUserId(userId);
       const res = await api.getBookings();
@@ -302,8 +311,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   fetchAvailabilityRules: async () => {
+    const userId = get().currentUserId;
+    if (!userId || userId <= 0) return;
     try {
-      setApiUserId(get().currentUserId);
+      setApiUserId(userId);
       const res = await api.getAvailabilityRules();
       const rawRules = Array.isArray(res) ? res : (res.data || res.rules || []);
       const rules = rawRules.map((r: any) => ({
@@ -342,8 +353,10 @@ export const useAppStore = create<AppState>((set, get) => ({
   },
 
   fetchAvailabilityExceptions: async () => {
+    const userId = get().currentUserId;
+    if (!userId || userId <= 0) return;
     try {
-      setApiUserId(get().currentUserId);
+      setApiUserId(userId);
       const res = await api.getAvailabilityExceptions();
       const exceptions = Array.isArray(res) ? res : (res.data || res.exceptions || []);
       set({ availabilityExceptions: exceptions });

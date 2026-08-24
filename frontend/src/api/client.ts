@@ -94,6 +94,20 @@ export const api = {
     return res.data;
   },
 
+  // Availability Exceptions
+  getAvailabilityExceptions: async () => {
+    const res = await apiClient.get('/api/availability/exceptions');
+    return res.data;
+  },
+  createAvailabilityException: async (data: { date: string; type: string; startTime?: string; endTime?: string; reason?: string }) => {
+    const res = await apiClient.post('/api/availability/exceptions', data);
+    return res.data;
+  },
+  deleteAvailabilityException: async (id: number) => {
+    const res = await apiClient.delete(`/api/availability/exceptions/${id}`);
+    return res.data;
+  },
+
   // Bookings
   getBookings: async () => {
     const res = await apiClient.get('/api/bookings');

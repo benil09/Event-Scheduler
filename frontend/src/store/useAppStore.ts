@@ -42,6 +42,16 @@ export interface AvailabilityRule {
   endTime: string;
 }
 
+export interface AvailabilityException {
+  id: number;
+  userId: number;
+  date: string;
+  type: string;
+  startTime?: string;
+  endTime?: string;
+  reason?: string;
+}
+
 interface AppState {
   currentUserId: number;
   currentUser: User | null;
@@ -49,6 +59,7 @@ interface AppState {
   eventTypes: EventType[];
   bookings: Booking[];
   availabilityRules: AvailabilityRule[];
+  availabilityExceptions: AvailabilityException[];
   isLoading: boolean;
   error: string | null;
 
@@ -64,6 +75,9 @@ interface AppState {
   fetchAvailabilityRules: () => Promise<void>;
   addAvailabilityRule: (rule: { dayOfWeek: number; startTime: string; endTime: string }) => Promise<boolean>;
   removeAvailabilityRule: (id: number) => Promise<boolean>;
+  fetchAvailabilityExceptions: () => Promise<void>;
+  addAvailabilityException: (exception: { date: string; type: string; startTime?: string; endTime?: string; reason?: string }) => Promise<boolean>;
+  removeAvailabilityException: (id: number) => Promise<boolean>;
 }
 
 export const useAppStore = create<AppState>((set, get) => ({
@@ -73,6 +87,7 @@ export const useAppStore = create<AppState>((set, get) => ({
   eventTypes: [],
   bookings: [],
   availabilityRules: [],
+  availabilityExceptions: [],
   isLoading: false,
   error: null,
 
@@ -84,6 +99,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().fetchEventTypes();
     get().fetchBookings();
     get().fetchAvailabilityRules();
+    get().fetchAvailabilityExceptions();
   },
 
   fetchUsers: async () => {
@@ -100,10 +116,11 @@ export const useAppStore = create<AppState>((set, get) => ({
         currentUserId: activeId,
         isLoading: false 
       });
-      // Fetch user's event types, bookings, rules automatically
+      // Fetch user's event types, bookings, rules, exceptions automatically
       get().fetchEventTypes();
       get().fetchBookings();
       get().fetchAvailabilityRules();
+      get().fetchAvailabilityExceptions();
     } catch (err: any) {
       console.error("Failed to fetch users", err);
       set({ error: err.message || 'Failed to fetch users', isLoading: false });
@@ -229,6 +246,42 @@ export const useAppStore = create<AppState>((set, get) => ({
       return true;
     } catch (err: any) {
       console.error("Failed to delete rule", err);
+      return false;
+    }
+  },
+
+  fetchAvailabilityExceptions: async () => {
+    try {
+      setApiUserId(get().currentUserId);
+      const res = await api.getAvailabilityExceptions();
+      const exceptions = Array.isArray(res) ? res : (res.data || res.exceptions || []);
+      set({ availabilityExceptions: exceptions });
+    } catch (err: any) {
+      console.error("Failed to fetch availability exceptions", err);
+      set({ availabilityExceptions: [] });
+    }
+  },
+
+  addAvailabilityException: async (exception) => {
+    try {
+      setApiUserId(get().currentUserId);
+      await api.createAvailabilityException(exception);
+      await get().fetchAvailabilityExceptions();
+      return true;
+    } catch (err: any) {
+      console.error("Failed to add exception", err);
+      return false;
+    }
+  },
+
+  removeAvailabilityException: async (id: number) => {
+    try {
+      setApiUserId(get().currentUserId);
+      await api.deleteAvailabilityException(id);
+      await get().fetchAvailabilityExceptions();
+      return true;
+    } catch (err: any) {
+      console.error("Failed to delete exception", err);
       return false;
     }
   }

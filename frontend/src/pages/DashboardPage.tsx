@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { 
   Plus, Calendar, Clock, Copy, Check, ExternalLink, Trash2, 
-  UserCheck, Globe, AlertCircle, RefreshCw, Layers
+  UserCheck, AlertCircle, RefreshCw, Layers, CalendarOff
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
@@ -11,18 +11,23 @@ const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'F
 export const DashboardPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { 
-    currentUserId, currentUser, eventTypes, bookings, availabilityRules, isLoading, error,
-    setCurrentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, removeEventType, cancelBooking,
-    addAvailabilityRule, removeAvailabilityRule
+    currentUserId, currentUser, eventTypes, bookings, availabilityRules, availabilityExceptions, isLoading, error,
+    setCurrentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
+    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, addAvailabilityException, removeAvailabilityException
   } = useAppStore();
 
   const [copiedId, setCopiedId] = useState<number | null>(null);
   const [activeTab, setActiveTab] = useState<'events' | 'availability' | 'bookings'>('events');
 
-  // Availability form state
+  // Availability Rule form state
   const [selectedDay, setSelectedDay] = useState(1); // Monday
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
+
+  // Availability Exception form state
+  const [exceptionDate, setExceptionDate] = useState(new Date().toISOString().split('T')[0]);
+  const [exceptionType, setExceptionType] = useState('UNAVAILABLE');
+  const [exceptionReason, setExceptionReason] = useState('');
 
   useEffect(() => {
     // Handle OAuth Callback Params if present
@@ -41,6 +46,7 @@ export const DashboardPage: React.FC = () => {
       fetchEventTypes();
       fetchBookings();
       fetchAvailabilityRules();
+      fetchAvailabilityExceptions();
     }
   }, [currentUserId]);
 
@@ -72,6 +78,17 @@ export const DashboardPage: React.FC = () => {
     });
   };
 
+  const handleAddException = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!exceptionDate) return;
+    await addAvailabilityException({
+      date: exceptionDate,
+      type: exceptionType,
+      reason: exceptionReason,
+    });
+    setExceptionReason('');
+  };
+
   return (
     <div className="space-y-8 pb-12">
       {/* Top Welcome Banner */}
@@ -85,7 +102,7 @@ export const DashboardPage: React.FC = () => {
             Host Control Center
           </h1>
           <p className="text-zinc-300 text-sm leading-relaxed max-w-2xl">
-            Configure your event types, set working hours, and review guest appointments generated via your public booking links.
+            Configure your event types, set weekly working hours & date exceptions, and review guest appointments generated via your public booking links.
           </p>
 
           <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -100,7 +117,7 @@ export const DashboardPage: React.FC = () => {
               onClick={() => setActiveTab('availability')}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold text-xs tracking-wider uppercase border border-zinc-700 transition-colors"
             >
-              Configure Working Hours
+              Configure Working Hours & Exceptions
             </button>
           </div>
         </div>
@@ -128,7 +145,7 @@ export const DashboardPage: React.FC = () => {
 
         <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
           <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Availability Rules</span>
+            <span className="text-xs font-bold uppercase tracking-wider text-black">Working Rules</span>
             <Layers className="w-4 h-4 text-black" />
           </div>
           <div className="text-3xl font-extrabold text-black">{availabilityRules.length}</div>
@@ -137,13 +154,11 @@ export const DashboardPage: React.FC = () => {
 
         <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
           <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Public Profile</span>
-            <Globe className="w-4 h-4 text-black" />
+            <span className="text-xs font-bold uppercase tracking-wider text-black">Date Exceptions</span>
+            <CalendarOff className="w-4 h-4 text-black" />
           </div>
-          <div className="text-xs font-mono font-bold text-black truncate mt-2">
-            /book/{currentUserId}/[slug]
-          </div>
-          <p className="text-xs font-medium text-zinc-500 mt-1">Shareable guest links</p>
+          <div className="text-3xl font-extrabold text-black">{availabilityExceptions.length}</div>
+          <p className="text-xs font-medium text-zinc-500 mt-1">Date overrides & off days</p>
         </div>
       </div>
 
@@ -169,7 +184,7 @@ export const DashboardPage: React.FC = () => {
                   : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
               }`}
             >
-              Working Hours ({availabilityRules.length})
+              Working Hours & Exceptions
             </button>
             <button
               onClick={() => setActiveTab('bookings')}
@@ -184,7 +199,7 @@ export const DashboardPage: React.FC = () => {
           </div>
 
           <button
-            onClick={() => { fetchEventTypes(); fetchBookings(); fetchAvailabilityRules(); }}
+            onClick={() => { fetchEventTypes(); fetchBookings(); fetchAvailabilityRules(); fetchAvailabilityExceptions(); }}
             className="p-2 rounded-xl text-zinc-500 hover:text-black hover:bg-zinc-100 transition-colors"
             title="Sync Latest Data"
           >
@@ -291,84 +306,177 @@ export const DashboardPage: React.FC = () => {
           </div>
         )}
 
-        {/* Tab 2: Availability & Working Hours */}
+        {/* Tab 2: Availability Rules & Exceptions */}
         {activeTab === 'availability' && (
-          <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-2xs space-y-6">
-            <div className="border-b border-zinc-100 pb-4">
-              <h3 className="text-lg font-extrabold text-black">Host Working Hours</h3>
-              <p className="text-xs text-zinc-500">Define your available days and time windows for guest appointments.</p>
+          <div className="space-y-8">
+            {/* Section 1: Weekly Working Hours (Rules) */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-2xs space-y-6">
+              <div className="border-b border-zinc-100 pb-4">
+                <h3 className="text-lg font-extrabold text-black">1. Weekly Working Hours (Recurring Rules)</h3>
+                <p className="text-xs text-zinc-500">Define your standard available days and time windows for guest appointments.</p>
+              </div>
+
+              {/* Add Rule Form */}
+              <form onSubmit={handleAddRule} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-2xl border border-zinc-200">
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Day of Week</label>
+                  <select
+                    value={selectedDay}
+                    onChange={(e) => setSelectedDay(Number(e.target.value))}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  >
+                    {DAYS_OF_WEEK.map((day, idx) => (
+                      <option key={day} value={idx}>{day}</option>
+                    ))}
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Start Time</label>
+                  <input
+                    type="time"
+                    value={startTime}
+                    onChange={(e) => setStartTime(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">End Time</label>
+                  <input
+                    type="time"
+                    value={endTime}
+                    onChange={(e) => setEndTime(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    className="w-full py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Add Working Rule
+                  </button>
+                </div>
+              </form>
+
+              {/* Existing Rules */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold text-black uppercase tracking-wider">Active Rules List</h4>
+                {availabilityRules.length === 0 ? (
+                  <p className="text-xs text-zinc-400 italic">No rules added yet. Default hours (09:00 - 17:00) apply.</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {availabilityRules.map((rule) => (
+                      <div key={rule.id} className="p-4 rounded-2xl border border-zinc-200 bg-white flex items-center justify-between shadow-2xs">
+                        <div>
+                          <span className="text-sm font-extrabold text-black block">{DAYS_OF_WEEK[rule.dayOfWeek]}</span>
+                          <span className="text-xs text-zinc-600 font-mono font-bold">{rule.startTime} - {rule.endTime}</span>
+                        </div>
+                        <button
+                          onClick={() => removeAvailabilityRule(rule.id)}
+                          className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                          title="Remove Rule"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
 
-            {/* Add Rule Form */}
-            <form onSubmit={handleAddRule} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-2xl border border-zinc-200">
-              <div>
-                <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Day of Week</label>
-                <select
-                  value={selectedDay}
-                  onChange={(e) => setSelectedDay(Number(e.target.value))}
-                  className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                >
-                  {DAYS_OF_WEEK.map((day, idx) => (
-                    <option key={day} value={idx}>{day}</option>
-                  ))}
-                </select>
+            {/* Section 2: Date Exceptions & Overrides */}
+            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-2xs space-y-6">
+              <div className="border-b border-zinc-100 pb-4">
+                <h3 className="text-lg font-extrabold text-black">2. Date Exceptions & Specific Off Days</h3>
+                <p className="text-xs text-zinc-500">Block specific dates (e.g., holidays, vacation) or override your standard availability for specific days.</p>
               </div>
 
-              <div>
-                <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Start Time</label>
-                <input
-                  type="time"
-                  value={startTime}
-                  onChange={(e) => setStartTime(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">End Time</label>
-                <input
-                  type="time"
-                  value={endTime}
-                  onChange={(e) => setEndTime(e.target.value)}
-                  className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                />
-              </div>
-
-              <div className="flex items-end">
-                <button
-                  type="submit"
-                  className="w-full py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5"
-                >
-                  <Plus className="w-3.5 h-3.5" />
-                  Add Working Rule
-                </button>
-              </div>
-            </form>
-
-            {/* Existing Rules */}
-            <div className="space-y-3">
-              <h4 className="text-xs font-bold text-black uppercase tracking-wider">Active Rules List</h4>
-              {availabilityRules.length === 0 ? (
-                <p className="text-xs text-zinc-400 italic">No rules added yet. Default hours (09:00 - 17:00) apply.</p>
-              ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                  {availabilityRules.map((rule) => (
-                    <div key={rule.id} className="p-4 rounded-2xl border border-zinc-200 bg-white flex items-center justify-between shadow-2xs">
-                      <div>
-                        <span className="text-sm font-extrabold text-black block">{DAYS_OF_WEEK[rule.dayOfWeek]}</span>
-                        <span className="text-xs text-zinc-600 font-mono font-bold">{rule.startTime} - {rule.endTime}</span>
-                      </div>
-                      <button
-                        onClick={() => removeAvailabilityRule(rule.id)}
-                        className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                        title="Remove Rule"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  ))}
+              {/* Add Exception Form */}
+              <form onSubmit={handleAddException} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-2xl border border-zinc-200">
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Specific Date</label>
+                  <input
+                    type="date"
+                    required
+                    value={exceptionDate}
+                    onChange={(e) => setExceptionDate(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  />
                 </div>
-              )}
+
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Exception Type</label>
+                  <select
+                    value={exceptionType}
+                    onChange={(e) => setExceptionType(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  >
+                    <option value="UNAVAILABLE">Unavailable (Block Entire Day)</option>
+                    <option value="CUSTOM">Custom Hours</option>
+                  </select>
+                </div>
+
+                <div>
+                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Reason / Note</label>
+                  <input
+                    type="text"
+                    placeholder="e.g. Vacation / Holiday"
+                    value={exceptionReason}
+                    onChange={(e) => setExceptionReason(e.target.value)}
+                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
+                  />
+                </div>
+
+                <div className="flex items-end">
+                  <button
+                    type="submit"
+                    className="w-full py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Add Date Exception
+                  </button>
+                </div>
+              </form>
+
+              {/* Existing Exceptions List */}
+              <div className="space-y-3">
+                <h4 className="text-xs font-bold text-black uppercase tracking-wider">Active Date Exceptions List</h4>
+                {availabilityExceptions.length === 0 ? (
+                  <p className="text-xs text-zinc-400 italic">No date exceptions added yet. Standard working rules apply to all dates.</p>
+                ) : (
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                    {availabilityExceptions.map((exc) => (
+                      <div key={exc.id} className="p-4 rounded-2xl border border-zinc-200 bg-white flex items-center justify-between shadow-2xs">
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="text-sm font-extrabold text-black block">
+                              {new Date(exc.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                            </span>
+                            <span className="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800 text-[10px] font-extrabold uppercase">
+                              {exc.type}
+                            </span>
+                          </div>
+                          {exc.reason && (
+                            <span className="text-xs text-zinc-500 font-medium block mt-0.5">{exc.reason}</span>
+                          )}
+                        </div>
+                        <button
+                          onClick={() => removeAvailabilityException(exc.id)}
+                          className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                          title="Remove Exception"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         )}

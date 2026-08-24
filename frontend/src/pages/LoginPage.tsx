@@ -1,24 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Calendar, User, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
+import { Calendar, AlertCircle } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 import { api } from '../api/client';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { currentUserId, users, setCurrentUserId, fetchUsers } = useAppStore();
+  const { currentUserId } = useAppStore();
 
-  const [inputUserId, setInputUserId] = useState<string>('');
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(searchParams.get('error'));
 
   useEffect(() => {
-    fetchUsers();
     if (currentUserId && currentUserId > 0) {
       navigate('/dashboard', { replace: true });
     }
-  }, [currentUserId, navigate, fetchUsers]);
+  }, [currentUserId, navigate]);
 
   const handleGoogleLogin = async () => {
     setLoadingGoogle(true);
@@ -35,22 +33,6 @@ export const LoginPage: React.FC = () => {
       setErrorMsg(err.response?.data?.message || err.message || 'Failed to connect to Google Auth');
       setLoadingGoogle(false);
     }
-  };
-
-  const handleIdLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    const idNum = Number(inputUserId);
-    if (isNaN(idNum) || idNum <= 0) {
-      alert('Please enter a valid numerical User ID (e.g. 3)');
-      return;
-    }
-    setCurrentUserId(idNum);
-    navigate('/dashboard');
-  };
-
-  const handleQuickSelect = (id: number) => {
-    setCurrentUserId(id);
-    navigate('/dashboard');
   };
 
   return (
@@ -77,7 +59,7 @@ export const LoginPage: React.FC = () => {
         )}
 
         {/* Primary Method: Sign in with Google */}
-        <div className="space-y-3">
+        <div className="space-y-4 pt-2">
           <button
             type="button"
             onClick={handleGoogleLogin}
@@ -115,79 +97,6 @@ export const LoginPage: React.FC = () => {
             Requires Google Calendar permissions to sync appointment invites.
           </p>
         </div>
-
-        <div className="relative py-2">
-          <div className="absolute inset-0 flex items-center">
-            <div className="w-full border-t border-zinc-200" />
-          </div>
-          <div className="relative flex justify-center text-[11px] font-extrabold uppercase tracking-wider">
-            <span className="bg-white px-3 text-zinc-400">Developer Testing</span>
-          </div>
-        </div>
-
-        {/* Secondary: Manual Host ID / Quick Select */}
-        <form onSubmit={handleIdLogin} className="space-y-4">
-          <div>
-            <label className="block text-xs font-bold text-black uppercase tracking-wider mb-2">
-              Manual Host User ID
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                placeholder="e.g. 3"
-                value={inputUserId}
-                onChange={(e) => setInputUserId(e.target.value)}
-                className="w-full px-4 py-3 pl-11 rounded-xl border border-zinc-300 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-black"
-              />
-              <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
-            </div>
-          </div>
-
-          <button
-            type="submit"
-            className="w-full py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 text-black font-bold text-xs flex items-center justify-center gap-2 cursor-pointer"
-          >
-            <span>Login with User ID</span>
-            <ArrowRight className="w-3.5 h-3.5" />
-          </button>
-        </form>
-
-        {/* Quick Select Detected Users */}
-        {users.length > 0 && (
-          <div className="space-y-2 pt-2">
-            <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider text-center">
-              Existing Hosts in Local DB
-            </label>
-
-            <div className="space-y-1.5">
-              {users.map((u) => (
-                <button
-                  key={u.id}
-                  type="button"
-                  onClick={() => handleQuickSelect(u.id)}
-                  className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all cursor-pointer ${
-                    currentUserId === u.id
-                      ? 'border-black bg-black text-white font-bold'
-                      : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 text-zinc-900'
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${currentUserId === u.id ? 'bg-zinc-800 text-white' : 'bg-zinc-100 text-zinc-800'}`}>
-                      {u.id}
-                    </div>
-                    <div>
-                      <div className="text-xs font-bold">{u.name}</div>
-                      <div className={`text-[10px] ${currentUserId === u.id ? 'text-zinc-300' : 'text-zinc-500'}`}>{u.email}</div>
-                    </div>
-                  </div>
-                  {currentUserId === u.id && (
-                    <CheckCircle2 className="w-4 h-4 text-white" />
-                  )}
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

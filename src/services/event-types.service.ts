@@ -19,6 +19,76 @@ export async function getEventTypeByEventIdService(eventId: number) {
     return eventType;
 }
 
+async function autoGenerateSlotsIfEmpty(userId: number, eventTypeId: number, durationMin: number) {
+    const rules = await prisma.availabilityRule.findMany({
+        where: { userId, isActive: true },
+    });
+
+    const activeRules = rules.length > 0 ? rules : [
+        { weekday: 1, startTime: "09:00", endTime: "17:00" },
+        { weekday: 2, startTime: "09:00", endTime: "17:00" },
+        { weekday: 3, startTime: "09:00", endTime: "17:00" },
+        { weekday: 4, startTime: "09:00", endTime: "17:00" },
+        { weekday: 5, startTime: "09:00", endTime: "17:00" },
+    ];
+
+    const exceptions = await prisma.availabilityException.findMany({
+        where: { userId },
+    });
+
+    const blockedDates = new Set(
+        exceptions
+            .filter(e => e.type === "UNAVAILABLE" || e.type === "BLOCK_FULL_DAY")
+            .map(e => e.date.toISOString().split("T")[0])
+    );
+
+    const now = new Date();
+    const newSlots = [];
+
+    for (let dayOffset = 0; dayOffset < 30; dayOffset++) {
+        const currentDate = new Date();
+        currentDate.setDate(now.getDate() + dayOffset);
+
+        const dateStr = currentDate.toISOString().split("T")[0];
+        if (blockedDates.has(dateStr)) continue;
+
+        const weekday = currentDate.getDay(); // 0 = Sunday, 1 = Monday...
+        const matchingRules = activeRules.filter(r => r.weekday === weekday);
+
+        for (const rule of matchingRules) {
+            const [startH, startM] = rule.startTime.split(":").map(Number);
+            const [endH, endM] = rule.endTime.split(":").map(Number);
+
+            let slotStart = new Date(currentDate);
+            slotStart.setHours(startH, startM, 0, 0);
+
+            const windowEnd = new Date(currentDate);
+            windowEnd.setHours(endH, endM, 0, 0);
+
+            while (slotStart.getTime() + durationMin * 60000 <= windowEnd.getTime()) {
+                const slotEnd = new Date(slotStart.getTime() + durationMin * 60000);
+                if (slotStart > now) {
+                    newSlots.push({
+                        hostId: userId,
+                        eventTypeId,
+                        startAt: slotStart,
+                        endAt: slotEnd,
+                        status: "AVAILABLE",
+                    });
+                }
+                slotStart = slotEnd;
+            }
+        }
+    }
+
+    if (newSlots.length > 0) {
+        await prisma.slot.createMany({
+            data: newSlots,
+            skipDuplicates: true,
+        });
+    }
+}
+
 export async function getEventTypePublic(userId: number, eventSlug: string) {
     const user = await getUserById(userId);
     if (!user) {
@@ -31,7 +101,7 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
     }
 
     // Fetch available slots for public booking page
-    const slots = await prisma.slot.findMany({
+    let slots = await prisma.slot.findMany({
         where: {
             eventTypeId: eventType.id,
             status: "AVAILABLE",
@@ -43,6 +113,23 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
             startAt: "asc",
         },
     });
+
+    // Auto-generate slots if empty
+    if (slots.length === 0) {
+        await autoGenerateSlotsIfEmpty(userId, eventType.id, eventType.durationMin);
+        slots = await prisma.slot.findMany({
+            where: {
+                eventTypeId: eventType.id,
+                status: "AVAILABLE",
+                startAt: {
+                    gte: new Date(),
+                },
+            },
+            orderBy: {
+                startAt: "asc",
+            },
+        });
+    }
 
     return {
         ...eventType,
@@ -79,6 +166,9 @@ export async function createEventTypeService(hostId: number, data: CreateEventTy
     try {
         const eventType = await createEventTypeRepo(hostId, { ...data, slug: slugPassed });
         
+        // Auto-generate slots right after creation
+        await autoGenerateSlotsIfEmpty(hostId, eventType.id, eventType.durationMin);
+
         try {
             await regenerateHostSlotsWorkflow({ hostId });
         } catch (temporalErr) {
@@ -112,6 +202,8 @@ export async function updateEventTypeService(eventId: number, data: UpdateEventT
     }
 
     const updatedEvent = await updateEventTypeRepo(eventId, data);
+    await autoGenerateSlotsIfEmpty(hostId, updatedEvent.id, updatedEvent.durationMin);
+
     try {
         await regenerateHostSlotsWorkflow({ hostId });
     } catch (temporalErr) {

@@ -494,41 +494,59 @@ export const DashboardPage: React.FC = () => {
               </div>
             ) : (
               <div className="divide-y divide-zinc-100">
-                {bookings.map((booking) => (
-                  <div key={booking.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-zinc-50 transition-colors">
-                    <div className="space-y-1.5">
-                      <div className="flex items-center gap-2">
-                        <span className="font-extrabold text-black text-base">{booking.guestName}</span>
-                        <span className="text-xs text-zinc-500">({booking.guestEmail})</span>
-                        <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[10px] font-extrabold uppercase tracking-wider">
-                          Confirmed
-                        </span>
-                      </div>
-                      <div className="text-xs text-zinc-700 flex items-center gap-4">
-                        <span className="flex items-center gap-1 font-bold">
-                          <Calendar className="w-4 h-4 text-black" />
-                          {new Date(booking.startTime).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
-                        </span>
-                        <span className="flex items-center gap-1 font-mono font-bold">
-                          <Clock className="w-4 h-4 text-black" />
-                          {new Date(booking.startTime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                        </span>
-                      </div>
-                      {booking.guestNotes && (
-                        <p className="text-xs text-zinc-600 italic mt-1 bg-zinc-50 p-2.5 rounded-xl border border-zinc-200">
-                          "{booking.guestNotes}"
-                        </p>
-                      )}
-                    </div>
+                {bookings.map((booking) => {
+                  const guestName = booking.inviteeName || booking.guestName || 'Guest';
+                  const guestEmail = booking.inviteeEmail || booking.guestEmail || '';
+                  const guestNotes = booking.inviteeNote || booking.guestNotes || '';
+                  const eventTitle = booking.eventType?.title || 'Appointment';
+                  const slotStart = booking.slot?.startAt || booking.startTime;
+                  
+                  const formattedDate = slotStart 
+                    ? new Date(slotStart).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
+                    : 'N/A';
+                  const formattedTime = slotStart 
+                    ? new Date(slotStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                    : 'N/A';
 
-                    <button
-                      onClick={() => handleCancelBooking(booking.id)}
-                      className="px-4 py-2 rounded-xl border border-zinc-300 hover:border-rose-300 hover:bg-rose-50 text-xs font-bold text-zinc-700 hover:text-rose-600 transition-colors self-start sm:self-auto"
-                    >
-                      Cancel Booking
-                    </button>
-                  </div>
-                ))}
+                  return (
+                    <div key={booking.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-zinc-50 transition-colors">
+                      <div className="space-y-1.5">
+                        <div className="flex items-center gap-2">
+                          <span className="font-extrabold text-black text-base">{guestName}</span>
+                          {guestEmail && <span className="text-xs text-zinc-500">({guestEmail})</span>}
+                          <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[10px] font-extrabold uppercase tracking-wider">
+                            {booking.status || 'CONFIRMED'}
+                          </span>
+                        </div>
+                        <div className="text-xs font-bold text-zinc-800">
+                          Event: {eventTitle}
+                        </div>
+                        <div className="text-xs text-zinc-700 flex items-center gap-4">
+                          <span className="flex items-center gap-1 font-bold">
+                            <Calendar className="w-4 h-4 text-black" />
+                            {formattedDate}
+                          </span>
+                          <span className="flex items-center gap-1 font-mono font-bold">
+                            <Clock className="w-4 h-4 text-black" />
+                            {formattedTime}
+                          </span>
+                        </div>
+                        {guestNotes && (
+                          <p className="text-xs text-zinc-600 italic mt-1 bg-zinc-50 p-2.5 rounded-xl border border-zinc-200">
+                            "{guestNotes}"
+                          </p>
+                        )}
+                      </div>
+
+                      <button
+                        onClick={() => handleCancelBooking(booking.id)}
+                        className="px-4 py-2 rounded-xl border border-zinc-300 hover:border-rose-300 hover:bg-rose-50 text-xs font-bold text-zinc-700 hover:text-rose-600 transition-colors self-start sm:self-auto"
+                      >
+                        Cancel Booking
+                      </button>
+                    </div>
+                  );
+                })}
               </div>
             )}
           </div>

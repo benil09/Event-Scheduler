@@ -24,13 +24,22 @@ export interface Booking {
   id: number;
   hostId: number;
   eventTypeId: number;
-  startTime: string;
-  endTime: string;
-  guestName: string;
-  guestEmail: string;
+  slotId: string;
+  inviteeEmail?: string;
+  inviteeName?: string;
+  inviteeNote?: string;
+  guestName?: string;
+  guestEmail?: string;
   guestNotes?: string;
   status: string;
+  slot?: {
+    id: string;
+    startAt: string;
+    endAt: string;
+  };
   eventType?: EventType;
+  startTime?: string;
+  endTime?: string;
   createdAt?: string;
 }
 
@@ -194,7 +203,15 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       setApiUserId(userId);
       const res = await api.getBookings();
-      const bookingList = Array.isArray(res) ? res : (res.data || res.bookings || []);
+      const rawList = Array.isArray(res) ? res : (res.data || res.bookings || []);
+      const bookingList = rawList.map((b: any) => ({
+        ...b,
+        guestName: b.inviteeName || b.guestName || 'Guest',
+        guestEmail: b.inviteeEmail || b.guestEmail || '',
+        guestNotes: b.inviteeNote || b.guestNotes || '',
+        startTime: b.slot?.startAt || b.startTime || b.startAt || b.createdAt,
+        endTime: b.slot?.endAt || b.endTime || b.endAt,
+      }));
       set({ bookings: bookingList });
     } catch (err: any) {
       console.error("Failed to fetch bookings", err);

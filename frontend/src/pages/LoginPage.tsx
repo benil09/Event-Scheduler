@@ -1,20 +1,38 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Calendar, User, ArrowRight, Plus, CheckCircle2 } from 'lucide-react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Calendar, User, ArrowRight, CheckCircle2, AlertCircle } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
+import { api } from '../api/client';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
-  const { currentUserId, users, setCurrentUserId, fetchUsers, createNewUser, isLoading } = useAppStore();
+  const [searchParams] = useSearchParams();
+  const { currentUserId, users, setCurrentUserId, fetchUsers } = useAppStore();
 
   const [inputUserId, setInputUserId] = useState<string>('');
-  const [showCreateModal, setShowCreateModal] = useState(false);
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [loadingGoogle, setLoadingGoogle] = useState(false);
+  const [errorMsg, setErrorMsg] = useState<string | null>(searchParams.get('error'));
 
   useEffect(() => {
     fetchUsers();
   }, []);
+
+  const handleGoogleLogin = async () => {
+    setLoadingGoogle(true);
+    setErrorMsg(null);
+    try {
+      const res = await api.getGoogleAuthUrl();
+      if (res && res.url) {
+        window.location.href = res.url;
+      } else {
+        throw new Error('Google Auth URL was not returned');
+      }
+    } catch (err: any) {
+      console.error('Google Auth Error:', err);
+      setErrorMsg(err.response?.data?.message || err.message || 'Failed to connect to Google Auth');
+      setLoadingGoogle(false);
+    }
+  };
 
   const handleIdLogin = (e: React.FormEvent) => {
     e.preventDefault();
@@ -32,17 +50,6 @@ export const LoginPage: React.FC = () => {
     navigate('/dashboard');
   };
 
-  const handleCreateHost = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!name || !email) return;
-    const newUser = await createNewUser(name, email);
-    if (newUser && newUser.id) {
-      setCurrentUserId(newUser.id);
-      setShowCreateModal(false);
-      navigate('/dashboard');
-    }
-  };
-
   return (
     <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-zinc-200 shadow-2xl">
@@ -52,65 +59,122 @@ export const LoginPage: React.FC = () => {
             <Calendar className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-black tracking-tight">Host Login Portal</h1>
-            <p className="text-xs font-medium text-zinc-500 mt-1">Enter your Host User ID to access your scheduling workspace.</p>
+            <h1 className="text-2xl font-extrabold text-black tracking-tight">Host Authentication</h1>
+            <p className="text-xs font-medium text-zinc-500 mt-1">
+              Sign in with your Google account to access your scheduler & calendar integration.
+            </p>
           </div>
         </div>
 
-        {/* Form 1: Enter Host ID */}
+        {errorMsg && (
+          <div className="p-4 rounded-2xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-bold flex items-center gap-2">
+            <AlertCircle className="w-4 h-4 flex-shrink-0" />
+            <span>{errorMsg}</span>
+          </div>
+        )}
+
+        {/* Primary Method: Sign in with Google */}
+        <div className="space-y-3">
+          <button
+            type="button"
+            onClick={handleGoogleLogin}
+            disabled={loadingGoogle}
+            className="w-full py-4 px-4 rounded-2xl bg-black hover:bg-zinc-800 text-white font-extrabold text-sm shadow-md flex items-center justify-center gap-3 transition-transform hover:scale-[1.01] active:scale-[0.99] disabled:opacity-70"
+          >
+            {loadingGoogle ? (
+              <span className="animate-pulse">Connecting to Google...</span>
+            ) : (
+              <>
+                {/* Official Google G Logo */}
+                <svg className="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
+                  <path
+                    fill="#4285F4"
+                    d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"
+                  />
+                  <path
+                    fill="#FBBC05"
+                    d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"
+                  />
+                  <path
+                    fill="#EA4335"
+                    d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
+                  />
+                </svg>
+                <span>Sign in with Google</span>
+              </>
+            )}
+          </button>
+          <p className="text-[11px] text-center text-zinc-400 font-medium">
+            Requires Google Calendar permissions to sync appointment invites.
+          </p>
+        </div>
+
+        <div className="relative py-2">
+          <div className="absolute inset-0 flex items-center">
+            <div className="w-full border-t border-zinc-200" />
+          </div>
+          <div className="relative flex justify-center text-[11px] font-extrabold uppercase tracking-wider">
+            <span className="bg-white px-3 text-zinc-400">Developer Testing</span>
+          </div>
+        </div>
+
+        {/* Secondary: Manual Host ID / Quick Select */}
         <form onSubmit={handleIdLogin} className="space-y-4">
           <div>
             <label className="block text-xs font-bold text-black uppercase tracking-wider mb-2">
-              Host User ID
+              Manual Host User ID
             </label>
             <div className="relative">
               <input
                 type="number"
-                required
                 placeholder="e.g. 3"
                 value={inputUserId}
                 onChange={(e) => setInputUserId(e.target.value)}
-                className="w-full px-4 py-3.5 pl-11 rounded-xl border border-zinc-300 text-base font-bold text-black focus:outline-none focus:ring-2 focus:ring-black focus:border-black transition-all"
+                className="w-full px-4 py-3 pl-11 rounded-xl border border-zinc-300 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-black"
               />
-              <User className="w-5 h-5 text-zinc-400 absolute left-3.5 top-4" />
+              <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3.5" />
             </div>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-sm shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+            className="w-full py-2.5 rounded-xl border border-zinc-300 hover:bg-zinc-100 text-black font-bold text-xs flex items-center justify-center gap-2"
           >
-            <span>Login to Host Workspace</span>
-            <ArrowRight className="w-4 h-4" />
+            <span>Login with User ID</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </form>
 
         {/* Quick Select Detected Users */}
         {users.length > 0 && (
-          <div className="space-y-3 pt-4 border-t border-zinc-100">
+          <div className="space-y-2 pt-2">
             <label className="block text-[11px] font-bold text-zinc-400 uppercase tracking-wider text-center">
-              Or Quick Select Detected Host Account
+              Existing Hosts in Local DB
             </label>
 
-            <div className="space-y-2">
+            <div className="space-y-1.5">
               {users.map((u) => (
                 <button
                   key={u.id}
                   type="button"
                   onClick={() => handleQuickSelect(u.id)}
-                  className={`w-full p-3.5 rounded-xl border text-left flex items-center justify-between transition-all ${
+                  className={`w-full p-3 rounded-xl border text-left flex items-center justify-between transition-all ${
                     currentUserId === u.id
                       ? 'border-black bg-black text-white font-bold'
                       : 'border-zinc-200 hover:border-zinc-400 hover:bg-zinc-50 text-zinc-900'
                   }`}
                 >
                   <div className="flex items-center gap-3">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center text-xs font-bold ${currentUserId === u.id ? 'bg-zinc-800 text-white' : 'bg-zinc-100 text-zinc-800'}`}>
+                    <div className={`w-7 h-7 rounded-lg flex items-center justify-center text-xs font-bold ${currentUserId === u.id ? 'bg-zinc-800 text-white' : 'bg-zinc-100 text-zinc-800'}`}>
                       {u.id}
                     </div>
                     <div>
                       <div className="text-xs font-bold">{u.name}</div>
-                      <div className={`text-[11px] ${currentUserId === u.id ? 'text-zinc-300' : 'text-zinc-500'}`}>{u.email}</div>
+                      <div className={`text-[10px] ${currentUserId === u.id ? 'text-zinc-300' : 'text-zinc-500'}`}>{u.email}</div>
                     </div>
                   </div>
                   {currentUserId === u.id && (
@@ -118,70 +182,6 @@ export const LoginPage: React.FC = () => {
                   )}
                 </button>
               ))}
-            </div>
-          </div>
-        )}
-
-        {/* Register New Account Link */}
-        <div className="text-center pt-2">
-          <button
-            type="button"
-            onClick={() => setShowCreateModal(false)}
-            className="text-xs font-bold text-black hover:underline inline-flex items-center gap-1"
-          >
-            <Plus className="w-3.5 h-3.5" />
-            Create new host account
-          </button>
-        </div>
-
-        {/* Register New Host Modal */}
-        {showCreateModal && (
-          <div className="fixed inset-0 z-50 bg-black/40 backdrop-blur-xs flex items-center justify-center p-4">
-            <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-zinc-200 space-y-4">
-              <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
-                <h3 className="text-lg font-extrabold text-black">Register New Host Account</h3>
-                <button
-                  type="button"
-                  onClick={() => setShowCreateModal(false)}
-                  className="text-zinc-400 hover:text-black text-xs font-bold"
-                >
-                  Cancel
-                </button>
-              </div>
-
-              <form onSubmit={handleCreateHost} className="space-y-4">
-                <div>
-                  <label className="block text-xs font-bold text-black mb-1">Full Name *</label>
-                  <input
-                    type="text"
-                    required
-                    placeholder="e.g. Alex Morgan"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-xs font-bold text-black mb-1">Email Address *</label>
-                  <input
-                    type="email"
-                    required
-                    placeholder="e.g. alex@example.com"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-300 text-sm focus:outline-none focus:ring-2 focus:ring-black"
-                  />
-                </div>
-
-                <button
-                  type="submit"
-                  disabled={isLoading}
-                  className="w-full py-3 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-md"
-                >
-                  Create & Login As New Host
-                </button>
-              </form>
             </div>
           </div>
         )}

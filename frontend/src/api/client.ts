@@ -21,6 +21,12 @@ export const setApiUserId = (userId: number | null) => {
 
 // User API
 export const api = {
+  // Google Auth
+  getGoogleAuthUrl: async () => {
+    const res = await apiClient.get('/api/auth/google/url');
+    return res.data;
+  },
+
   // Users
   getUsers: async () => {
     const res = await apiClient.get('/api/users');

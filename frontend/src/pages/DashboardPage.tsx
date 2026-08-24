@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { 
   Plus, Calendar, Clock, Copy, Check, ExternalLink, Trash2, 
   UserCheck, Globe, AlertCircle, RefreshCw, Layers
@@ -9,9 +9,10 @@ import { useAppStore } from '../store/useAppStore';
 const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const DashboardPage: React.FC = () => {
+  const [searchParams, setSearchParams] = useSearchParams();
   const { 
     currentUserId, currentUser, eventTypes, bookings, availabilityRules, isLoading, error,
-    fetchEventTypes, fetchBookings, fetchAvailabilityRules, removeEventType, cancelBooking,
+    setCurrentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, removeEventType, cancelBooking,
     addAvailabilityRule, removeAvailabilityRule
   } = useAppStore();
 
@@ -24,9 +25,23 @@ export const DashboardPage: React.FC = () => {
   const [endTime, setEndTime] = useState('17:00');
 
   useEffect(() => {
-    fetchEventTypes();
-    fetchBookings();
-    fetchAvailabilityRules();
+    // Handle OAuth Callback Params if present
+    const paramUserId = searchParams.get('userId');
+    if (paramUserId) {
+      const parsedId = Number(paramUserId);
+      if (!isNaN(parsedId) && parsedId > 0) {
+        setCurrentUserId(parsedId);
+        setSearchParams({}, { replace: true });
+      }
+    }
+  }, [searchParams]);
+
+  useEffect(() => {
+    if (currentUserId > 0) {
+      fetchEventTypes();
+      fetchBookings();
+      fetchAvailabilityRules();
+    }
   }, [currentUserId]);
 
   const copyPublicLink = (slug: string, id: number) => {
@@ -64,7 +79,7 @@ export const DashboardPage: React.FC = () => {
         <div className="relative z-10 max-w-3xl space-y-3">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-zinc-300">
             <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Authenticated Host: {currentUser?.name || `Host #${currentUserId}`} ({currentUser?.email || 'Active Session'})
+            Authenticated Host: {currentUser?.name || `Host #${currentUserId}`} ({currentUser?.email || 'Active Google Session'})
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
             Host Control Center

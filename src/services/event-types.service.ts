@@ -1,9 +1,10 @@
-import { createEventTypeRepo, deleteEventTypeRepo, findActiveByHostIdAndEventSlug, findEventTypeByEventIdRepo, getEventTypesByUserIdRepo, slugExistsGlobal, slugExistsForHost, updateEventTypeRepo } from "../repositories/event-type.repository.js";
+import { createEventTypeRepo, deleteEventTypeRepo, findActiveByHostIdAndEventSlug, findEventTypeByEventIdRepo, getEventTypesByUserIdRepo, slugExistsGlobal, updateEventTypeRepo } from "../repositories/event-type.repository.js";
 import { CreateEventTypeDto, UpdateEventTypeDto } from "../dtos/event-type.dto.js";
 import slug from "slug";
 import { conflict, forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
 import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
+import { prisma } from "../config/database.js";
 
 export async function getEventTypesByUserIdService(hostId: number) {
     const response = await getEventTypesByUserIdRepo(hostId);
@@ -16,6 +17,43 @@ export async function getEventTypeByEventIdService(eventId: number) {
         throw notFound("Event not found");
     }
     return eventType;
+}
+
+export async function getEventTypePublic(userId: number, eventSlug: string) {
+    const user = await getUserById(userId);
+    if (!user) {
+        throw notFound("User not found");
+    }
+
+    const eventType = await findActiveByHostIdAndEventSlug(userId, eventSlug);
+    if (!eventType) {
+        throw notFound("Event type not found or inactive");
+    }
+
+    // Fetch available slots for public booking page
+    const slots = await prisma.slot.findMany({
+        where: {
+            eventTypeId: eventType.id,
+            status: "AVAILABLE",
+            startAt: {
+                gte: new Date(),
+            },
+        },
+        orderBy: {
+            startAt: "asc",
+        },
+    });
+
+    return {
+        ...eventType,
+        host: {
+            id: user.id,
+            name: user.name,
+            Email: user.Email,
+            timezone: user.timezone,
+        },
+        availableSlots: slots,
+    };
 }
 
 export async function createEventTypeService(hostId: number, data: CreateEventTypeDto) {

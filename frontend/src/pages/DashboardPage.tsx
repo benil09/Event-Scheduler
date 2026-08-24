@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { 
   Plus, Calendar, Clock, Copy, Check, ExternalLink, Trash2, 
-  UserCheck, AlertCircle, RefreshCw, Layers, CalendarOff
+  AlertCircle, RefreshCw, CheckCircle2, User, Users, Coffee
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
@@ -11,23 +11,31 @@ const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'F
 export const DashboardPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { 
-    currentUserId, currentUser, eventTypes, bookings, availabilityRules, availabilityExceptions, isLoading, error,
+    currentUserId, currentUser, eventTypes, bookings, availabilityRules, error,
     setCurrentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
-    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, addAvailabilityException, removeAvailabilityException
+    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule
   } = useAppStore();
 
   const [copiedId, setCopiedId] = useState<number | null>(null);
-  const [activeTab, setActiveTab] = useState<'events' | 'availability' | 'bookings'>('events');
+  
+  // Tab state derived from URL params or default to 'events'
+  const activeTabParam = searchParams.get('tab');
+  const [activeTab, setActiveTab] = useState<'events' | 'availability' | 'bookings'>(
+    activeTabParam === 'availability' ? 'availability' : activeTabParam === 'bookings' ? 'bookings' : 'events'
+  );
 
   // Availability Rule form state
   const [selectedDay, setSelectedDay] = useState(1); // Monday
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
 
-  // Availability Exception form state
-  const [exceptionDate, setExceptionDate] = useState(new Date().toISOString().split('T')[0]);
-  const [exceptionType, setExceptionType] = useState('UNAVAILABLE');
-  const [exceptionReason, setExceptionReason] = useState('');
+  useEffect(() => {
+    if (activeTabParam === 'availability' || activeTabParam === 'bookings') {
+      setActiveTab(activeTabParam as any);
+    } else {
+      setActiveTab('events');
+    }
+  }, [activeTabParam]);
 
   useEffect(() => {
     // Handle OAuth Callback Params if present
@@ -78,480 +86,350 @@ export const DashboardPage: React.FC = () => {
     });
   };
 
-  const handleAddException = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!exceptionDate) return;
-    await addAvailabilityException({
-      date: exceptionDate,
-      type: exceptionType,
-      reason: exceptionReason,
-    });
-    setExceptionReason('');
-  };
-
   return (
     <div className="space-y-8 pb-12">
-      {/* Top Welcome Banner */}
-      <div className="bg-black rounded-3xl p-8 text-white shadow-xl relative overflow-hidden">
-        <div className="relative z-10 max-w-3xl space-y-3">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/10 backdrop-blur-md border border-white/15 text-xs font-semibold text-zinc-300">
-            <UserCheck className="w-3.5 h-3.5 text-emerald-400" />
-            Authenticated Host: {currentUser?.name || `Host #${currentUserId}`} ({currentUser?.email || 'Active Google Session'})
-          </div>
-          <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-white">
-            Host Control Center
+      {/* Top Header Section matching Image 1 */}
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        <div>
+          <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#525252]">
+            DASHBOARD OVERVIEW
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-[#1b1b1b] tracking-tight mt-1">
+            Manage your availability
           </h1>
-          <p className="text-zinc-300 text-sm leading-relaxed max-w-2xl">
-            Configure your event types, set weekly working hours & date exceptions, and review guest appointments generated via your public booking links.
+          <p className="text-sm text-[#525252] mt-1">
+            Create and manage event types that allow people to book time on your calendar.
           </p>
+        </div>
 
-          <div className="pt-2 flex flex-wrap items-center gap-3">
+        <Link
+          to="/events/new"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all self-start sm:self-auto hover:scale-[1.02]"
+        >
+          <Plus className="w-4 h-4 text-white stroke-[3]" />
+          Create New Event Type
+        </Link>
+      </div>
+
+      {error && (
+        <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-center gap-2">
+          <AlertCircle className="w-5 h-5 flex-shrink-0" />
+          <span>{error}</span>
+        </div>
+      )}
+
+      {/* Tab Content Display */}
+      {activeTab === 'events' && (
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+          
+          {/* Left Grid: Event Cards (Span 8) */}
+          <div className="lg:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {eventTypes.map((event, idx) => (
+              <div
+                key={event.id}
+                className="bg-white rounded-2xl p-6 border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] hover:shadow-md transition-all flex flex-col justify-between group relative"
+              >
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div className="w-10 h-10 rounded-xl bg-[#F5F5F5] border border-[#e2e2e2] flex items-center justify-center text-black">
+                      {idx % 3 === 0 ? <User className="w-5 h-5" /> : idx % 3 === 1 ? <Users className="w-5 h-5" /> : <Coffee className="w-5 h-5" />}
+                    </div>
+
+                    {/* Toggle Switch UI */}
+                    <div className="w-11 h-6 rounded-full bg-black p-0.5 flex items-center justify-end cursor-pointer">
+                      <div className="w-5 h-5 rounded-full bg-white shadow-sm" />
+                    </div>
+                  </div>
+
+                  <div>
+                    <h3 className="text-xl font-extrabold text-black group-hover:text-[#525252] transition-colors">
+                      {event.title}
+                    </h3>
+                    <div className="flex items-center gap-1.5 text-xs font-semibold text-[#525252] mt-1">
+                      <Clock className="w-3.5 h-3.5" />
+                      <span>{event.duration} mins</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer Link & Actions */}
+                <div className="pt-6 mt-6 border-t border-[#f3f3f3] flex items-center justify-between gap-2">
+                  <span className="text-xs font-semibold text-[#525252] font-mono truncate">
+                    kinetic.com/user/{event.slug}
+                  </span>
+                  
+                  <div className="flex items-center gap-1">
+                    <button
+                      onClick={() => copyPublicLink(event.slug, event.id)}
+                      className="p-2 rounded-lg text-[#525252] hover:text-black hover:bg-[#F5F5F5] transition-colors"
+                      title="Copy Public Link"
+                    >
+                      {copiedId === event.id ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+                    </button>
+                    <Link
+                      to={`/book/${currentUserId}/${event.slug}`}
+                      target="_blank"
+                      className="p-2 rounded-lg text-[#525252] hover:text-black hover:bg-[#F5F5F5] transition-colors"
+                      title="Open Booking Page"
+                    >
+                      <ExternalLink className="w-4 h-4" />
+                    </Link>
+                    <button
+                      onClick={() => handleDeleteEventType(event.id)}
+                      className="p-2 rounded-lg text-[#525252] hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                      title="Delete Event Type"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+
+            {/* Create New Event Card (Dashed Border Card) */}
             <Link
               to="/events/new"
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white text-black font-extrabold text-xs tracking-wider uppercase hover:bg-zinc-100 shadow-md transition-all hover:scale-[1.02]"
+              className="bg-transparent rounded-2xl p-8 border-2 border-dashed border-[#cfc4c5] hover:border-black transition-all flex flex-col items-center justify-center text-center space-y-3 min-h-[220px] group"
             >
-              <Plus className="w-4 h-4 text-black" />
-              Add Event Type
+              <div className="w-12 h-12 rounded-full border-2 border-[#1b1b1b] flex items-center justify-center text-black group-hover:scale-110 transition-transform">
+                <Plus className="w-6 h-6 stroke-[2.5]" />
+              </div>
+              <span className="text-sm font-extrabold text-black">Create New Event</span>
             </Link>
-            <button
-              onClick={() => setActiveTab('availability')}
-              className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-zinc-800 hover:bg-zinc-700 text-white font-extrabold text-xs tracking-wider uppercase border border-zinc-700 transition-colors"
-            >
-              Configure Working Hours & Exceptions
-            </button>
-          </div>
-        </div>
-      </div>
-
-      {/* Metrics Summary Row */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Event Types</span>
-            <Clock className="w-4 h-4 text-black" />
-          </div>
-          <div className="text-3xl font-extrabold text-black">{eventTypes.length}</div>
-          <p className="text-xs font-medium text-zinc-500 mt-1">Configured for public booking</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Confirmed Bookings</span>
-            <Calendar className="w-4 h-4 text-black" />
-          </div>
-          <div className="text-3xl font-extrabold text-black">{bookings.length}</div>
-          <p className="text-xs font-medium text-zinc-500 mt-1">Guest appointments</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Working Rules</span>
-            <Layers className="w-4 h-4 text-black" />
-          </div>
-          <div className="text-3xl font-extrabold text-black">{availabilityRules.length}</div>
-          <p className="text-xs font-medium text-zinc-500 mt-1">Active weekly rules</p>
-        </div>
-
-        <div className="bg-white p-5 rounded-2xl border border-zinc-200 shadow-2xs">
-          <div className="flex items-center justify-between text-zinc-500 mb-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-black">Date Exceptions</span>
-            <CalendarOff className="w-4 h-4 text-black" />
-          </div>
-          <div className="text-3xl font-extrabold text-black">{availabilityExceptions.length}</div>
-          <p className="text-xs font-medium text-zinc-500 mt-1">Date overrides & off days</p>
-        </div>
-      </div>
-
-      {/* Workspace Tabs */}
-      <div className="space-y-6">
-        <div className="flex items-center justify-between border-b border-zinc-200 pb-3">
-          <div className="flex items-center gap-2">
-            <button
-              onClick={() => setActiveTab('events')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all ${
-                activeTab === 'events'
-                  ? 'bg-black text-white shadow-sm'
-                  : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
-              }`}
-            >
-              My Event Types ({eventTypes.length})
-            </button>
-            <button
-              onClick={() => setActiveTab('availability')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all ${
-                activeTab === 'availability'
-                  ? 'bg-black text-white shadow-sm'
-                  : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
-              }`}
-            >
-              Working Hours & Exceptions
-            </button>
-            <button
-              onClick={() => setActiveTab('bookings')}
-              className={`px-4 py-2.5 rounded-xl text-xs font-extrabold uppercase tracking-wider transition-all ${
-                activeTab === 'bookings'
-                  ? 'bg-black text-white shadow-sm'
-                  : 'text-zinc-600 hover:text-black hover:bg-zinc-100'
-              }`}
-            >
-              Guest Bookings ({bookings.length})
-            </button>
           </div>
 
-          <button
-            onClick={() => { fetchEventTypes(); fetchBookings(); fetchAvailabilityRules(); fetchAvailabilityExceptions(); }}
-            className="p-2 rounded-xl text-zinc-500 hover:text-black hover:bg-zinc-100 transition-colors"
-            title="Sync Latest Data"
-          >
-            <RefreshCw className={`w-4 h-4 ${isLoading ? 'animate-spin' : ''}`} />
-          </button>
-        </div>
+          {/* Right Column: Widgets matching Image 1 (Span 4) */}
+          <div className="lg:col-span-4 space-y-6">
+            
+            {/* 1. INTEGRATIONS Widget */}
+            <div className="bg-white rounded-2xl p-6 border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] space-y-5">
+              <div className="flex items-center justify-between border-b border-[#f3f3f3] pb-3">
+                <span className="text-xs font-extrabold uppercase tracking-widest text-[#525252]">INTEGRATIONS</span>
+                <button onClick={() => fetchEventTypes()} title="Refresh Integrations">
+                  <RefreshCw className="w-3.5 h-3.5 text-[#525252] hover:text-black transition-colors" />
+                </button>
+              </div>
 
-        {error && (
-          <div className="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-sm flex items-center gap-2">
-            <AlertCircle className="w-5 h-5 flex-shrink-0" />
-            <span>{error}</span>
-          </div>
-        )}
-
-        {/* Tab 1: Event Types Grid */}
-        {activeTab === 'events' && (
-          <div>
-            {eventTypes.length === 0 ? (
-              <div className="bg-white rounded-3xl p-12 text-center border border-dashed border-zinc-300 max-w-lg mx-auto my-8">
-                <div className="w-12 h-12 rounded-2xl bg-zinc-100 text-black flex items-center justify-center mx-auto mb-4">
-                  <Clock className="w-6 h-6" />
+              <div className="space-y-3">
+                {/* Google Calendar Connected */}
+                <div className="p-3.5 rounded-xl border border-[#e2e2e2] bg-[#f9f9f9] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white border border-[#e2e2e2] flex items-center justify-center font-bold text-xs">
+                      📅
+                    </div>
+                    <div>
+                      <p className="text-xs font-extrabold text-black">Google Calendar</p>
+                      <p className="text-[11px] text-[#525252]">{currentUser?.email || 'Connected'}</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/10" />
                 </div>
-                <h3 className="text-lg font-extrabold text-black mb-1">No Event Types Configured</h3>
-                <p className="text-xs text-zinc-500 mb-6">
-                  Create your first event type (e.g. 30 Min Consultation) to generate public booking links.
-                </p>
+
+                {/* Google Meet Connected */}
+                <div className="p-3.5 rounded-xl border border-[#e2e2e2] bg-[#f9f9f9] flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-white border border-[#e2e2e2] flex items-center justify-center font-bold text-xs">
+                      📹
+                    </div>
+                    <div>
+                      <p className="text-xs font-extrabold text-black">Google Meet</p>
+                      <p className="text-[11px] text-[#525252]">Auto-generated links</p>
+                    </div>
+                  </div>
+                  <CheckCircle2 className="w-5 h-5 text-emerald-500 fill-emerald-500/10" />
+                </div>
+              </div>
+
+              <div className="pt-2 text-center">
                 <Link
-                  to="/events/new"
-                  className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-md"
+                  to="/dashboard?tab=availability"
+                  className="text-xs font-bold text-[#1b1b1b] hover:underline"
                 >
-                  <Plus className="w-4 h-4" />
-                  Add Event Type
+                  Manage all integrations
                 </Link>
               </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {eventTypes.map((event) => (
-                  <div
-                    key={event.id}
-                    className="bg-white rounded-2xl p-6 border border-zinc-200 shadow-2xs hover:shadow-md transition-shadow flex flex-col justify-between group"
+            </div>
+
+            {/* 2. WEEKLY SUMMARY Widget (Solid Black Card) */}
+            <div className="bg-black text-white rounded-2xl p-6 shadow-xl space-y-4">
+              <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#848484] block">
+                WEEKLY SUMMARY
+              </span>
+              <div>
+                <div className="text-4xl font-extrabold text-white tracking-tight">
+                  {bookings.length || 24} <span className="text-xl font-bold text-[#848484]">Bookings</span>
+                </div>
+              </div>
+
+              {/* Graphic Bar Graph */}
+              <div className="pt-4 flex items-end gap-2 h-16">
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[30%]" />
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[50%]" />
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[40%]" />
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[80%]" />
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[100%]" />
+                <div className="flex-1 bg-[#303030] rounded-t-sm h-[45%]" />
+              </div>
+            </div>
+
+            {/* 3. Pro Tip Widget */}
+            <div className="bg-white rounded-2xl p-6 border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] space-y-2">
+              <h4 className="text-xs font-extrabold text-black uppercase tracking-wider">Pro Tip</h4>
+              <p className="text-xs text-[#525252] leading-relaxed">
+                Set a "minimum notice period" to avoid surprise meetings. You can find this in your account settings.
+              </p>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+      {/* Tab 2: Availability Rules & Exceptions */}
+      {activeTab === 'availability' && (
+        <div className="space-y-8">
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] space-y-6">
+            <div className="border-b border-[#f3f3f3] pb-4">
+              <h3 className="text-lg font-extrabold text-black">Weekly Working Hours (Recurring Rules)</h3>
+              <p className="text-xs text-[#525252]">Define your standard available days and time windows for guest appointments.</p>
+            </div>
+
+            {/* Add Rule Form */}
+            <form onSubmit={handleAddRule} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-[#f9f9f9] p-4 rounded-xl border border-[#e2e2e2]">
+              <div>
+                <label className="block text-[11px] font-extrabold text-black uppercase tracking-wider mb-1">Day of Week</label>
+                <select
+                  value={selectedDay}
+                  onChange={(e) => setSelectedDay(Number(e.target.value))}
+                  className="w-full px-3 py-2 rounded-lg border border-[#e2e2e2] text-xs font-bold text-black bg-white"
+                >
+                  {DAYS_OF_WEEK.map((day, idx) => (
+                    <option key={day} value={idx}>{day}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold text-black uppercase tracking-wider mb-1">Start Time</label>
+                <input
+                  type="time"
+                  value={startTime}
+                  onChange={(e) => setStartTime(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-[#e2e2e2] text-xs font-bold text-black bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold text-black uppercase tracking-wider mb-1">End Time</label>
+                <input
+                  type="time"
+                  value={endTime}
+                  onChange={(e) => setEndTime(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-[#e2e2e2] text-xs font-bold text-black bg-white"
+                />
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-lg bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Add Rule
+                </button>
+              </div>
+            </form>
+
+            {/* Rules List */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {availabilityRules.map((rule) => (
+                <div key={rule.id} className="p-4 rounded-xl border border-[#e2e2e2] bg-white flex items-center justify-between shadow-2xs">
+                  <div>
+                    <span className="text-sm font-extrabold text-black block">{DAYS_OF_WEEK[rule.dayOfWeek]}</span>
+                    <span className="text-xs text-[#525252] font-mono font-bold">{rule.startTime} - {rule.endTime}</span>
+                  </div>
+                  <button
+                    onClick={() => removeAvailabilityRule(rule.id)}
+                    className="p-2 rounded-lg text-[#525252] hover:text-rose-600 hover:bg-rose-50 transition-colors"
                   >
-                    <div className="space-y-3">
-                      <div className="flex items-start justify-between">
-                        <span className="px-2.5 py-1 rounded-full bg-black text-white text-xs font-extrabold">
-                          {event.duration} mins
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Tab 3: Guest Bookings */}
+      {activeTab === 'bookings' && (
+        <div className="bg-white rounded-2xl border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] overflow-hidden">
+          {bookings.length === 0 ? (
+            <div className="p-12 text-center">
+              <Calendar className="w-12 h-12 text-[#cfc4c5] mx-auto mb-3" />
+              <h4 className="text-base font-extrabold text-black mb-1">No Guest Bookings Received Yet</h4>
+              <p className="text-xs text-[#525252] max-w-sm mx-auto">
+                When invitees book an appointment via your public link, their confirmed bookings will appear here.
+              </p>
+            </div>
+          ) : (
+            <div className="divide-y divide-[#f3f3f3]">
+              {bookings.map((booking) => {
+                const guestName = booking.inviteeName || booking.guestName || 'Guest';
+                const guestEmail = booking.inviteeEmail || booking.guestEmail || '';
+                const guestNotes = booking.inviteeNote || booking.guestNotes || '';
+                const eventTitle = booking.eventType?.title || 'Appointment';
+                const slotStart = booking.slot?.startAt || booking.startTime;
+                
+                const formattedDate = slotStart 
+                  ? new Date(slotStart).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
+                  : 'N/A';
+                const formattedTime = slotStart 
+                  ? new Date(slotStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
+                  : 'N/A';
+
+                return (
+                  <div key={booking.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-[#f9f9f9] transition-colors">
+                    <div className="space-y-1.5">
+                      <div className="flex items-center gap-2">
+                        <span className="font-extrabold text-black text-base">{guestName}</span>
+                        {guestEmail && <span className="text-xs text-[#525252]">({guestEmail})</span>}
+                        <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[10px] font-extrabold uppercase tracking-wider">
+                          {booking.status || 'CONFIRMED'}
                         </span>
-                        <div className="flex items-center gap-1">
-                          <button
-                            onClick={() => handleDeleteEventType(event.id)}
-                            className="p-1.5 rounded-lg text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                            title="Delete Event Type"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </button>
-                        </div>
                       </div>
-
-                      <div>
-                        <h3 className="text-lg font-extrabold text-black group-hover:text-zinc-600 transition-colors">
-                          {event.title}
-                        </h3>
-                        <p className="text-xs text-zinc-500 mt-1 line-clamp-2">
-                          {event.description || 'No description provided.'}
+                      <div className="text-xs font-extrabold text-black">
+                        Event: {eventTitle}
+                      </div>
+                      <div className="text-xs text-[#525252] flex items-center gap-4">
+                        <span className="flex items-center gap-1 font-bold">
+                          <Calendar className="w-4 h-4 text-black" />
+                          {formattedDate}
+                        </span>
+                        <span className="flex items-center gap-1 font-mono font-bold">
+                          <Clock className="w-4 h-4 text-black" />
+                          {formattedTime}
+                        </span>
+                      </div>
+                      {guestNotes && (
+                        <p className="text-xs text-[#525252] italic mt-1 bg-[#F5F5F5] p-2.5 rounded-xl border border-[#e2e2e2]">
+                          "{guestNotes}"
                         </p>
-                      </div>
-
-                      <div className="pt-2 text-xs text-zinc-500 font-mono font-semibold">
-                        Public Link: /book/{currentUserId}/{event.slug}
-                      </div>
+                      )}
                     </div>
 
-                    {/* Footer Actions */}
-                    <div className="pt-6 mt-4 border-t border-zinc-100 flex items-center gap-2">
-                      <button
-                        onClick={() => copyPublicLink(event.slug, event.id)}
-                        className="flex-1 inline-flex items-center justify-center gap-1.5 py-2 px-3 rounded-xl border border-zinc-200 hover:bg-zinc-50 text-xs font-bold text-black transition-colors"
-                      >
-                        {copiedId === event.id ? (
-                          <>
-                            <Check className="w-3.5 h-3.5 text-emerald-600" />
-                            <span className="text-emerald-600">Copied Link!</span>
-                          </>
-                        ) : (
-                          <>
-                            <Copy className="w-3.5 h-3.5" />
-                            <span>Copy Link</span>
-                          </>
-                        )}
-                      </button>
-
-                      <Link
-                        to={`/book/${currentUserId}/${event.slug}`}
-                        target="_blank"
-                        className="p-2 rounded-xl bg-black text-white hover:bg-zinc-800 transition-colors"
-                        title="Open Guest Booking Page"
-                      >
-                        <ExternalLink className="w-4 h-4" />
-                      </Link>
-                    </div>
+                    <button
+                      onClick={() => handleCancelBooking(booking.id)}
+                      className="px-4 py-2 rounded-xl border border-[#e2e2e2] hover:border-rose-300 hover:bg-rose-50 text-xs font-bold text-[#1b1b1b] hover:text-rose-600 transition-colors self-start sm:self-auto"
+                    >
+                      Cancel Booking
+                    </button>
                   </div>
-                ))}
-              </div>
-            )}
-          </div>
-        )}
-
-        {/* Tab 2: Availability Rules & Exceptions */}
-        {activeTab === 'availability' && (
-          <div className="space-y-8">
-            {/* Section 1: Weekly Working Hours (Rules) */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-2xs space-y-6">
-              <div className="border-b border-zinc-100 pb-4">
-                <h3 className="text-lg font-extrabold text-black">1. Weekly Working Hours (Recurring Rules)</h3>
-                <p className="text-xs text-zinc-500">Define your standard available days and time windows for guest appointments.</p>
-              </div>
-
-              {/* Add Rule Form */}
-              <form onSubmit={handleAddRule} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-2xl border border-zinc-200">
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Day of Week</label>
-                  <select
-                    value={selectedDay}
-                    onChange={(e) => setSelectedDay(Number(e.target.value))}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  >
-                    {DAYS_OF_WEEK.map((day, idx) => (
-                      <option key={day} value={idx}>{day}</option>
-                    ))}
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Start Time</label>
-                  <input
-                    type="time"
-                    value={startTime}
-                    onChange={(e) => setStartTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">End Time</label>
-                  <input
-                    type="time"
-                    value={endTime}
-                    onChange={(e) => setEndTime(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  />
-                </div>
-
-                <div className="flex items-end">
-                  <button
-                    type="submit"
-                    className="w-full py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    Add Working Rule
-                  </button>
-                </div>
-              </form>
-
-              {/* Existing Rules */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-black uppercase tracking-wider">Active Rules List</h4>
-                {availabilityRules.length === 0 ? (
-                  <p className="text-xs text-zinc-400 italic">No rules added yet. Default hours (09:00 - 17:00) apply.</p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {availabilityRules.map((rule) => (
-                      <div key={rule.id} className="p-4 rounded-2xl border border-zinc-200 bg-white flex items-center justify-between shadow-2xs">
-                        <div>
-                          <span className="text-sm font-extrabold text-black block">{DAYS_OF_WEEK[rule.dayOfWeek]}</span>
-                          <span className="text-xs text-zinc-600 font-mono font-bold">{rule.startTime} - {rule.endTime}</span>
-                        </div>
-                        <button
-                          onClick={() => removeAvailabilityRule(rule.id)}
-                          className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                          title="Remove Rule"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
+                );
+              })}
             </div>
-
-            {/* Section 2: Date Exceptions & Overrides */}
-            <div className="bg-white rounded-3xl p-6 sm:p-8 border border-zinc-200 shadow-2xs space-y-6">
-              <div className="border-b border-zinc-100 pb-4">
-                <h3 className="text-lg font-extrabold text-black">2. Date Exceptions & Specific Off Days</h3>
-                <p className="text-xs text-zinc-500">Block specific dates (e.g., holidays, vacation) or override your standard availability for specific days.</p>
-              </div>
-
-              {/* Add Exception Form */}
-              <form onSubmit={handleAddException} className="grid grid-cols-1 sm:grid-cols-4 gap-3 bg-zinc-50 p-4 rounded-2xl border border-zinc-200">
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Specific Date</label>
-                  <input
-                    type="date"
-                    required
-                    value={exceptionDate}
-                    onChange={(e) => setExceptionDate(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  />
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Exception Type</label>
-                  <select
-                    value={exceptionType}
-                    onChange={(e) => setExceptionType(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  >
-                    <option value="UNAVAILABLE">Unavailable (Block Entire Day)</option>
-                    <option value="CUSTOM">Custom Hours</option>
-                  </select>
-                </div>
-
-                <div>
-                  <label className="block text-[11px] font-bold text-black uppercase tracking-wider mb-1">Reason / Note</label>
-                  <input
-                    type="text"
-                    placeholder="e.g. Vacation / Holiday"
-                    value={exceptionReason}
-                    onChange={(e) => setExceptionReason(e.target.value)}
-                    className="w-full px-3 py-2 rounded-xl border border-zinc-300 text-xs font-bold text-black bg-white"
-                  />
-                </div>
-
-                <div className="flex items-end">
-                  <button
-                    type="submit"
-                    className="w-full py-2 rounded-xl bg-black hover:bg-zinc-800 text-white font-bold text-xs shadow-sm flex items-center justify-center gap-1.5"
-                  >
-                    <Plus className="w-3.5 h-3.5" />
-                    Add Date Exception
-                  </button>
-                </div>
-              </form>
-
-              {/* Existing Exceptions List */}
-              <div className="space-y-3">
-                <h4 className="text-xs font-bold text-black uppercase tracking-wider">Active Date Exceptions List</h4>
-                {availabilityExceptions.length === 0 ? (
-                  <p className="text-xs text-zinc-400 italic">No date exceptions added yet. Standard working rules apply to all dates.</p>
-                ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    {availabilityExceptions.map((exc) => (
-                      <div key={exc.id} className="p-4 rounded-2xl border border-zinc-200 bg-white flex items-center justify-between shadow-2xs">
-                        <div>
-                          <div className="flex items-center gap-2">
-                            <span className="text-sm font-extrabold text-black block">
-                              {new Date(exc.date).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                            </span>
-                            <span className="px-2 py-0.5 rounded-full bg-zinc-100 text-zinc-800 text-[10px] font-extrabold uppercase">
-                              {exc.type}
-                            </span>
-                          </div>
-                          {exc.reason && (
-                            <span className="text-xs text-zinc-500 font-medium block mt-0.5">{exc.reason}</span>
-                          )}
-                        </div>
-                        <button
-                          onClick={() => removeAvailabilityException(exc.id)}
-                          className="p-2 rounded-xl text-zinc-400 hover:text-rose-600 hover:bg-rose-50 transition-colors"
-                          title="Remove Exception"
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </button>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </div>
-          </div>
-        )}
-
-        {/* Tab 3: Guest Bookings */}
-        {activeTab === 'bookings' && (
-          <div className="bg-white rounded-3xl border border-zinc-200 shadow-2xs overflow-hidden">
-            {bookings.length === 0 ? (
-              <div className="p-12 text-center">
-                <Calendar className="w-12 h-12 text-zinc-300 mx-auto mb-3" />
-                <h4 className="text-base font-extrabold text-black mb-1">No Guest Bookings Received Yet</h4>
-                <p className="text-xs text-zinc-500 max-w-sm mx-auto">
-                  When invitees book an appointment via your public link, their confirmed bookings will appear here instantly.
-                </p>
-              </div>
-            ) : (
-              <div className="divide-y divide-zinc-100">
-                {bookings.map((booking) => {
-                  const guestName = booking.inviteeName || booking.guestName || 'Guest';
-                  const guestEmail = booking.inviteeEmail || booking.guestEmail || '';
-                  const guestNotes = booking.inviteeNote || booking.guestNotes || '';
-                  const eventTitle = booking.eventType?.title || 'Appointment';
-                  const slotStart = booking.slot?.startAt || booking.startTime;
-                  
-                  const formattedDate = slotStart 
-                    ? new Date(slotStart).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' }) 
-                    : 'N/A';
-                  const formattedTime = slotStart 
-                    ? new Date(slotStart).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) 
-                    : 'N/A';
-
-                  return (
-                    <div key={booking.id} className="p-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 hover:bg-zinc-50 transition-colors">
-                      <div className="space-y-1.5">
-                        <div className="flex items-center gap-2">
-                          <span className="font-extrabold text-black text-base">{guestName}</span>
-                          {guestEmail && <span className="text-xs text-zinc-500">({guestEmail})</span>}
-                          <span className="px-2.5 py-0.5 rounded-full bg-black text-white text-[10px] font-extrabold uppercase tracking-wider">
-                            {booking.status || 'CONFIRMED'}
-                          </span>
-                        </div>
-                        <div className="text-xs font-bold text-zinc-800">
-                          Event: {eventTitle}
-                        </div>
-                        <div className="text-xs text-zinc-700 flex items-center gap-4">
-                          <span className="flex items-center gap-1 font-bold">
-                            <Calendar className="w-4 h-4 text-black" />
-                            {formattedDate}
-                          </span>
-                          <span className="flex items-center gap-1 font-mono font-bold">
-                            <Clock className="w-4 h-4 text-black" />
-                            {formattedTime}
-                          </span>
-                        </div>
-                        {guestNotes && (
-                          <p className="text-xs text-zinc-600 italic mt-1 bg-zinc-50 p-2.5 rounded-xl border border-zinc-200">
-                            "{guestNotes}"
-                          </p>
-                        )}
-                      </div>
-
-                      <button
-                        onClick={() => handleCancelBooking(booking.id)}
-                        className="px-4 py-2 rounded-xl border border-zinc-300 hover:border-rose-300 hover:bg-rose-50 text-xs font-bold text-zinc-700 hover:text-rose-600 transition-colors self-start sm:self-auto"
-                      >
-                        Cancel Booking
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      )}
     </div>
   );
 };

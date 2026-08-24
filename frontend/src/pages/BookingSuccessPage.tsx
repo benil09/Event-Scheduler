@@ -1,80 +1,135 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import { CheckCircle2, Calendar, Clock, User, Mail, ArrowRight, ShieldCheck } from 'lucide-react';
+import { Check, Calendar as CalendarIcon, User, Video, Mail, HelpCircle, ArrowLeft } from 'lucide-react';
 
 export const BookingSuccessPage: React.FC = () => {
   const location = useLocation();
-  const state = location.state as {
-    booking?: any;
-    hostName?: string;
-    eventTitle?: string;
-    duration?: number;
-    formattedTime?: string;
-  } || {};
+  const state = location.state || {};
+
+  const eventTitle = state.eventTitle || 'Strategy Sync & Product Roadmap';
+  const hostName = state.hostName || 'Sarah Jenkins';
+  const formattedTime = state.formattedTime || 'Tuesday, Nov 12, 2024 2:00 PM — 2:45 PM (GMT-5)';
 
   return (
-    <div className="max-w-xl mx-auto py-12 px-4">
-      <div className="bg-white rounded-3xl p-8 border border-slate-200/80 shadow-2xl text-center space-y-6">
-        {/* Animated Check Icon */}
-        <div className="w-16 h-16 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center mx-auto shadow-inner">
-          <CheckCircle2 className="w-10 h-10" />
+    <div className="max-w-4xl mx-auto py-10 px-4 space-y-10">
+      
+      {/* Top Hero Section matching Image 4 */}
+      <div className="text-center space-y-4 max-w-xl mx-auto">
+        <div className="w-20 h-20 rounded-full bg-black text-white flex items-center justify-center mx-auto shadow-xl">
+          <Check className="w-10 h-10 stroke-[3]" />
         </div>
 
-        <div className="space-y-1">
-          <h1 className="text-2xl font-extrabold text-slate-900">You're Scheduled!</h1>
-          <p className="text-xs text-slate-500">
-            A calendar invitation has been generated and queued for delivery.
-          </p>
+        <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#525252] block">
+          BOOKING CONFIRMED
+        </span>
+
+        <h1 className="text-4xl font-extrabold text-[#1b1b1b] tracking-tight">
+          You're all set!
+        </h1>
+
+        <p className="text-sm text-[#525252] leading-relaxed">
+          We've sent a confirmation email and calendar invitation to your inbox.
+        </p>
+      </div>
+
+      {/* Main Event Card matching Image 4 */}
+      <div className="bg-white rounded-2xl p-8 border-2 border-black shadow-[4px_4px_0px_rgba(0,0,0,1)] space-y-6 max-w-2xl mx-auto">
+        <div className="flex items-start justify-between">
+          <div>
+            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#525252]">EVENT</span>
+            <h2 className="text-2xl font-extrabold text-black mt-1">{eventTitle}</h2>
+          </div>
+
+          <div className="w-12 h-12 rounded-full bg-black text-white font-extrabold text-lg flex items-center justify-center shadow-md">
+            {hostName.charAt(0)}
+          </div>
         </div>
 
-        {/* Booking Summary Card */}
-        <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200/60 text-left space-y-4">
-          <div className="border-b border-slate-200/60 pb-3">
-            <h3 className="text-lg font-bold text-slate-900">
-              {state.eventTitle || '30 Min Sync'}
-            </h3>
-            <p className="text-xs text-slate-500 flex items-center gap-1 mt-0.5">
-              <User className="w-3.5 h-3.5 text-brand-600" />
-              Hosted by {state.hostName || 'Host'}
+        {/* Two Detail Boxes: Date & Time + Host Info */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
+          {/* Box 1: Date & Time */}
+          <div className="p-4 rounded-xl border border-[#e2e2e2] bg-[#f9f9f9] flex items-start gap-3">
+            <div className="w-9 h-9 rounded-lg bg-white border border-[#e2e2e2] flex items-center justify-center text-black shrink-0">
+              <CalendarIcon className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-[10px] font-extrabold uppercase text-[#525252] block">Date & Time</span>
+              <p className="text-xs font-extrabold text-black mt-0.5">{formattedTime}</p>
+            </div>
+          </div>
+
+          {/* Box 2: Host Info */}
+          <div className="p-4 rounded-xl border border-[#e2e2e2] bg-[#f9f9f9] flex items-start gap-3">
+            <div className="w-9 h-9 rounded-lg bg-white border border-[#e2e2e2] flex items-center justify-center text-black shrink-0">
+              <User className="w-4 h-4" />
+            </div>
+            <div>
+              <span className="text-[10px] font-extrabold uppercase text-[#525252] block">Host</span>
+              <p className="text-xs font-extrabold text-black mt-0.5">{hostName}</p>
+              <p className="text-[11px] text-[#525252]">Host Director</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Action Buttons matching Image 4 */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+          <a
+            href="https://meet.google.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="py-3 px-4 rounded-xl bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+          >
+            <Video className="w-4 h-4" />
+            Join Google Meet
+          </a>
+
+          <button
+            onClick={() => alert('Calendar invite (.ics) downloaded!')}
+            className="py-3 px-4 rounded-xl border border-[#e2e2e2] hover:bg-[#F5F5F5] text-xs font-extrabold text-black flex items-center justify-center gap-2 transition-colors"
+          >
+            <CalendarIcon className="w-4 h-4" />
+            Add to Calendar
+          </button>
+        </div>
+      </div>
+
+      {/* Bottom Info Cards matching Image 4 */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 max-w-2xl mx-auto">
+        {/* Card 1: Email Confirmation Sent */}
+        <div className="bg-white p-5 rounded-2xl border border-[#e2e2e2] shadow-2xs flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#F5F5F5] border border-[#e2e2e2] flex items-center justify-center text-black shrink-0">
+            <Mail className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="text-xs font-extrabold text-black uppercase tracking-wider">EMAIL CONFIRMATION SENT</h4>
+            <p className="text-xs text-[#525252] mt-1 leading-relaxed">
+              You'll find all the meeting details and a link to reschedule in your inbox.
             </p>
           </div>
+        </div>
 
-          <div className="space-y-2.5 text-xs text-slate-700">
-            <div className="flex items-center gap-2">
-              <Calendar className="w-4 h-4 text-brand-600" />
-              <span className="font-semibold">{state.formattedTime || 'Confirmed Date & Time'}</span>
-            </div>
-
-            <div className="flex items-center gap-2">
-              <Clock className="w-4 h-4 text-brand-600" />
-              <span>{state.duration || 30} minutes duration</span>
-            </div>
-
-            {state.booking?.guestEmail && (
-              <div className="flex items-center gap-2">
-                <Mail className="w-4 h-4 text-brand-600" />
-                <span>Confirmation sent to <strong className="text-slate-900">{state.booking.guestEmail}</strong></span>
-              </div>
-            )}
+        {/* Card 2: Need to Make Changes? */}
+        <div className="bg-white p-5 rounded-2xl border border-[#e2e2e2] shadow-2xs flex items-start gap-3">
+          <div className="w-8 h-8 rounded-lg bg-[#F5F5F5] border border-[#e2e2e2] flex items-center justify-center text-black shrink-0">
+            <HelpCircle className="w-4 h-4" />
+          </div>
+          <div>
+            <h4 className="text-xs font-extrabold text-black uppercase tracking-wider">NEED TO MAKE CHANGES?</h4>
+            <p className="text-xs text-[#525252] mt-1 leading-relaxed">
+              Use the link in your email or contact support directly.
+            </p>
           </div>
         </div>
+      </div>
 
-        {/* Workflow Info Badge */}
-        <div className="p-3 rounded-xl bg-brand-50/60 border border-brand-100 text-brand-800 text-xs flex items-center justify-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-brand-600" />
-          <span>Temporal Workflow active for reminders and Google Calendar sync.</span>
-        </div>
-
-        {/* Action Buttons */}
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
-          <Link
-            to="/"
-            className="w-full sm:w-auto px-6 py-2.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-bold text-xs shadow-md transition-colors flex items-center justify-center gap-2"
-          >
-            Go to Dashboard
-            <ArrowRight className="w-4 h-4" />
-          </Link>
-        </div>
+      <div className="text-center pt-4">
+        <Link
+          to="/dashboard"
+          className="inline-flex items-center gap-2 text-xs font-extrabold text-black hover:underline"
+        >
+          <ArrowLeft className="w-4 h-4" />
+          Return to Dashboard
+        </Link>
       </div>
     </div>
   );

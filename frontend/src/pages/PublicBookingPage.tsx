@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Clock, Calendar as CalendarIcon, Globe, ChevronLeft, CheckCircle2, AlertCircle, CalendarCheck, User, Mail, FileText } from 'lucide-react';
+import { Clock, Globe, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Video } from 'lucide-react';
 import { api } from '../api/client';
 import type { EventType, User as UserModel } from '../store/useAppStore';
 
@@ -21,13 +21,11 @@ export const PublicBookingPage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-  // Booking Flow State
-  const [selectedDateStr, setSelectedDateStr] = useState<string>(
-    new Date().toISOString().split('T')[0]
-  );
+  // Calendar Date State
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<SlotItem | null>(null);
 
-  // Guest details form
+  // Guest Form State
   const [guestName, setGuestName] = useState('');
   const [guestEmail, setGuestEmail] = useState('');
   const [guestNotes, setGuestNotes] = useState('');
@@ -71,6 +69,8 @@ export const PublicBookingPage: React.FC = () => {
     }
   };
 
+  const selectedDateStr = selectedDate.toISOString().split('T')[0];
+
   // Filter available slots for the chosen date
   const filteredSlots = availableSlots.filter(slot => {
     const slotDate = new Date(slot.startAt).toISOString().split('T')[0];
@@ -103,6 +103,7 @@ export const PublicBookingPage: React.FC = () => {
           eventTitle: eventType.title,
           duration: eventType.duration,
           formattedTime: formattedTimeStr,
+          slotStartAt: selectedSlot.startAt,
         },
       });
     } catch (err: any) {
@@ -142,126 +143,165 @@ export const PublicBookingPage: React.FC = () => {
     );
   }
 
+  const currentMonthName = selectedDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+
   return (
-    <div className="max-w-5xl mx-auto py-8 px-4">
-      <div className="bg-white rounded-3xl border border-zinc-200 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+    <div className="max-w-5xl mx-auto py-6 px-4">
+      <div className="bg-white rounded-3xl border border-[#e2e2e2] shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
         
-        {/* Left Column: Event & Host Summary */}
-        <div className="md:col-span-5 p-8 bg-zinc-50 border-r border-zinc-200 flex flex-col justify-between space-y-6">
-          <div className="space-y-4">
+        {/* Left Column: Host Info matching Image 3 */}
+        <div className="md:col-span-5 p-8 bg-white border-r border-[#e2e2e2] flex flex-col justify-between space-y-6">
+          <div className="space-y-6">
+            
+            {/* Host Avatar with active status green dot */}
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center font-extrabold text-lg shadow-md">
-                {host?.name.charAt(0) || 'H'}
+              <div className="relative">
+                <div className="w-16 h-16 rounded-full bg-black text-white font-extrabold text-xl flex items-center justify-center border-2 border-white shadow-md">
+                  {host?.name ? host.name.charAt(0).toUpperCase() : 'A'}
+                </div>
+                <div className="w-4 h-4 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0" />
               </div>
+
               <div>
-                <h4 className="text-xs font-bold text-zinc-400 uppercase tracking-wider">Host Profile</h4>
-                <p className="text-sm font-extrabold text-black">{host?.name}</p>
+                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#525252]">HOST</span>
+                <h3 className="text-xl font-extrabold text-black">{host?.name || 'Alexander Reed'}</h3>
               </div>
             </div>
 
-            <div className="pt-2 space-y-2">
-              <h2 className="text-2xl font-extrabold text-black leading-tight">
-                {eventType?.title}
+            {/* Event Title & Description */}
+            <div>
+              <h2 className="text-2xl font-extrabold text-black leading-snug">
+                {eventType?.title || '30 Minute Strategy Session'}
               </h2>
-              <div className="flex items-center gap-4 text-xs font-bold text-zinc-600">
-                <span className="flex items-center gap-1.5">
-                  <Clock className="w-4 h-4 text-black" />
-                  {eventType?.duration} mins
-                </span>
-                <span className="flex items-center gap-1.5">
-                  <Globe className="w-4 h-4 text-black" />
-                  {host?.timezone || 'UTC'}
-                </span>
+              <p className="text-xs text-[#525252] leading-relaxed mt-2">
+                {eventType?.description || 'A focused, high-impact session to audit your current workflow, identify bottlenecks, and map out a 90-day execution plan.'}
+              </p>
+            </div>
+
+            {/* Meta Rows matching Image 3 */}
+            <div className="space-y-3 pt-2 text-xs font-semibold text-[#1b1b1b]">
+              <div className="flex items-center gap-3">
+                <Clock className="w-4 h-4 text-[#525252]" />
+                <span>{eventType?.duration} min</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Video className="w-4 h-4 text-[#525252]" />
+                <span>Google Meet</span>
+              </div>
+              <div className="flex items-center gap-3">
+                <Globe className="w-4 h-4 text-[#525252]" />
+                <span>GMT +0:00 (London)</span>
               </div>
             </div>
 
-            <p className="text-xs text-zinc-600 leading-relaxed pt-2">
-              {eventType?.description || 'Please select an available date and time slot to confirm your appointment.'}
-            </p>
-          </div>
-
-          <div className="pt-4 border-t border-zinc-200 text-[11px] text-zinc-400 font-medium">
-            Powered by EventScheduler & Google Calendar Integration
+            {/* Quote Block matching Image 3 */}
+            <div className="pt-4 border-t border-[#f3f3f3]">
+              <p className="text-xs text-[#525252] italic">
+                "The goal is clarity, not just conversation."
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* Right Column: Date Picker + Time Slots + Guest Details on SAME SCREEN */}
-        <div className="md:col-span-7 p-8 flex flex-col justify-between space-y-6">
+        {/* Right Column: Interactive Date & Slot Selector matching Image 3 */}
+        <div className="md:col-span-7 p-8 bg-white flex flex-col justify-between space-y-6">
           <div className="space-y-6">
             
-            {/* Step Header */}
-            <div className="border-b border-zinc-100 pb-3 flex items-center justify-between">
-              <h3 className="text-sm font-extrabold text-black uppercase tracking-wider flex items-center gap-2">
-                <CalendarIcon className="w-4 h-4 text-black" />
-                Select Date & Time Slot
+            {/* Header */}
+            <div className="flex items-center justify-between border-b border-[#f3f3f3] pb-3">
+              <h3 className="text-xl font-extrabold text-black">
+                {selectedSlot ? 'Confirm Booking Details' : 'Select a Date'}
               </h3>
               {selectedSlot && (
                 <button
                   onClick={() => setSelectedSlot(null)}
-                  className="text-xs font-bold text-zinc-500 hover:text-black flex items-center gap-1"
+                  className="text-xs font-extrabold text-[#525252] hover:text-black flex items-center gap-1"
                 >
-                  <ChevronLeft className="w-3.5 h-3.5" /> Change Slot
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back to Calendar
                 </button>
               )}
             </div>
 
-            {/* Date Picker Bar */}
-            <div>
-              <label className="block text-xs font-bold text-black uppercase tracking-wider mb-2">
-                Pick Date
-              </label>
-              <input
-                type="date"
-                value={selectedDateStr}
-                min={new Date().toISOString().split('T')[0]}
-                onChange={(e) => {
-                  setSelectedDateStr(e.target.value);
-                  setSelectedSlot(null);
-                }}
-                className="w-full px-4 py-3 rounded-xl border border-zinc-300 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-black bg-white"
-              />
-            </div>
-
-            {/* Available Time Slots Grid for Selected Date */}
             {!selectedSlot ? (
-              <div className="space-y-3">
-                <label className="block text-xs font-bold text-black uppercase tracking-wider">
-                  Available Slots for {new Date(selectedDateStr).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}
-                </label>
+              <div className="space-y-6">
+                {/* Month Navigator Header matching Image 3 */}
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-extrabold text-black">{currentMonthName}</span>
+                  <div className="flex items-center gap-2">
+                    <button className="p-1 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5]">
+                      <ChevronLeft className="w-4 h-4 text-black" />
+                    </button>
+                    <button className="p-1 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5]">
+                      <ChevronRight className="w-4 h-4 text-black" />
+                    </button>
+                  </div>
+                </div>
 
-                {filteredSlots.length === 0 ? (
-                  <div className="p-8 text-center bg-zinc-50 rounded-2xl border border-dashed border-zinc-200">
-                    <CalendarCheck className="w-8 h-8 text-zinc-300 mx-auto mb-2" />
-                    <p className="text-xs font-bold text-zinc-600">
-                      No slots available for {new Date(selectedDateStr).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })}.
+                {/* Day Headers (S M T W T F S) matching Image 3 */}
+                <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-[#525252]">
+                  <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
+                </div>
+
+                {/* Circular Date Grid matching Image 3 */}
+                <div className="grid grid-cols-7 gap-2 text-center">
+                  {Array.from({ length: 31 }, (_, i) => i + 1).map((dayNum) => {
+                    const dateObj = new Date();
+                    dateObj.setDate(dayNum);
+                    const isSelected = selectedDate.getDate() === dayNum;
+
+                    return (
+                      <button
+                        key={dayNum}
+                        type="button"
+                        onClick={() => setSelectedDate(dateObj)}
+                        className={`w-9 h-9 rounded-full mx-auto text-xs font-bold transition-all flex items-center justify-center ${
+                          isSelected
+                            ? 'bg-black text-white shadow-md scale-105'
+                            : 'bg-transparent text-black hover:bg-[#F5F5F5]'
+                        }`}
+                      >
+                        {dayNum}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Available Slots Section for Selected Date */}
+                <div className="pt-4 border-t border-[#f3f3f3] space-y-3">
+                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider">
+                    Available Slots for {selectedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
+                  </label>
+
+                  {filteredSlots.length === 0 ? (
+                    <p className="text-xs text-[#525252] italic">
+                      No slots available for this date. Default working hours (09:00 - 17:00) generated.
                     </p>
-                    <p className="text-[11px] text-zinc-400 mt-1">Please select another date on the calendar.</p>
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-60 overflow-y-auto pr-1">
-                    {filteredSlots.map((slot) => {
-                      const startTime = new Date(slot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-                      return (
-                        <button
-                          key={slot.id}
-                          type="button"
-                          onClick={() => setSelectedSlot(slot)}
-                          className="py-3 px-3 rounded-xl text-xs font-extrabold border border-zinc-300 hover:border-black hover:bg-black hover:text-white text-zinc-800 transition-all flex items-center justify-center gap-1.5 shadow-2xs group"
-                        >
-                          <Clock className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white" />
-                          <span>{startTime}</span>
-                        </button>
-                      );
-                    })}
-                  </div>
-                )}
+                  ) : (
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">
+                      {filteredSlots.map((slot) => {
+                        const startTime = new Date(slot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        return (
+                          <button
+                            key={slot.id}
+                            type="button"
+                            onClick={() => setSelectedSlot(slot)}
+                            className="py-3 px-3 rounded-xl text-xs font-extrabold border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white text-black transition-all flex items-center justify-center gap-1.5 shadow-2xs group"
+                          >
+                            <Clock className="w-3.5 h-3.5 text-[#525252] group-hover:text-white" />
+                            <span>{startTime}</span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
               </div>
             ) : (
-              /* Guest Booking Form right below selected slot on the same screen */
-              <form onSubmit={handleBookingSubmit} className="space-y-4 pt-2 border-t border-zinc-100">
-                <div className="p-3.5 rounded-2xl bg-black text-white flex items-center justify-between">
+              /* Guest Booking Form matching Image 3 style */
+              <form onSubmit={handleBookingSubmit} className="space-y-4">
+                <div className="p-4 rounded-xl bg-black text-white flex items-center justify-between">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-zinc-400 block">Selected Slot</span>
+                    <span className="text-[10px] uppercase font-bold text-[#848484] block">Selected Appointment</span>
                     <span className="text-sm font-extrabold">
                       {new Date(selectedSlot.startAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(selectedSlot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                     </span>
@@ -270,62 +310,46 @@ export const PublicBookingPage: React.FC = () => {
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1">Your Full Name *</label>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      required
-                      placeholder="John Doe"
-                      value={guestName}
-                      onChange={(e) => setGuestName(e.target.value)}
-                      className="w-full px-4 py-2.5 pl-10 rounded-xl border border-zinc-300 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-black"
-                    />
-                    <User className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
-                  </div>
+                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Your Full Name *</label>
+                  <input
+                    type="text"
+                    required
+                    placeholder="John Doe"
+                    value={guestName}
+                    onChange={(e) => setGuestName(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-sm font-semibold text-black focus:outline-none focus:border-black bg-white"
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1">Email Address *</label>
-                  <div className="relative">
-                    <input
-                      type="email"
-                      required
-                      placeholder="john@example.com"
-                      value={guestEmail}
-                      onChange={(e) => setGuestEmail(e.target.value)}
-                      className="w-full px-4 py-2.5 pl-10 rounded-xl border border-zinc-300 text-sm font-bold text-black focus:outline-none focus:ring-2 focus:ring-black"
-                    />
-                    <Mail className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
-                  </div>
+                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Email Address *</label>
+                  <input
+                    type="email"
+                    required
+                    placeholder="john@example.com"
+                    value={guestEmail}
+                    onChange={(e) => setGuestEmail(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-sm font-semibold text-black focus:outline-none focus:border-black bg-white"
+                  />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-bold text-black uppercase tracking-wider mb-1">Additional Notes</label>
-                  <div className="relative">
-                    <textarea
-                      rows={2}
-                      placeholder="Please share anything that will help prepare for our meeting."
-                      value={guestNotes}
-                      onChange={(e) => setGuestNotes(e.target.value)}
-                      className="w-full px-4 py-2.5 pl-10 rounded-xl border border-zinc-300 text-sm font-medium text-black focus:outline-none focus:ring-2 focus:ring-black resize-none"
-                    />
-                    <FileText className="w-4 h-4 text-zinc-400 absolute left-3.5 top-3" />
-                  </div>
+                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Notes / Objectives</label>
+                  <textarea
+                    rows={3}
+                    placeholder="Please share anything that will help prepare for our meeting."
+                    value={guestNotes}
+                    onChange={(e) => setGuestNotes(e.target.value)}
+                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-xs font-medium text-black focus:outline-none focus:border-black bg-white resize-none"
+                  />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3.5 rounded-xl bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+                  className="w-full py-3.5 rounded-xl bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
                 >
-                  {submitting ? (
-                    <span>Processing Booking...</span>
-                  ) : (
-                    <>
-                      <CheckCircle2 className="w-4 h-4" />
-                      Confirm & Book Appointment
-                    </>
-                  )}
+                  {submitting ? 'Processing Booking...' : 'Confirm & Schedule Appointment'}
                 </button>
               </form>
             )}

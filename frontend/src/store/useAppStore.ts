@@ -5,6 +5,7 @@ export interface User {
   id: number;
   name: string;
   email: string;
+  avatar?: string;
   timezone?: string;
   createdAt?: string;
 }
@@ -74,6 +75,7 @@ interface AppState {
 
   // Actions
   setCurrentUserId: (id: number) => void;
+  setGoogleUserProfile: (profile: { id: number; name: string; email: string; avatar?: string }) => void;
   fetchUsers: () => Promise<void>;
   createNewUser: (name: string, email: string) => Promise<User | null>;
   fetchEventTypes: () => Promise<void>;
@@ -89,9 +91,19 @@ interface AppState {
   removeAvailabilityException: (id: number) => Promise<boolean>;
 }
 
+const savedUserId = Number(localStorage.getItem('event_scheduler_user_id')) || 1;
+const savedUserName = localStorage.getItem('event_scheduler_user_name') || '';
+const savedUserEmail = localStorage.getItem('event_scheduler_user_email') || '';
+const savedUserAvatar = localStorage.getItem('event_scheduler_user_avatar') || '';
+
 export const useAppStore = create<AppState>((set, get) => ({
-  currentUserId: Number(localStorage.getItem('event_scheduler_user_id')) || 1,
-  currentUser: null,
+  currentUserId: savedUserId,
+  currentUser: savedUserId ? {
+    id: savedUserId,
+    name: savedUserName || `Host #${savedUserId}`,
+    email: savedUserEmail,
+    avatar: savedUserAvatar,
+  } : null,
   users: [],
   eventTypes: [],
   bookings: [],
@@ -103,8 +115,35 @@ export const useAppStore = create<AppState>((set, get) => ({
   setCurrentUserId: (id: number) => {
     localStorage.setItem('event_scheduler_user_id', String(id));
     setApiUserId(id);
-    const user = get().users.find(u => u.id === id) || null;
-    set({ currentUserId: id, currentUser: user });
+    const existingUser = get().users.find(u => u.id === id);
+    const activeUser = existingUser || get().currentUser || {
+      id,
+      name: localStorage.getItem('event_scheduler_user_name') || `Host #${id}`,
+      email: localStorage.getItem('event_scheduler_user_email') || '',
+      avatar: localStorage.getItem('event_scheduler_user_avatar') || '',
+    };
+    set({ currentUserId: id, currentUser: activeUser });
+    get().fetchEventTypes();
+    get().fetchBookings();
+    get().fetchAvailabilityRules();
+    get().fetchAvailabilityExceptions();
+  },
+
+  setGoogleUserProfile: (profile) => {
+    localStorage.setItem('event_scheduler_user_id', String(profile.id));
+    if (profile.name) localStorage.setItem('event_scheduler_user_name', profile.name);
+    if (profile.email) localStorage.setItem('event_scheduler_user_email', profile.email);
+    if (profile.avatar) localStorage.setItem('event_scheduler_user_avatar', profile.avatar);
+    setApiUserId(profile.id);
+    set({
+      currentUserId: profile.id,
+      currentUser: {
+        id: profile.id,
+        name: profile.name || `Host #${profile.id}`,
+        email: profile.email || '',
+        avatar: profile.avatar || '',
+      }
+    });
     get().fetchEventTypes();
     get().fetchBookings();
     get().fetchAvailabilityRules();
@@ -116,7 +155,7 @@ export const useAppStore = create<AppState>((set, get) => ({
     try {
       const res = await api.getUsers();
       const userList = Array.isArray(res) ? res : (res.data || res.users || []);
-      const activeUser = userList.find((u: User) => u.id === get().currentUserId) || userList[0] || null;
+      const activeUser = userList.find((u: User) => u.id === get().currentUserId) || get().currentUser || userList[0] || null;
       const activeId = activeUser ? activeUser.id : get().currentUserId;
       setApiUserId(activeId);
       set({ 
@@ -125,7 +164,6 @@ export const useAppStore = create<AppState>((set, get) => ({
         currentUserId: activeId,
         isLoading: false 
       });
-      // Fetch user's event types, bookings, rules, exceptions automatically
       get().fetchEventTypes();
       get().fetchBookings();
       get().fetchAvailabilityRules();

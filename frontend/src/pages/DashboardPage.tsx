@@ -12,8 +12,8 @@ export const DashboardPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { 
     currentUserId, currentUser, eventTypes, bookings, availabilityRules, error,
-    setCurrentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
-    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule
+    fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
+    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, setGoogleUserProfile
   } = useAppStore();
 
   const [copiedId, setCopiedId] = useState<number | null>(null);
@@ -40,10 +40,19 @@ export const DashboardPage: React.FC = () => {
   useEffect(() => {
     // Handle OAuth Callback Params if present
     const paramUserId = searchParams.get('userId');
+    const paramName = searchParams.get('name');
+    const paramEmail = searchParams.get('email');
+    const paramAvatar = searchParams.get('avatar');
+
     if (paramUserId) {
       const parsedId = Number(paramUserId);
       if (!isNaN(parsedId) && parsedId > 0) {
-        setCurrentUserId(parsedId);
+        setGoogleUserProfile({
+          id: parsedId,
+          name: paramName || `Host #${parsedId}`,
+          email: paramEmail || '',
+          avatar: paramAvatar || '',
+        });
         setSearchParams({}, { replace: true });
       }
     }

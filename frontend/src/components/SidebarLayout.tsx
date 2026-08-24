@@ -18,6 +18,9 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
 
   const handleLogout = () => {
     localStorage.removeItem('event_scheduler_user_id');
+    localStorage.removeItem('event_scheduler_user_name');
+    localStorage.removeItem('event_scheduler_user_email');
+    localStorage.removeItem('event_scheduler_user_avatar');
     navigate('/login');
   };
 
@@ -72,17 +75,30 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
               onClick={() => setShowProfileMenu(!showProfileMenu)}
               className="flex items-center gap-2.5 p-1 rounded-full border border-[#e2e2e2] hover:border-black transition-all bg-white"
             >
-              <div className="w-7 h-7 rounded-full bg-black text-white font-extrabold text-xs flex items-center justify-center">
-                {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'H'}
-              </div>
+              {currentUser?.avatar ? (
+                <img src={currentUser.avatar} alt={currentUser.name} className="w-7 h-7 rounded-full object-cover" />
+              ) : (
+                <div className="w-7 h-7 rounded-full bg-black text-white font-extrabold text-xs flex items-center justify-center">
+                  {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'H'}
+                </div>
+              )}
               <ChevronDown className="w-3.5 h-3.5 text-[#525252] mr-1" />
             </button>
 
             {showProfileMenu && (
               <div className="absolute right-0 mt-2 w-56 rounded-2xl bg-white border border-[#171717] shadow-[4px_4px_0px_rgba(0,0,0,1)] py-2 z-50 animate-in fade-in slide-in-from-top-2">
-                <div className="px-4 py-2.5 border-b border-[#e2e2e2]">
-                  <p className="text-xs font-extrabold text-black">{currentUser?.name || `Host #${currentUserId}`}</p>
-                  <p className="text-[11px] text-[#525252] truncate">{currentUser?.email || 'Authenticated User'}</p>
+                <div className="px-4 py-2.5 border-b border-[#e2e2e2] flex items-center gap-3">
+                  {currentUser?.avatar ? (
+                    <img src={currentUser.avatar} alt={currentUser.name} className="w-9 h-9 rounded-full object-cover" />
+                  ) : (
+                    <div className="w-9 h-9 rounded-full bg-black text-white font-extrabold text-xs flex items-center justify-center">
+                      {currentUser?.name ? currentUser.name.charAt(0).toUpperCase() : 'H'}
+                    </div>
+                  )}
+                  <div className="overflow-hidden">
+                    <p className="text-xs font-extrabold text-black truncate">{currentUser?.name || `Host #${currentUserId}`}</p>
+                    <p className="text-[11px] text-[#525252] truncate">{currentUser?.email || 'Authenticated User'}</p>
+                  </div>
                 </div>
 
                 <Link

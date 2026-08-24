@@ -48,11 +48,13 @@ export async function handleGoogleCallback(req: Request, res: Response) {
 
     // Upsert host user in PostgreSQL
     let user = await findByEmail(email);
+    const googleName = name && name !== "-" ? name : email.split("@")[0];
+
     if (!user) {
-      const baseSlug = name.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || "host";
+      const baseSlug = googleName.toLowerCase().replace(/[^a-z0-9]/g, "-").replace(/-+/g, "-").replace(/^-|-$/g, "") || "host";
       const uniqueSlug = `${baseSlug}-${Math.floor(1000 + Math.random() * 9000)}`;
       user = await createUserRep({
-        name,
+        name: googleName,
         Email: email,
         slug: uniqueSlug,
       });
@@ -64,8 +66,9 @@ export async function handleGoogleCallback(req: Request, res: Response) {
       await redis.set(`user:${user.id}:refresh_token`, refresh_token);
     }
 
-    // Redirect host back to the exact initiating frontend port with host user context
-    const redirectUrl = `${frontendUrl}/dashboard?userId=${user.id}&name=${encodeURIComponent(user.name)}&email=${encodeURIComponent(user.Email)}`;
+    const avatarUrl = avatar && avatar !== "-" ? avatar : "";
+    // Redirect host back to the exact initiating frontend port with full Google profile metadata
+    const redirectUrl = `${frontendUrl}/dashboard?userId=${user.id}&name=${encodeURIComponent(googleName)}&email=${encodeURIComponent(user.Email)}&avatar=${encodeURIComponent(avatarUrl)}`;
     console.log(`[Google Auth Callback] Successfully authenticated host #${user.id} (${user.Email}). Redirecting to: ${redirectUrl}`);
     
     return res.redirect(redirectUrl);

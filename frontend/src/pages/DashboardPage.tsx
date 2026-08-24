@@ -13,29 +13,21 @@ export const DashboardPage: React.FC = () => {
   const { 
     currentUserId, currentUser, eventTypes, bookings, availabilityRules, error,
     fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
-    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, setGoogleUserProfile
+    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, setGoogleUserProfile, toggleEventTypeActive
   } = useAppStore();
 
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [togglingId, setTogglingId] = useState<number | null>(null);
   
-  // Tab state derived from URL params or default to 'events'
+  // Tab state derived directly from URL params
   const activeTabParam = searchParams.get('tab');
-  const [activeTab, setActiveTab] = useState<'events' | 'availability' | 'bookings'>(
-    activeTabParam === 'availability' ? 'availability' : activeTabParam === 'bookings' ? 'bookings' : 'events'
-  );
+  const activeTab: 'events' | 'availability' | 'bookings' = 
+    activeTabParam === 'availability' ? 'availability' : activeTabParam === 'bookings' ? 'bookings' : 'events';
 
   // Availability Rule form state
   const [selectedDay, setSelectedDay] = useState(1); // Monday
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
-
-  useEffect(() => {
-    if (activeTabParam === 'availability' || activeTabParam === 'bookings') {
-      setActiveTab(activeTabParam as any);
-    } else {
-      setActiveTab('events');
-    }
-  }, [activeTabParam]);
 
   useEffect(() => {
     // Handle OAuth Callback Params if present
@@ -56,7 +48,7 @@ export const DashboardPage: React.FC = () => {
         setSearchParams({}, { replace: true });
       }
     }
-  }, [searchParams]);
+  }, [searchParams, setSearchParams, setGoogleUserProfile]);
 
   useEffect(() => {
     if (currentUserId > 0) {
@@ -65,13 +57,19 @@ export const DashboardPage: React.FC = () => {
       fetchAvailabilityRules();
       fetchAvailabilityExceptions();
     }
-  }, [currentUserId]);
+  }, [currentUserId, fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions]);
 
   const copyPublicLink = (slug: string, id: number) => {
     const url = `${window.location.origin}/book/${currentUserId}/${slug}`;
     navigator.clipboard.writeText(url);
     setCopiedId(id);
     setTimeout(() => setCopiedId(null), 2000);
+  };
+
+  const handleToggleActive = async (id: number, currentStatus: boolean) => {
+    setTogglingId(id);
+    await toggleEventTypeActive(id, !currentStatus);
+    setTogglingId(null);
   };
 
   const handleDeleteEventType = async (id: number) => {
@@ -144,10 +142,17 @@ export const DashboardPage: React.FC = () => {
                       {idx % 3 === 0 ? <User className="w-5 h-5" /> : idx % 3 === 1 ? <Users className="w-5 h-5" /> : <Coffee className="w-5 h-5" />}
                     </div>
 
-                    {/* Toggle Switch UI */}
-                    <div className="w-11 h-6 rounded-full bg-black p-0.5 flex items-center justify-end cursor-pointer">
+                    {/* Interactive Toggle Switch UI */}
+                    <button
+                      onClick={() => handleToggleActive(event.id, event.isActive ?? true)}
+                      disabled={togglingId === event.id}
+                      className={`w-11 h-6 rounded-full p-0.5 transition-colors flex items-center ${
+                        event.isActive ?? true ? 'bg-black justify-end' : 'bg-zinc-300 justify-start'
+                      }`}
+                      title={event.isActive ?? true ? 'Active (Click to disable)' : 'Inactive (Click to enable)'}
+                    >
                       <div className="w-5 h-5 rounded-full bg-white shadow-sm" />
-                    </div>
+                    </button>
                   </div>
 
                   <div>
@@ -178,6 +183,7 @@ export const DashboardPage: React.FC = () => {
                     <Link
                       to={`/book/${currentUserId}/${event.slug}`}
                       target="_blank"
+                      rel="noopener noreferrer"
                       className="p-2 rounded-lg text-[#525252] hover:text-black hover:bg-[#F5F5F5] transition-colors"
                       title="Open Booking Page"
                     >
@@ -266,7 +272,7 @@ export const DashboardPage: React.FC = () => {
               </span>
               <div>
                 <div className="text-4xl font-extrabold text-white tracking-tight">
-                  {bookings.length || 24} <span className="text-xl font-bold text-[#848484]">Bookings</span>
+                  {bookings.length} <span className="text-xl font-bold text-[#848484]">Bookings</span>
                 </div>
               </div>
 

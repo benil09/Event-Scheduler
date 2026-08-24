@@ -17,6 +17,7 @@ export interface EventType {
   slug: string;
   duration: number;
   description?: string;
+  isActive?: boolean;
   isPrivate?: boolean;
   createdAt?: string;
 }
@@ -76,10 +77,12 @@ interface AppState {
   // Actions
   setCurrentUserId: (id: number) => void;
   setGoogleUserProfile: (profile: { id: number; name: string; email: string; avatar?: string }) => void;
+  logout: () => void;
   fetchUsers: () => Promise<void>;
   createNewUser: (name: string, email: string) => Promise<User | null>;
   fetchEventTypes: () => Promise<void>;
   addEventType: (data: { title: string; slug: string; duration: number; description?: string }) => Promise<boolean>;
+  toggleEventTypeActive: (id: number, isActive: boolean) => Promise<boolean>;
   removeEventType: (id: number) => Promise<boolean>;
   fetchBookings: () => Promise<void>;
   cancelBooking: (id: number) => Promise<boolean>;
@@ -150,6 +153,22 @@ export const useAppStore = create<AppState>((set, get) => ({
     get().fetchAvailabilityExceptions();
   },
 
+  logout: () => {
+    localStorage.removeItem('event_scheduler_user_id');
+    localStorage.removeItem('event_scheduler_user_name');
+    localStorage.removeItem('event_scheduler_user_email');
+    localStorage.removeItem('event_scheduler_user_avatar');
+    setApiUserId(null);
+    set({
+      currentUserId: 0,
+      currentUser: null,
+      eventTypes: [],
+      bookings: [],
+      availabilityRules: [],
+      availabilityExceptions: [],
+    });
+  },
+
   fetchUsers: async () => {
     set({ isLoading: true, error: null });
     try {
@@ -201,6 +220,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       const events = rawEvents.map((item: any) => ({
         ...item,
         duration: item.durationMin || item.duration || 30,
+        isActive: item.isActive !== undefined ? item.isActive : true,
       }));
       set({ eventTypes: events });
     } catch (err: any) {
@@ -219,6 +239,18 @@ export const useAppStore = create<AppState>((set, get) => ({
       return true;
     } catch (err: any) {
       set({ error: err.response?.data?.message || 'Failed to create event type', isLoading: false });
+      return false;
+    }
+  },
+
+  toggleEventTypeActive: async (id: number, isActive: boolean) => {
+    try {
+      setApiUserId(get().currentUserId);
+      await api.updateEventType(id, { isActive });
+      await get().fetchEventTypes();
+      return true;
+    } catch (err: any) {
+      console.error("Failed to toggle event status", err);
       return false;
     }
   },

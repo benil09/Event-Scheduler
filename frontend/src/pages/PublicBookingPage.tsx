@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, Globe, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Video } from 'lucide-react';
 import { api } from '../api/client';
@@ -22,6 +22,7 @@ export const PublicBookingPage: React.FC = () => {
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
   // Calendar Date State
+  const [currentMonthDate, setCurrentMonthDate] = useState<Date>(new Date());
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
   const [selectedSlot, setSelectedSlot] = useState<SlotItem | null>(null);
 
@@ -31,11 +32,7 @@ export const PublicBookingPage: React.FC = () => {
   const [guestNotes, setGuestNotes] = useState('');
   const [submitting, setSubmitting] = useState(false);
 
-  useEffect(() => {
-    fetchPublicEventDetails();
-  }, [userId, slug]);
-
-  const fetchPublicEventDetails = async () => {
+  const fetchPublicEventDetails = useCallback(async () => {
     setLoading(true);
     setErrorMsg(null);
     try {
@@ -67,6 +64,22 @@ export const PublicBookingPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
+  }, [userId, slug]);
+
+  useEffect(() => {
+    fetchPublicEventDetails();
+  }, [fetchPublicEventDetails]);
+
+  const handlePrevMonth = () => {
+    const newD = new Date(currentMonthDate);
+    newD.setMonth(newD.getMonth() - 1);
+    setCurrentMonthDate(newD);
+  };
+
+  const handleNextMonth = () => {
+    const newD = new Date(currentMonthDate);
+    newD.setMonth(newD.getMonth() + 1);
+    setCurrentMonthDate(newD);
   };
 
   const selectedDateStr = selectedDate.toISOString().split('T')[0];
@@ -79,15 +92,15 @@ export const PublicBookingPage: React.FC = () => {
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!guestName || !guestEmail || !selectedSlot || !eventType || !userId) return;
+    if (!guestName.trim() || !guestEmail.trim() || !selectedSlot || !eventType || !userId) return;
 
     setSubmitting(true);
     try {
       const bookingPayload = {
         slotId: String(selectedSlot.id),
-        inviteeName: guestName,
-        inviteeEmail: guestEmail,
-        inviteeNotes: guestNotes,
+        inviteeName: guestName.trim(),
+        inviteeEmail: guestEmail.trim(),
+        inviteeNotes: guestNotes.trim(),
         hostId: Number(userId),
       };
 
@@ -143,7 +156,10 @@ export const PublicBookingPage: React.FC = () => {
     );
   }
 
-  const currentMonthName = selectedDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+  const currentMonthName = currentMonthDate.toLocaleDateString(undefined, { month: 'long', year: 'numeric' });
+  const year = currentMonthDate.getFullYear();
+  const month = currentMonthDate.getMonth();
+  const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
 
   return (
     <div className="max-w-5xl mx-auto py-6 px-4">
@@ -156,9 +172,13 @@ export const PublicBookingPage: React.FC = () => {
             {/* Host Avatar with active status green dot */}
             <div className="flex items-center gap-3">
               <div className="relative">
-                <div className="w-16 h-16 rounded-full bg-black text-white font-extrabold text-xl flex items-center justify-center border-2 border-white shadow-md">
-                  {host?.name ? host.name.charAt(0).toUpperCase() : 'A'}
-                </div>
+                {host?.avatar ? (
+                  <img src={host.avatar} alt={host.name} className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md" />
+                ) : (
+                  <div className="w-16 h-16 rounded-full bg-black text-white font-extrabold text-xl flex items-center justify-center border-2 border-white shadow-md">
+                    {host?.name ? host.name.charAt(0).toUpperCase() : 'A'}
+                  </div>
+                )}
                 <div className="w-4 h-4 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0" />
               </div>
 
@@ -228,10 +248,18 @@ export const PublicBookingPage: React.FC = () => {
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-extrabold text-black">{currentMonthName}</span>
                   <div className="flex items-center gap-2">
-                    <button className="p-1 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5]">
+                    <button 
+                      onClick={handlePrevMonth}
+                      className="p-1.5 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5] transition-colors" 
+                      title="Previous Month"
+                    >
                       <ChevronLeft className="w-4 h-4 text-black" />
                     </button>
-                    <button className="p-1 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5]">
+                    <button 
+                      onClick={handleNextMonth}
+                      className="p-1.5 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5] transition-colors" 
+                      title="Next Month"
+                    >
                       <ChevronRight className="w-4 h-4 text-black" />
                     </button>
                   </div>
@@ -244,10 +272,9 @@ export const PublicBookingPage: React.FC = () => {
 
                 {/* Circular Date Grid matching Image 3 */}
                 <div className="grid grid-cols-7 gap-2 text-center">
-                  {Array.from({ length: 31 }, (_, i) => i + 1).map((dayNum) => {
-                    const dateObj = new Date();
-                    dateObj.setDate(dayNum);
-                    const isSelected = selectedDate.getDate() === dayNum;
+                  {Array.from({ length: daysInCurrentMonth }, (_, i) => i + 1).map((dayNum) => {
+                    const dateObj = new Date(year, month, dayNum);
+                    const isSelected = selectedDate.getDate() === dayNum && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
 
                     return (
                       <button
@@ -274,7 +301,7 @@ export const PublicBookingPage: React.FC = () => {
 
                   {filteredSlots.length === 0 ? (
                     <p className="text-xs text-[#525252] italic">
-                      No slots available for this date. Default working hours (09:00 - 17:00) generated.
+                      No slots available for this date. Select another date on the calendar.
                     </p>
                   ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">

@@ -9,6 +9,38 @@ export const BookingSuccessPage: React.FC = () => {
   const eventTitle = state.eventTitle || 'Strategy Sync & Product Roadmap';
   const hostName = state.hostName || 'Sarah Jenkins';
   const formattedTime = state.formattedTime || 'Tuesday, Nov 12, 2024 2:00 PM — 2:45 PM (GMT-5)';
+  const slotStartAt = state.slotStartAt || new Date().toISOString();
+
+  const handleDownloadIcs = () => {
+    const startDate = new Date(slotStartAt);
+    const endDate = new Date(startDate.getTime() + 30 * 60000);
+
+    const formatDateForIcs = (d: Date) => {
+      return d.toISOString().replace(/-|:|\.\d+/g, '');
+    };
+
+    const icsContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//Kinetic Platform//Event Scheduler//EN',
+      'BEGIN:VEVENT',
+      `SUMMARY:${eventTitle} with ${hostName}`,
+      `DESCRIPTION:Confirmed appointment for ${eventTitle}.`,
+      `DTSTART:${formatDateForIcs(startDate)}`,
+      `DTEND:${formatDateForIcs(endDate)}`,
+      'STATUS:CONFIRMED',
+      'END:VEVENT',
+      'END:VCALENDAR',
+    ].join('\r\n');
+
+    const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+    const link = document.createElement('a');
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute('download', `${eventTitle.toLowerCase().replace(/\s+/g, '-')}-invite.ics`);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
 
   return (
     <div className="max-w-4xl mx-auto py-10 px-4 space-y-10">
@@ -84,11 +116,12 @@ export const BookingSuccessPage: React.FC = () => {
           </a>
 
           <button
-            onClick={() => alert('Calendar invite (.ics) downloaded!')}
+            type="button"
+            onClick={handleDownloadIcs}
             className="py-3 px-4 rounded-xl border border-[#e2e2e2] hover:bg-[#F5F5F5] text-xs font-extrabold text-black flex items-center justify-center gap-2 transition-colors"
           >
             <CalendarIcon className="w-4 h-4" />
-            Add to Calendar
+            Add to Calendar (.ics)
           </button>
         </div>
       </div>

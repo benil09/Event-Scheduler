@@ -12,7 +12,7 @@ export const apiClient = axios.create({
 
 // Helper to set or update the x-user-id header dynamically
 export const setApiUserId = (userId: number | null) => {
-  if (userId) {
+  if (userId && !isNaN(Number(userId)) && Number(userId) > 0) {
     apiClient.defaults.headers.common['x-user-id'] = String(userId);
   } else {
     delete apiClient.defaults.headers.common['x-user-id'];
@@ -67,7 +67,7 @@ export const api = {
     const res = await apiClient.post('/api/event-types', payload);
     return res.data;
   },
-  updateEventType: async (eventId: number, data: Partial<{ title: string; slug: string; duration: number; description?: string; isPrivate?: boolean }>) => {
+  updateEventType: async (eventId: number, data: Partial<{ title: string; slug: string; duration: number; description?: string; isActive?: boolean; isPrivate?: boolean }>) => {
     const payload = {
       ...data,
       ...(data.duration ? { durationMin: Number(data.duration) } : {}),
@@ -141,9 +141,9 @@ export const api = {
     }
     const payload = {
       slotId: String(data.slotId),
-      inviteeName: data.inviteeName,
-      inviteeEmail: data.inviteeEmail,
-      inviteeNotes: data.inviteeNotes || '',
+      inviteeName: data.inviteeName.trim(),
+      inviteeEmail: data.inviteeEmail.trim(),
+      inviteeNotes: (data.inviteeNotes || '').trim(),
     };
     const res = await apiClient.post('/api/bookings', payload);
     return res.data;

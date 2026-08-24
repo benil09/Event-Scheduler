@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
   Calendar, Clock, Share2, Search, Bell, ChevronDown, 
-  LogOut, Sliders
+  LogOut, Sliders, Menu, X
 } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
 
@@ -13,22 +13,40 @@ interface SidebarLayoutProps {
 export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser, currentUserId } = useAppStore();
+  const { currentUser, currentUserId, logout } = useAppStore();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        setShowProfileMenu(false);
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('keydown', handleKeyDown);
+    return () => window.removeEventListener('keydown', handleKeyDown);
+  }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('event_scheduler_user_id');
-    localStorage.removeItem('event_scheduler_user_name');
-    localStorage.removeItem('event_scheduler_user_email');
-    localStorage.removeItem('event_scheduler_user_avatar');
+    logout();
     navigate('/login');
   };
 
   return (
     <div className="min-h-screen bg-[#f9f9f9] text-[#1b1b1b] font-sans flex flex-col selection:bg-black selection:text-white">
       {/* Top Header Bar */}
-      <header className="h-16 bg-white border-b border-[#e2e2e2] px-6 flex items-center justify-between sticky top-0 z-40">
-        <div className="flex items-center gap-8">
+      <header className="h-16 bg-white border-b border-[#e2e2e2] px-4 md:px-6 flex items-center justify-between sticky top-0 z-40">
+        <div className="flex items-center gap-4 md:gap-8">
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 rounded-lg text-[#525252] hover:text-black md:hidden"
+            aria-label="Toggle Navigation Menu"
+          >
+            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
+
           {/* Kinetic Logo */}
           <Link to="/dashboard" className="flex items-center gap-2.5 group">
             <div className="w-8 h-8 rounded-lg bg-black text-white flex items-center justify-center font-extrabold text-sm tracking-tighter group-hover:scale-105 transition-transform">
@@ -44,23 +62,27 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
           <nav className="hidden md:flex items-center gap-6 text-xs font-semibold tracking-wide text-[#525252]">
             <Link 
               to="/dashboard" 
-              className={`hover:text-black transition-colors ${location.pathname === '/dashboard' ? 'text-black font-extrabold' : ''}`}
+              className={`hover:text-black transition-colors ${location.pathname === '/dashboard' && !location.search ? 'text-black font-extrabold' : ''}`}
             >
               Events
             </Link>
             <Link 
               to="/dashboard?tab=bookings" 
-              className="hover:text-black transition-colors"
+              className={`hover:text-black transition-colors ${location.search.includes('tab=bookings') ? 'text-black font-extrabold' : ''}`}
             >
               Scheduled
             </Link>
-            <span className="hover:text-black transition-colors cursor-pointer">Workflows</span>
-            <span className="hover:text-black transition-colors cursor-pointer">Routing</span>
+            <Link
+              to="/dashboard?tab=availability"
+              className={`hover:text-black transition-colors ${location.search.includes('tab=availability') ? 'text-black font-extrabold' : ''}`}
+            >
+              Integrations
+            </Link>
           </nav>
         </div>
 
         {/* Top Right Utilities */}
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button className="p-2 rounded-lg text-[#525252] hover:text-black hover:bg-[#F5F5F5] transition-colors" title="Search">
             <Search className="w-4 h-4" />
           </button>
@@ -123,6 +145,43 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         </div>
       </header>
 
+      {/* Mobile Drawer Navigation */}
+      {mobileMenuOpen && (
+        <div className="md:hidden bg-white border-b border-[#e2e2e2] px-4 py-3 space-y-1 animate-in slide-in-from-top duration-200">
+          <Link
+            to="/dashboard"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold ${
+              location.pathname === '/dashboard' && !location.search ? 'bg-black text-white' : 'text-[#525252]'
+            }`}
+          >
+            <Calendar className="w-4 h-4" />
+            Event Types
+          </Link>
+          <Link
+            to="/dashboard?tab=bookings"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold ${
+              location.search.includes('tab=bookings') ? 'bg-black text-white' : 'text-[#525252]'
+            }`}
+          >
+            <Clock className="w-4 h-4" />
+            Scheduled Events
+          </Link>
+
+          <Link
+            to="/dashboard?tab=availability"
+            onClick={() => setMobileMenuOpen(false)}
+            className={`flex items-center gap-3 px-4 py-2.5 rounded-xl text-xs font-bold ${
+              location.search.includes('tab=availability') ? 'bg-black text-white' : 'text-[#525252]'
+            }`}
+          >
+            <Share2 className="w-4 h-4" />
+            Integrations & Hours
+          </Link>
+        </div>
+      )}
+
       {/* Body Area with Left Sidebar + Content */}
       <div className="flex-1 flex min-h-[calc(100vh-4rem-3.5rem)]">
         {/* Left Sidebar */}
@@ -131,7 +190,7 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
             <Link
               to="/dashboard"
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-xl text-xs font-bold tracking-wide transition-all ${
-                location.pathname === '/dashboard' || location.pathname === '/'
+                location.pathname === '/dashboard' && !location.search
                   ? 'bg-black text-white shadow-sm'
                   : 'text-[#525252] hover:text-black hover:bg-[#F5F5F5]'
               }`}
@@ -167,15 +226,15 @@ export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
         </aside>
 
         {/* Main Content Area */}
-        <main className="flex-1 p-6 md:p-10 max-w-7xl mx-auto w-full">
+        <main className="flex-1 p-4 sm:p-6 md:p-10 max-w-7xl mx-auto w-full">
           {children}
         </main>
       </div>
 
       {/* Footer Bar */}
-      <footer className="h-14 bg-white border-t border-[#e2e2e2] px-8 flex items-center justify-between text-xs font-semibold text-[#525252]">
+      <footer className="h-14 bg-white border-t border-[#e2e2e2] px-4 md:px-8 flex items-center justify-between text-xs font-semibold text-[#525252]">
         <div>© 2024 Kinetic Platform.</div>
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-4 md:gap-6">
           <span className="hover:text-black cursor-pointer transition-colors">Support</span>
           <span className="hover:text-black cursor-pointer transition-colors">Privacy</span>
           <span className="hover:text-black cursor-pointer transition-colors">Terms</span>

@@ -1,0 +1,140 @@
+import { createAvailabilityExceptionDto, UpdateExceptionDto, CreateAvailabilityRuleDto, UpdateAvailabilityRuleDto } from "../dtos/availability-rule.dto.js";
+export declare function getAvailabilityRulesByUserRepo(userId: number): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+}[]>;
+export declare function getActiveAvailabilityRulesByUser(userId: number): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+}[]>;
+export declare function getAvailabilityRuleById(id: number): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+} | null>;
+export declare function createAvailabilityRuleRepo(userId: number, data: CreateAvailabilityRuleDto): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+}>;
+export declare function updateAvailabilityRuleRepo(id: number, data: UpdateAvailabilityRuleDto): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+}>;
+export declare function removeAvailabilityRuleRepo(id: number): Promise<{
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    isActive: boolean;
+    weekday: number;
+    startTime: string;
+    endTime: string;
+    userId: number;
+}>;
+export declare function findExceptionByUser(userId: number): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+}[]>;
+export declare function findExceptionById(id: number): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+} | null>;
+export declare function createException(userId: number, data: createAvailabilityExceptionDto): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+}>;
+export declare function updateException(id: number, data: UpdateExceptionDto): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+}>;
+export declare function removeException(id: number): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+}>;
+export declare function findExceptionByUserInRange(userId: number, startDate: Date, endDate: Date): Promise<{
+    type: string;
+    timezone: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    date: Date;
+    startTime: string | null;
+    endTime: string | null;
+    reason: string | null;
+    userId: number;
+}[]>;
+//# sourceMappingURL=availabilityRule.repository.d.ts.map

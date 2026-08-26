@@ -14,22 +14,32 @@ export async function getAllBookedSlotsByHostInRangeRepo(hostId:number,startDate
 }
 
 export async function upsertAvailableSlotRepo(hostId: number, eventTypeId: number, startAt: Date, endAt: Date) {
-    return prisma.slot.upsert({
+    const existing = await prisma.slot.findUnique({
         where: {
             eventTypeId_startAt_endAt: {
                 eventTypeId,
                 startAt,
                 endAt,
             }
-        },
-        create: {
+        }
+    });
+
+    if (existing) {
+        if (existing.status === 'BOOKED' || existing.status === 'BLOCKED') {
+            return existing;
+        }
+        return prisma.slot.update({
+            where: { id: existing.id },
+            data: { status: 'AVAILABLE' }
+        });
+    }
+
+    return prisma.slot.create({
+        data: {
             hostId,
             eventTypeId,
             startAt,
             endAt,
-            status: 'AVAILABLE',
-        },
-        update: {
             status: 'AVAILABLE',
         }
     });

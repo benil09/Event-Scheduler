@@ -11,12 +11,14 @@ const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'F
 export const DashboardPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const { 
-    currentUserId, currentUser, eventTypes, bookings, availabilityRules, error,
+    currentUserId, currentUser, eventTypes, bookings, availabilityRules, availabilityExceptions, error,
     fetchEventTypes, fetchBookings, fetchAvailabilityRules, fetchAvailabilityExceptions,
-    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, setGoogleUserProfile, toggleEventTypeActive
+    removeEventType, cancelBooking, addAvailabilityRule, removeAvailabilityRule, 
+    addAvailabilityException, removeAvailabilityException, setGoogleUserProfile, toggleEventTypeActive
   } = useAppStore();
 
   const [copiedId, setCopiedId] = useState<number | null>(null);
+  const [copiedProfile, setCopiedProfile] = useState(false);
   const [togglingId, setTogglingId] = useState<number | null>(null);
   
   // Tab state derived directly from URL params
@@ -28,6 +30,10 @@ export const DashboardPage: React.FC = () => {
   const [selectedDay, setSelectedDay] = useState(1); // Monday
   const [startTime, setStartTime] = useState('09:00');
   const [endTime, setEndTime] = useState('17:00');
+
+  // Exception form state
+  const [exceptionDate, setExceptionDate] = useState('');
+  const [exceptionReason, setExceptionReason] = useState('');
 
   useEffect(() => {
     // Handle OAuth Callback Params if present
@@ -66,6 +72,13 @@ export const DashboardPage: React.FC = () => {
     setTimeout(() => setCopiedId(null), 2000);
   };
 
+  const copyHostProfileLink = () => {
+    const url = `${window.location.origin}/profile/${currentUserId}`;
+    navigator.clipboard.writeText(url);
+    setCopiedProfile(true);
+    setTimeout(() => setCopiedProfile(false), 2000);
+  };
+
   const handleToggleActive = async (id: number, currentStatus: boolean) => {
     setTogglingId(id);
     await toggleEventTypeActive(id, !currentStatus);
@@ -93,6 +106,18 @@ export const DashboardPage: React.FC = () => {
     });
   };
 
+  const handleAddException = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!exceptionDate) return;
+    await addAvailabilityException({
+      date: exceptionDate,
+      type: 'UNAVAILABLE',
+      reason: exceptionReason.trim() || 'Blocked Day',
+    });
+    setExceptionDate('');
+    setExceptionReason('');
+  };
+
   return (
     <div className="space-y-8 pb-12">
       {/* Top Header Section matching Image 1 */}
@@ -109,13 +134,24 @@ export const DashboardPage: React.FC = () => {
           </p>
         </div>
 
-        <Link
-          to="/events/new"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all self-start sm:self-auto hover:scale-[1.02]"
-        >
-          <Plus className="w-4 h-4 text-white stroke-[3]" />
-          Create New Event Type
-        </Link>
+        <div className="flex items-center gap-3 self-start sm:self-auto">
+          <button
+            type="button"
+            onClick={copyHostProfileLink}
+            className="inline-flex items-center gap-2 px-5 py-3 rounded-full border border-zinc-300 hover:border-black bg-white text-black font-extrabold text-xs uppercase tracking-wider shadow-2xs transition-all hover:scale-[1.02] cursor-pointer"
+          >
+            {copiedProfile ? <Check className="w-4 h-4 text-emerald-600" /> : <Copy className="w-4 h-4" />}
+            <span>{copiedProfile ? 'Profile Link Copied!' : 'Share Host Profile'}</span>
+          </button>
+
+          <Link
+            to="/events/new"
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md transition-all hover:scale-[1.02]"
+          >
+            <Plus className="w-4 h-4 text-white stroke-[3]" />
+            Create New Event Type
+          </Link>
+        </div>
       </div>
 
       {error && (
@@ -371,6 +407,74 @@ export const DashboardPage: React.FC = () => {
                 </div>
               ))}
             </div>
+          </div>
+
+          {/* Date Overrides & Exception Overrides */}
+          <div className="bg-white rounded-2xl p-6 sm:p-8 border border-[#e2e2e2] shadow-[0_2px_8px_rgba(0,0,0,0.04)] space-y-6">
+            <div className="border-b border-[#f3f3f3] pb-4">
+              <h3 className="text-lg font-extrabold text-black">Date Overrides & Blocked Days</h3>
+              <p className="text-xs text-[#525252]">Block out specific calendar dates when you are on leave, traveling, or unavailable.</p>
+            </div>
+
+            {/* Add Exception Form */}
+            <form onSubmit={handleAddException} className="grid grid-cols-1 sm:grid-cols-3 gap-3 bg-[#f9f9f9] p-4 rounded-xl border border-[#e2e2e2]">
+              <div>
+                <label className="block text-[11px] font-extrabold text-black uppercase tracking-wider mb-1">Select Date to Block</label>
+                <input
+                  type="date"
+                  required
+                  value={exceptionDate}
+                  onChange={(e) => setExceptionDate(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-[#e2e2e2] text-xs font-bold text-black bg-white"
+                />
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-extrabold text-black uppercase tracking-wider mb-1">Reason / Note</label>
+                <input
+                  type="text"
+                  placeholder="e.g. Holiday / Out of Office"
+                  value={exceptionReason}
+                  onChange={(e) => setExceptionReason(e.target.value)}
+                  className="w-full px-3 py-2 rounded-lg border border-[#e2e2e2] text-xs font-bold text-black bg-white"
+                />
+              </div>
+
+              <div className="flex items-end">
+                <button
+                  type="submit"
+                  className="w-full py-2 rounded-lg bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-sm flex items-center justify-center gap-1.5"
+                >
+                  <Plus className="w-3.5 h-3.5" />
+                  Block Date
+                </button>
+              </div>
+            </form>
+
+            {/* Exceptions List */}
+            {availabilityExceptions.length === 0 ? (
+              <p className="text-xs text-[#525252] italic">No blocked dates or overrides configured.</p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                {availabilityExceptions.map((ex) => (
+                  <div key={ex.id} className="p-4 rounded-xl border border-[#e2e2e2] bg-white flex items-center justify-between shadow-2xs">
+                    <div>
+                      <span className="text-sm font-extrabold text-black block">
+                        {new Date(ex.date).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric', year: 'numeric' })}
+                      </span>
+                      <span className="text-xs text-rose-600 font-bold block">{ex.reason || 'Blocked Full Day'}</span>
+                    </div>
+                    <button
+                      onClick={() => removeAvailabilityException(ex.id)}
+                      className="p-2 rounded-lg text-[#525252] hover:text-rose-600 hover:bg-rose-50 transition-colors"
+                      title="Unblock Date"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       )}

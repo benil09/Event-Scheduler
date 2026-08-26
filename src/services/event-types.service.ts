@@ -100,11 +100,10 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
         throw notFound("Event type not found or inactive");
     }
 
-    // Fetch available slots for public booking page
+    // Fetch all future slots for public booking page (both AVAILABLE and BOOKED/BLOCKED)
     let slots = await prisma.slot.findMany({
         where: {
             eventTypeId: eventType.id,
-            status: "AVAILABLE",
             startAt: {
                 gte: new Date(),
             },
@@ -120,7 +119,6 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
         slots = await prisma.slot.findMany({
             where: {
                 eventTypeId: eventType.id,
-                status: "AVAILABLE",
                 startAt: {
                     gte: new Date(),
                 },
@@ -131,6 +129,26 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
         });
     }
 
+    // Cross-reference active non-cancelled bookings to ensure booked slots are properly flagged
+    const activeBookings = await prisma.booking.findMany({
+        where: {
+            eventTypeId: eventType.id,
+            status: { notIn: ["CANCELLED"] },
+        },
+        select: {
+            slotId: true,
+        },
+    });
+
+    const bookedSlotIds = new Set(activeBookings.map(b => b.slotId));
+
+    const updatedSlots = slots.map(slot => {
+        if (bookedSlotIds.has(slot.id)) {
+            return { ...slot, status: "BOOKED" };
+        }
+        return slot;
+    });
+
     return {
         ...eventType,
         host: {
@@ -139,7 +157,7 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
             Email: user.Email,
             timezone: user.timezone,
         },
-        availableSlots: slots,
+        availableSlots: updatedSlots,
     };
 }
 

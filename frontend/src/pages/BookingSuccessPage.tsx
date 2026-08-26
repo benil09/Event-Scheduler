@@ -186,13 +186,13 @@ export const BookingSuccessPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="text-center pt-4 animate-card-slide-up opacity-0 [animation-delay:500ms] [animation-fill-mode:forwards]">
+      <div className="text-center pt-4 animate-card-slide-up opacity-0 [animation-delay:500ms] [animation-fill-mode:forwards] flex items-center justify-center gap-6">
         <Link
-          to="/dashboard"
+          to="/"
           className="inline-flex items-center gap-2 text-xs font-extrabold text-black hover:underline transition-transform hover:-translate-x-1"
         >
           <ArrowLeft className="w-4 h-4" />
-          Return to Dashboard
+          Return to Home & Host Directory
         </Link>
       </div>
     </div>

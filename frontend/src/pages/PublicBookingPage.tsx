@@ -82,12 +82,14 @@ export const PublicBookingPage: React.FC = () => {
     setCurrentMonthDate(newD);
   };
 
-  const selectedDateStr = selectedDate.toISOString().split('T')[0];
-
-  // Filter available slots for the chosen date
+  // Filter slots for the chosen date
   const filteredSlots = availableSlots.filter(slot => {
-    const slotDate = new Date(slot.startAt).toISOString().split('T')[0];
-    return slotDate === selectedDateStr;
+    const slotDate = new Date(slot.startAt);
+    return (
+      slotDate.getFullYear() === selectedDate.getFullYear() &&
+      slotDate.getMonth() === selectedDate.getMonth() &&
+      slotDate.getDate() === selectedDate.getDate()
+    );
   });
 
   const handleBookingSubmit = async (e: React.FormEvent) => {
@@ -147,10 +149,10 @@ export const PublicBookingPage: React.FC = () => {
         <h3 className="text-lg font-bold text-black">Event Not Found</h3>
         <p className="text-xs text-zinc-500">{errorMsg}</p>
         <button
-          onClick={() => navigate('/')}
+          onClick={() => navigate(userId ? `/profile/${userId}` : '/')}
           className="px-4 py-2 rounded-xl bg-black text-white font-bold text-xs"
         >
-          Return to Dashboard
+          Return to Host Profile
         </button>
       </div>
     );
@@ -160,9 +162,22 @@ export const PublicBookingPage: React.FC = () => {
   const year = currentMonthDate.getFullYear();
   const month = currentMonthDate.getMonth();
   const daysInCurrentMonth = new Date(year, month + 1, 0).getDate();
+  const firstDayOfWeek = new Date(year, month, 1).getDay();
 
   return (
-    <div className="max-w-5xl mx-auto py-6 px-4">
+    <div className="max-w-5xl mx-auto py-6 px-4 space-y-4">
+      {/* Back to Host Profile Navigation */}
+      <div>
+        <button
+          type="button"
+          onClick={() => navigate(userId ? `/profile/${userId}` : '/')}
+          className="inline-flex items-center gap-2 text-xs font-extrabold text-zinc-600 hover:text-black transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+          Back to Host Profile & All Events
+        </button>
+      </div>
+
       <div className="bg-white rounded-3xl border border-[#e2e2e2] shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
         
         {/* Left Column: Host Info matching Image 3 */}
@@ -272,6 +287,11 @@ export const PublicBookingPage: React.FC = () => {
 
                 {/* Circular Date Grid matching Image 3 */}
                 <div className="grid grid-cols-7 gap-2 text-center">
+                  {/* Empty offset cells for days before day 1 */}
+                  {Array.from({ length: firstDayOfWeek }).map((_, i) => (
+                    <div key={`offset-${i}`} className="w-9 h-9 mx-auto" />
+                  ))}
+
                   {Array.from({ length: daysInCurrentMonth }, (_, i) => i + 1).map((dayNum) => {
                     const dateObj = new Date(year, month, dayNum);
                     const isSelected = selectedDate.getDate() === dayNum && selectedDate.getMonth() === month && selectedDate.getFullYear() === year;
@@ -306,7 +326,27 @@ export const PublicBookingPage: React.FC = () => {
                   ) : (
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">
                       {filteredSlots.map((slot) => {
+                        const isBooked = slot.status === 'BOOKED' || slot.status === 'BLOCKED';
                         const startTime = new Date(slot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        
+                        if (isBooked) {
+                          return (
+                            <div
+                              key={slot.id}
+                              className="py-2.5 px-3 rounded-xl text-xs font-bold border border-zinc-200 bg-zinc-100 text-zinc-400 cursor-not-allowed flex items-center justify-between opacity-70 select-none"
+                              title="This slot has already been booked"
+                            >
+                              <span className="line-through flex items-center gap-1.5">
+                                <Clock className="w-3.5 h-3.5 text-zinc-400" />
+                                {startTime}
+                              </span>
+                              <span className="text-[10px] font-black uppercase tracking-wider text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">
+                                Booked
+                              </span>
+                            </div>
+                          );
+                        }
+
                         return (
                           <button
                             key={slot.id}

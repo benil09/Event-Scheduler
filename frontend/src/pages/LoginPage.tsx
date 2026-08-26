@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Calendar, AlertCircle } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
+import { Calendar, AlertCircle, User as UserIcon, ArrowRight, Plus } from 'lucide-react';
+import { useAppStore, type User } from '../store/useAppStore';
 import { api } from '../api/client';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { currentUserId } = useAppStore();
+  const { currentUserId, createNewUser, setCurrentUserId, users, fetchUsers } = useAppStore();
 
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(searchParams.get('error'));
+
+  // Local host form
+  const [hostName, setHostName] = useState('');
+  const [hostEmail, setHostEmail] = useState('');
+  const [creatingHost, setCreatingHost] = useState(false);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [fetchUsers]);
 
   useEffect(() => {
     if (currentUserId && currentUserId > 0) {
@@ -35,8 +44,34 @@ export const LoginPage: React.FC = () => {
     }
   };
 
+  const handleLocalCreateUser = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!hostName.trim() || !hostEmail.trim()) return;
+
+    setCreatingHost(true);
+    setErrorMsg(null);
+    try {
+      const user = await createNewUser(hostName.trim(), hostEmail.trim());
+      if (user && user.id) {
+        setCurrentUserId(user.id);
+        navigate('/dashboard');
+      } else {
+        setErrorMsg('Failed to create host user account');
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Failed to create host account');
+    } finally {
+      setCreatingHost(false);
+    }
+  };
+
+  const handleSelectExistingUser = (user: User) => {
+    setCurrentUserId(user.id);
+    navigate('/dashboard');
+  };
+
   return (
-    <div className="min-h-[80vh] flex items-center justify-center py-12 px-4">
+    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 bg-[#fafafa]">
       <div className="max-w-md w-full space-y-8 bg-white p-8 sm:p-10 rounded-3xl border border-zinc-200 shadow-2xl">
         {/* Brand Header */}
         <div className="text-center space-y-3">
@@ -44,9 +79,9 @@ export const LoginPage: React.FC = () => {
             <Calendar className="w-7 h-7" />
           </div>
           <div>
-            <h1 className="text-2xl font-extrabold text-black tracking-tight">Host Authentication</h1>
+            <h1 className="text-2xl font-black text-black tracking-tight">Host Portal Authentication</h1>
             <p className="text-xs font-medium text-zinc-500 mt-1">
-              Sign in with your Google account to access your scheduler & calendar integration.
+              Log in to manage your availability rules, event types, and scheduled bookings.
             </p>
           </div>
         </div>
@@ -58,8 +93,8 @@ export const LoginPage: React.FC = () => {
           </div>
         )}
 
-        {/* Primary Method: Sign in with Google */}
-        <div className="space-y-4 pt-2">
+        {/* Method 1: Sign in with Google */}
+        <div className="space-y-3">
           <button
             type="button"
             onClick={handleGoogleLogin}
@@ -70,7 +105,6 @@ export const LoginPage: React.FC = () => {
               <span className="animate-pulse">Connecting to Google...</span>
             ) : (
               <>
-                {/* Official Google G Logo */}
                 <svg className="w-5 h-5 bg-white rounded-full p-0.5" viewBox="0 0 24 24">
                   <path
                     fill="#4285F4"
@@ -89,14 +123,90 @@ export const LoginPage: React.FC = () => {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"
                   />
                 </svg>
-                <span>Sign in with Google</span>
+                <span>Sign in with Google OAuth</span>
               </>
             )}
           </button>
-          <p className="text-[11px] text-center text-zinc-400 font-medium">
-            Requires Google Calendar permissions to sync appointment invites.
-          </p>
         </div>
+
+        {/* Divider */}
+        <div className="relative flex items-center justify-center">
+          <div className="border-t border-zinc-200 w-full" />
+          <span className="bg-white px-3 text-[11px] font-extrabold text-zinc-400 uppercase tracking-widest absolute">
+            OR LOCAL HOST SIGN IN
+          </span>
+        </div>
+
+        {/* Method 2: Local Host Sign In / Create */}
+        <form onSubmit={handleLocalCreateUser} className="space-y-4">
+          <div>
+            <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">
+              Host Full Name
+            </label>
+            <input
+              type="text"
+              required
+              placeholder="Alexander Reed"
+              value={hostName}
+              onChange={(e) => setHostName(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-xs font-semibold text-black focus:outline-none focus:border-black bg-white"
+            />
+          </div>
+
+          <div>
+            <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">
+              Host Email Address
+            </label>
+            <input
+              type="email"
+              required
+              placeholder="alexander@example.com"
+              value={hostEmail}
+              onChange={(e) => setHostEmail(e.target.value)}
+              className="w-full px-4 py-3 rounded-xl border border-zinc-200 text-xs font-semibold text-black focus:outline-none focus:border-black bg-white"
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={creatingHost}
+            className="w-full py-3.5 px-4 rounded-xl border border-zinc-300 hover:border-black bg-white hover:bg-zinc-50 text-black font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all cursor-pointer shadow-2xs"
+          >
+            <Plus className="w-4 h-4 text-black" />
+            <span>{creatingHost ? 'Creating Account...' : 'Create & Sign In as Host'}</span>
+          </button>
+        </form>
+
+        {/* Existing Host Quick Switcher */}
+        {users.length > 0 && (
+          <div className="pt-2 border-t border-zinc-100 space-y-2">
+            <span className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block">
+              Quick Switch Existing Host Account
+            </span>
+            <div className="space-y-1.5 max-h-36 overflow-y-auto pr-1">
+              {users.map((u) => (
+                <button
+                  key={u.id}
+                  type="button"
+                  onClick={() => handleSelectExistingUser(u)}
+                  className="w-full p-2.5 rounded-xl border border-zinc-200 hover:border-black hover:bg-zinc-50 text-left flex items-center justify-between text-xs font-semibold transition-all group"
+                >
+                  <div className="flex items-center gap-2 truncate">
+                    <UserIcon className="w-4 h-4 text-zinc-500 group-hover:text-black shrink-0" />
+                    <span className="text-black font-bold truncate">{u.name}</span>
+                  </div>
+                  <div className="flex items-center gap-1 shrink-0">
+                    <span className="text-[10px] bg-zinc-100 text-zinc-600 px-1.5 py-0.5 rounded font-bold">
+                      ID #{u.id}
+                    </span>
+                    <ArrowRight className="w-3.5 h-3.5 text-zinc-400 group-hover:text-black" />
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
+
       </div>
     </div>
   );

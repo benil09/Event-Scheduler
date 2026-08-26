@@ -141,18 +141,21 @@ export async function cancelBookingService(bookingId: number, userId: number) {
         throw badRequest("Booking does not belong to the user");
     }
 
-    // Direct / Temporal Cancellation Email
+    // 1. Update database status to CANCELLED and make slot AVAILABLE first
+    await deleteBookingRepo(bookingId);
+
+    // 2. Direct / Temporal Cancellation Email (triggered after status is updated)
     (async () => {
         try {
             const wfId = await sendCancellationEmailWorkflow(bookingId);
             if (!wfId) {
                 await sendCancellationEmail(bookingId);
             }
-        } catch {
+        } catch (err) {
+            console.error("Failed to send cancellation email:", err);
             await sendCancellationEmail(bookingId).catch(console.error);
         }
     })();
 
-    await deleteBookingRepo(bookingId);
     return "Booking cancelled successfully";
 }

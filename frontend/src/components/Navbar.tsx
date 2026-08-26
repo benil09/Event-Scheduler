@@ -1,14 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, User as UserIcon, LogOut, LayoutDashboard, Clock } from 'lucide-react';
 import { useAppStore } from '../store/useAppStore';
-import { API_BASE_URL } from '../api/client';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { currentUserId, currentUser, setCurrentUserId, fetchUsers } = useAppStore();
-  const [isApiOnline, setIsApiOnline] = useState<boolean | null>(null);
 
   const isPublicPage = location.pathname.startsWith('/book') || location.pathname === '/booking-confirmed';
   const isLoginPage = location.pathname === '/login';
@@ -17,17 +15,7 @@ export const Navbar: React.FC = () => {
     if (currentUserId && currentUserId > 0) {
       fetchUsers();
     }
-    checkApiHealth();
   }, [currentUserId]);
-
-  const checkApiHealth = async () => {
-    try {
-      const res = await fetch(`${API_BASE_URL}/health`);
-      setIsApiOnline(res.ok);
-    } catch {
-      setIsApiOnline(false);
-    }
-  };
 
   const handleLogout = () => {
     localStorage.removeItem('event_scheduler_user_id');
@@ -84,22 +72,7 @@ export const Navbar: React.FC = () => {
 
           {/* Right Controls */}
           <div className="flex items-center gap-3">
-            {/* Live API Status */}
-            <div className="hidden sm:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-zinc-100 border border-zinc-200 text-xs text-zinc-700">
-              {isApiOnline === true ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                  <span className="font-bold text-zinc-900">Local API Live</span>
-                </>
-              ) : isApiOnline === false ? (
-                <>
-                  <span className="w-2 h-2 rounded-full bg-rose-500" />
-                  <span className="font-bold text-rose-700">API Offline</span>
-                </>
-              ) : (
-                <span className="text-zinc-400">Checking...</span>
-              )}
-            </div>
+            
 
             {/* Host Auth Controls */}
             {!isPublicPage && !isLoginPage && currentUserId > 0 ? (

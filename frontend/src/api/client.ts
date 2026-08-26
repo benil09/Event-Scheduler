@@ -1,7 +1,7 @@
 import axios from 'axios';
 
-// Localhost API URL for local testing
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000';
+// API Base URL - defaults to localhost in dev, or relative path on Vercel to route via Vercel edge proxy
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || (import.meta.env.PROD ? '' : 'http://localhost:8000');
 
 export const apiClient = axios.create({
   baseURL: API_BASE_URL,

@@ -4,8 +4,8 @@ import {
   Calendar, Zap, ArrowRight, 
   Search, User as UserIcon, Sparkles, ChevronRight, RefreshCw
 } from 'lucide-react';
-import { api } from '../api/client';
-import type { User } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
+import type { User } from '../store/types';
 
 export const HomePage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,8 +17,8 @@ export const HomePage: React.FC = () => {
     const fetchHosts = async () => {
       setLoading(true);
       try {
-        const res = await api.getUsers();
-        const userList = Array.isArray(res) ? res : (res.data || res.users || []);
+        await useUserStore.getState().fetchUsers();
+        const userList = useUserStore.getState().users;
         setHosts(userList);
       } catch (err) {
         console.error("Failed to load hosts for directory", err);
@@ -194,9 +194,7 @@ export const HomePage: React.FC = () => {
                       <p className="text-xs font-medium text-zinc-500 truncate">
                         {host.email || `host${host.id}@example.com`}
                       </p>
-                      <span className="inline-block px-2 py-0.5 mt-1 rounded bg-zinc-100 text-[10px] font-bold text-zinc-700">
-                        Host ID: #{host.id}
-                      </span>
+                     
                     </div>
                   </div>
 
@@ -211,30 +209,13 @@ export const HomePage: React.FC = () => {
                   onClick={() => navigate(`/profile/${host.id}`)}
                   className="w-full py-3 px-4 rounded-xl bg-black group-hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider flex items-center justify-center gap-2 transition-all shadow-sm"
                 >
-                  <span>View Profile & Book Events</span>
+                  <span>View Profile</span>
                   <ChevronRight className="w-4 h-4" />
                 </button>
               </div>
             ))}
           </div>
         )}
-      </section>
-
-      {/* Host CTA Banner */}
-      <section className="bg-zinc-100 rounded-3xl p-8 sm:p-10 border border-zinc-200 flex flex-col sm:flex-row items-center justify-between gap-6">
-        <div className="space-y-1 text-center sm:text-left">
-          <h3 className="text-xl font-extrabold text-black">Are you an Event Host?</h3>
-          <p className="text-xs text-zinc-600">
-            Log in to manage your availability rules, define new event types, and track scheduled bookings.
-          </p>
-        </div>
-
-        <Link
-          to="/login"
-          className="px-6 py-3 rounded-xl bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-md shrink-0 transition-transform hover:scale-105"
-        >
-          Go to Host Workspace
-        </Link>
       </section>
 
     </div>

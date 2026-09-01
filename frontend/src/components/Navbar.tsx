@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { Calendar, User as UserIcon, LogOut, LayoutDashboard, Clock } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
 
 export const Navbar: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUserId, currentUser, setCurrentUserId, fetchUsers } = useAppStore();
+  const { currentUserId, currentUser, setCurrentUserId, fetchUsers } = useUserStore();
 
   const isPublicPage = location.pathname.startsWith('/book') || location.pathname === '/booking-confirmed';
   const isLoginPage = location.pathname === '/login';

@@ -1,21 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { Calendar, AlertCircle, User as UserIcon, ArrowRight, Plus } from 'lucide-react';
-import { useAppStore, type User } from '../store/useAppStore';
-import { api } from '../api/client';
+import { Calendar, AlertCircle } from 'lucide-react';
+import { useUserStore } from '../store/useUserStore';
 
 export const LoginPage: React.FC = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const { currentUserId, createNewUser, setCurrentUserId, users, fetchUsers } = useAppStore();
+  const { currentUserId, fetchUsers, getGoogleAuthUrl } = useUserStore();
 
   const [loadingGoogle, setLoadingGoogle] = useState(false);
   const [errorMsg, setErrorMsg] = useState<string | null>(searchParams.get('error'));
-
-  // Local host form
-  const [hostName, setHostName] = useState('');
-  const [hostEmail, setHostEmail] = useState('');
-  const [creatingHost, setCreatingHost] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -31,9 +25,9 @@ export const LoginPage: React.FC = () => {
     setLoadingGoogle(true);
     setErrorMsg(null);
     try {
-      const res = await api.getGoogleAuthUrl();
-      if (res && res.url) {
-        window.location.href = res.url;
+      const url = await getGoogleAuthUrl();
+      if (url) {
+        window.location.href = url;
       } else {
         throw new Error('Google Auth URL was not returned');
       }
@@ -44,31 +38,10 @@ export const LoginPage: React.FC = () => {
     }
   };
 
-  const handleLocalCreateUser = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!hostName.trim() || !hostEmail.trim()) return;
-
-    setCreatingHost(true);
-    setErrorMsg(null);
-    try {
-      const user = await createNewUser(hostName.trim(), hostEmail.trim());
-      if (user && user.id) {
-        setCurrentUserId(user.id);
-        navigate('/dashboard');
-      } else {
-        setErrorMsg('Failed to create host user account');
-      }
-    } catch (err: any) {
-      setErrorMsg(err.message || 'Failed to create host account');
-    } finally {
-      setCreatingHost(false);
-    }
-  };
-
-  const handleSelectExistingUser = (user: User) => {
-    setCurrentUserId(user.id);
-    navigate('/dashboard');
-  };
+  /* Kept for when local sign-in is re-enabled
+  const handleLocalCreateUser = async (e: React.FormEvent) => { ... };
+  const handleSelectExistingUser = (user: User) => { ... };
+  */
 
   return (
     <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 bg-[#fafafa]">
@@ -130,15 +103,15 @@ export const LoginPage: React.FC = () => {
         </div>
 
         {/* Divider */}
-        <div className="relative flex items-center justify-center">
+        {/* <div className="relative flex items-center justify-center">
           <div className="border-t border-zinc-200 w-full" />
           <span className="bg-white px-3 text-[11px] font-extrabold text-zinc-400 uppercase tracking-widest absolute">
             OR LOCAL HOST SIGN IN
           </span>
-        </div>
+        </div> */}
 
         {/* Method 2: Local Host Sign In / Create */}
-        <form onSubmit={handleLocalCreateUser} className="space-y-4">
+        {/* <form onSubmit={handleLocalCreateUser} className="space-y-4">
           <div>
             <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">
               Host Full Name
@@ -175,10 +148,10 @@ export const LoginPage: React.FC = () => {
             <Plus className="w-4 h-4 text-black" />
             <span>{creatingHost ? 'Creating Account...' : 'Create & Sign In as Host'}</span>
           </button>
-        </form>
+        </form> */}
 
         {/* Existing Host Quick Switcher */}
-        {users.length > 0 && (
+        {/* {users.length > 0 && (
           <div className="pt-2 border-t border-zinc-100 space-y-2">
             <span className="text-[10px] font-extrabold uppercase tracking-wider text-zinc-400 block">
               Quick Switch Existing Host Account
@@ -205,7 +178,7 @@ export const LoginPage: React.FC = () => {
               ))}
             </div>
           </div>
-        )}
+        )} */}
 
       </div>
     </div>

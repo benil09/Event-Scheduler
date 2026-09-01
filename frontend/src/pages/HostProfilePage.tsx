@@ -4,8 +4,9 @@ import {
   Clock, Video, ArrowLeft, Globe,
   ChevronRight, AlertCircle, Sparkles, Star, ShieldCheck, CheckCircle2, Calendar
 } from 'lucide-react';
-import { api } from '../api/client';
-import type { EventType, User } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
+import { apiClient } from '../api/client';
+import type { EventType, User } from '../store/types';
 
 export const HostProfilePage: React.FC = () => {
   const { hostId } = useParams<{ hostId: string }>();
@@ -16,6 +17,7 @@ export const HostProfilePage: React.FC = () => {
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<'All' | '1:1 Call' | 'Priority Sync'>('All');
+  const { fetchUserById, fetchUsers } = useUserStore();
 
   const fetchHostProfileAndEvents = useCallback(async () => {
     if (!hostId || isNaN(Number(hostId))) {
@@ -32,12 +34,11 @@ export const HostProfilePage: React.FC = () => {
       // Fetch Host User Details
       let hostData: User | null = null;
       try {
-        const userRes = await api.getUserById(parsedId);
-        hostData = userRes.data || userRes;
+        hostData = await fetchUserById(parsedId);
       } catch {
         // Fallback: search users list
-        const usersListRes = await api.getUsers();
-        const users = Array.isArray(usersListRes) ? usersListRes : (usersListRes.data || []);
+        await fetchUsers();
+        const users = useUserStore.getState().users;
         hostData = users.find((u: User) => u.id === parsedId) || null;
       }
 
@@ -45,7 +46,7 @@ export const HostProfilePage: React.FC = () => {
         setHost({
           id: hostData.id,
           name: hostData.name || `Host #${parsedId}`,
-          email: hostData.email || `host${parsedId}@example.com`,
+          email: hostData.email || (hostData as any).Email || '',
           avatar: hostData.avatar || '',
           timezone: hostData.timezone || 'UTC',
         });
@@ -58,9 +59,9 @@ export const HostProfilePage: React.FC = () => {
         });
       }
 
-      // Fetch Host Event Types
-      const eventsRes = await api.getEventsByUser(parsedId);
-      const rawEvents = Array.isArray(eventsRes) ? eventsRes : (eventsRes.data || eventsRes.eventTypes || []);
+      // Fetch Host Event Types directly via apiClient for any public host ID
+      const eventsRes = await apiClient.get(`/api/event-types/user/${parsedId}`);
+      const rawEvents = Array.isArray(eventsRes.data) ? eventsRes.data : (eventsRes.data?.data || eventsRes.data?.eventTypes || []);
       
       const mappedEvents: EventType[] = rawEvents
         .filter((e: any) => e.isActive !== false)

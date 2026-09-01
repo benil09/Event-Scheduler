@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { Calendar, User as UserIcon, LogOut, LayoutDashboard, ArrowRight } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
 
 interface PublicLayoutProps {
   children: React.ReactNode;
@@ -9,7 +9,7 @@ interface PublicLayoutProps {
 
 export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
   const location = useLocation();
-  const { currentUserId, currentUser, logout, fetchUsers } = useAppStore();
+  const { currentUserId, currentUser, logout, fetchUsers } = useUserStore();
 
   useEffect(() => {
     if (currentUserId && currentUserId > 0) {

@@ -1,9 +1,9 @@
 import React from 'react';
 import { Navigate, useLocation, useSearchParams } from 'react-router-dom';
-import { useAppStore } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
 
 export const RequireAuth: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const { currentUserId, setGoogleUserProfile } = useAppStore();
+  const { currentUserId, setGoogleUserProfile } = useUserStore();
   const location = useLocation();
   const [searchParams] = useSearchParams();
 

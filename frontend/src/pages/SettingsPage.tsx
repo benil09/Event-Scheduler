@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { Settings, Calendar, Plus, Trash2, CheckCircle, ExternalLink, User as UserIcon } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
+import { useAvailabilityStore } from '../store/useAvailabilityStore';
 import { API_BASE_URL } from '../api/client';
 
 const DAYS_OF_WEEK = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
 export const SettingsPage: React.FC = () => {
-  const { 
-    currentUserId, currentUser, availabilityRules, 
-    fetchAvailabilityRules, addAvailabilityRule, removeAvailabilityRule,
-    fetchUsers, createNewUser 
-  } = useAppStore();
+  const { currentUserId, currentUser, fetchUsers, createNewUser } = useUserStore();
+  const { availabilityRules, fetchAvailabilityRules, addAvailabilityRule, removeAvailabilityRule } = useAvailabilityStore();
 
   const [selectedDay, setSelectedDay] = useState(1); // Monday
   const [startTime, setStartTime] = useState('09:00');

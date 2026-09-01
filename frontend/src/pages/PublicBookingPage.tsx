@@ -1,19 +1,18 @@
 import React, { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Clock, Globe, ChevronLeft, ChevronRight, CheckCircle2, AlertCircle, Video } from 'lucide-react';
-import { api } from '../api/client';
-import type { EventType, User as UserModel } from '../store/useAppStore';
+import { useEventStore } from '../store/useEventStore';
+import { useBookingStore } from '../store/useBookingStore';
+import type { EventType, User as UserModel, SlotItem } from '../store/types';
 
-export interface SlotItem {
-  id: string | number;
-  startAt: string;
-  endAt: string;
-  status: string;
-}
+
+
 
 export const PublicBookingPage: React.FC = () => {
   const { userId, slug } = useParams<{ userId: string; slug: string }>();
   const navigate = useNavigate();
+  const { fetchPublicEventType } = useEventStore();
+  const { createBooking } = useBookingStore();
 
   const [host, setHost] = useState<UserModel | null>(null);
   const [eventType, setEventType] = useState<EventType | null>(null);
@@ -37,8 +36,7 @@ export const PublicBookingPage: React.FC = () => {
     setErrorMsg(null);
     try {
       if (!userId || !slug) return;
-      const res = await api.getPublicEventType(Number(userId), slug);
-      const eventData = res.data || res;
+      const eventData = await fetchPublicEventType(Number(userId), slug);
 
       if (eventData) {
         setEventType({
@@ -82,13 +80,13 @@ export const PublicBookingPage: React.FC = () => {
     setCurrentMonthDate(newD);
   };
 
-  // Filter slots for the chosen date
+  // Filter slots for the chosen date using UTC date comparison
   const filteredSlots = availableSlots.filter(slot => {
     const slotDate = new Date(slot.startAt);
     return (
-      slotDate.getFullYear() === selectedDate.getFullYear() &&
-      slotDate.getMonth() === selectedDate.getMonth() &&
-      slotDate.getDate() === selectedDate.getDate()
+      slotDate.getUTCFullYear() === selectedDate.getFullYear() &&
+      slotDate.getUTCMonth() === selectedDate.getMonth() &&
+      slotDate.getUTCDate() === selectedDate.getDate()
     );
   });
 
@@ -106,14 +104,14 @@ export const PublicBookingPage: React.FC = () => {
         hostId: Number(userId),
       };
 
-      const result = await api.createBooking(bookingPayload);
+      const result = await createBooking(bookingPayload);
 
       const slotStartTime = new Date(selectedSlot.startAt);
-      const formattedTimeStr = `${slotStartTime.toLocaleDateString(undefined, { weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })} at ${slotStartTime.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+      const formattedTimeStr = `${slotStartTime.toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'long', month: 'short', day: 'numeric', year: 'numeric' })} at ${slotStartTime.toLocaleTimeString([], { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false })}`;
 
       navigate('/booking-confirmed', {
         state: {
-          booking: result.data?.booking || result.booking || bookingPayload,
+          booking: result?.data?.booking || result?.booking || bookingPayload,
           hostName: host?.name || `Host #${userId}`,
           eventTitle: eventType.title,
           duration: eventType.duration,
@@ -327,7 +325,7 @@ export const PublicBookingPage: React.FC = () => {
                     <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">
                       {filteredSlots.map((slot) => {
                         const isBooked = slot.status === 'BOOKED' || slot.status === 'BLOCKED';
-                        const startTime = new Date(slot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        const startTime = new Date(slot.startAt).toLocaleTimeString([], { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
                         
                         if (isBooked) {
                           return (
@@ -370,7 +368,7 @@ export const PublicBookingPage: React.FC = () => {
                   <div>
                     <span className="text-[10px] uppercase font-bold text-[#848484] block">Selected Appointment</span>
                     <span className="text-sm font-extrabold">
-                      {new Date(selectedSlot.startAt).toLocaleDateString(undefined, { weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(selectedSlot.startAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                      {new Date(selectedSlot.startAt).toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(selectedSlot.startAt).toLocaleTimeString([], { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false })}
                     </span>
                   </div>
                   <CheckCircle2 className="w-5 h-5 text-emerald-400" />

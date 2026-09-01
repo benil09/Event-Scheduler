@@ -4,7 +4,7 @@ import {
   Calendar, Clock, Share2, Search, Bell, ChevronDown, 
   LogOut, Sliders, Menu, X
 } from 'lucide-react';
-import { useAppStore } from '../store/useAppStore';
+import { useUserStore } from '../store/useUserStore';
 
 interface SidebarLayoutProps {
   children: React.ReactNode;
@@ -13,7 +13,7 @@ interface SidebarLayoutProps {
 export const SidebarLayout: React.FC<SidebarLayoutProps> = ({ children }) => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { currentUser, currentUserId, logout } = useAppStore();
+  const { currentUser, currentUserId, logout } = useUserStore();
   const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 

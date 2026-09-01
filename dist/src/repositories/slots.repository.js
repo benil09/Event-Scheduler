@@ -40,13 +40,17 @@ export async function upsertAvailableSlotRepo(hostId, eventTypeId, startAt, endA
         }
     });
 }
-export async function getFutureBookedOrBlockedSlotsRepo(eventTypeId, fromDate) {
+export async function getAllFutureSlotsForEventRepo(eventTypeId, fromDate) {
     return prisma.slot.findMany({
         where: {
             eventTypeId,
-            startAt: { gte: fromDate },
-            status: { in: ["BOOKED", "BLOCKED"] }
+            startAt: { gte: fromDate }
         }
+    });
+}
+export async function deleteSlotRepo(id) {
+    return prisma.slot.delete({
+        where: { id }
     });
 }
 export async function updateSlotStatusRepo(id, status) {

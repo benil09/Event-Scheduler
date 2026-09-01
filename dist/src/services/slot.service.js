@@ -1,7 +1,7 @@
 import { DateTime } from "luxon";
 import { SLOT_GENERATION_DAYS } from "../config/env.js";
 import { findExceptionByUserInRange, getActiveAvailabilityRulesByUser } from "../repositories/availabilityRule.repository.js";
-import { getAllBookedSlotsByHostInRangeRepo, upsertAvailableSlotRepo, getFutureBookedOrBlockedSlotsRepo, updateSlotStatusRepo } from "../repositories/slots.repository.js";
+import { getAllBookedSlotsByHostInRangeRepo, upsertAvailableSlotRepo, getAllFutureSlotsForEventRepo, deleteSlotRepo } from "../repositories/slots.repository.js";
 import { findActiveEventTypesByHost } from "../repositories/event-type.repository.js";
 import { getUserById } from "../repositories/user.repository.js";
 import { applyExceptionsForDate, overlapsBooked, splitIntoSlots, windowsForWeekdayRule } from "./slot-generation.service.js";
@@ -60,15 +60,13 @@ export async function regenerateHostSlots(input) {
                 await upsertAvailableSlotRepo(input.hostId, event.id, startAt, endAt);
             }
         }
-        const futureSlots = await getFutureBookedOrBlockedSlotsRepo(event.id, from.toJSDate());
-        const existingSlots = new Set();
+        const futureSlots = await getAllFutureSlotsForEventRepo(event.id, from.toJSDate());
         for (const slot of futureSlots) {
             const key = `${slot.eventTypeId}|${slot.startAt.toISOString()}|${slot.endAt.toISOString()}`;
             if (!generatedValidSlotKeys.has(key) && slot.status !== 'BOOKED') {
-                // this slot is no longer valid
-                await updateSlotStatusRepo(slot.id, 'BOOKED');
+                // this slot is no longer valid (e.g. date blocked by exception or rule removed)
+                await deleteSlotRepo(slot.id);
             }
-            existingSlots.add(key);
         }
     }
 }

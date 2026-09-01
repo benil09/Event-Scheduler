@@ -4,6 +4,7 @@ import slug from "slug";
 import { conflict, forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
 import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
+import { regenerateHostSlots } from "./slot.service.js";
 import { prisma } from "../config/database.js";
 
 export async function getEventTypesByUserIdService(hostId: number) {
@@ -129,21 +130,29 @@ export async function getEventTypePublic(userId: number, eventSlug: string) {
         });
     }
 
-    // Cross-reference active non-cancelled bookings to ensure booked slots are properly flagged
+    // Cross-reference active non-cancelled bookings for the HOST across all event types to prevent double-booking
     const activeBookings = await prisma.booking.findMany({
         where: {
-            eventTypeId: eventType.id,
+            hostId: userId,
             status: { notIn: ["CANCELLED"] },
         },
-        select: {
-            slotId: true,
+        include: {
+            slot: true,
         },
     });
 
-    const bookedSlotIds = new Set(activeBookings.map(b => b.slotId));
-
     const updatedSlots = slots.map(slot => {
-        if (bookedSlotIds.has(slot.id)) {
+        const slotStart = new Date(slot.startAt).getTime();
+        const slotEnd = new Date(slot.endAt).getTime();
+
+        const isConflict = activeBookings.some(b => {
+            if (!b.slot) return false;
+            const bStart = new Date(b.slot.startAt).getTime();
+            const bEnd = new Date(b.slot.endAt).getTime();
+            return slotStart < bEnd && slotEnd > bStart;
+        });
+
+        if (isConflict || slot.status === "BOOKED" || slot.status === "BLOCKED") {
             return { ...slot, status: "BOOKED" };
         }
         return slot;
@@ -190,7 +199,8 @@ export async function createEventTypeService(hostId: number, data: CreateEventTy
         try {
             await regenerateHostSlotsWorkflow({ hostId });
         } catch (temporalErr) {
-            console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+            console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+            await regenerateHostSlots({ hostId });
         }
 
         return eventType;
@@ -225,7 +235,8 @@ export async function updateEventTypeService(eventId: number, data: UpdateEventT
     try {
         await regenerateHostSlotsWorkflow({ hostId });
     } catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+        await regenerateHostSlots({ hostId });
     }
     return updatedEvent;
 }
@@ -244,7 +255,8 @@ export async function deleteEventTypeService(eventId: number, hostId: number) {
     try {
         await regenerateHostSlotsWorkflow({ hostId });
     } catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
+        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+        await regenerateHostSlots({ hostId });
     }
     return deletedEvent;
 }

@@ -2,12 +2,24 @@ import { getAvailabilityRulesByUserRepo, getActiveAvailabilityRulesByUser, getAv
 import { forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
 import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
+import { regenerateHostSlots } from "./slot.service.js";
 // Helper function to verify user existence
 async function verifyUserExists(userId) {
     const user = await getUserById(userId);
     if (!user) {
         throw notFound("User not found");
     }
+}
+// Helper function to trigger slot regeneration (Temporal with direct fallback)
+async function triggerSlotRegeneration(userId) {
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    }
+    catch (temporalErr) {
+        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+    }
+    // Always execute direct slot regeneration so DB slots immediately reflect new rules/exceptions
+    await regenerateHostSlots({ hostId: userId });
 }
 // Get all availability rules for a user
 export async function getAvailabilityRulesByUserService(userId) {
@@ -23,12 +35,7 @@ export async function getActiveAvailabilityRulesByUserService(userId) {
 export async function createAvailabilityRuleService(userId, data) {
     await verifyUserExists(userId);
     const result = await createAvailabilityRuleRepo(userId, data);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Update an availability rule
@@ -41,12 +48,7 @@ export async function updateAvailabilityRuleService(id, userId, data) {
         throw forbidden("Unauthorized");
     }
     const result = await updateAvailabilityRuleRepo(id, data);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Delete an availability rule
@@ -59,12 +61,7 @@ export async function deleteAvailabilityRuleService(id, userId) {
         throw forbidden("Unauthorized");
     }
     const result = await removeAvailabilityRuleRepo(id);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Get all exceptions for a user
@@ -76,12 +73,7 @@ export async function getExceptionsByUserService(userId) {
 export async function createExceptionService(userId, data) {
     await verifyUserExists(userId);
     const result = await createException(userId, data);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Update an exception
@@ -94,12 +86,7 @@ export async function updateExceptionService(id, userId, data) {
         throw forbidden("Unauthorized");
     }
     const result = await updateException(id, data);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Delete an exception
@@ -112,12 +99,7 @@ export async function deleteExceptionService(id, userId) {
         throw forbidden("Unauthorized");
     }
     const result = await removeException(id);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId: userId });
-    }
-    catch (temporalErr) {
-        console.warn("Temporal workflow trigger skipped or failed:", temporalErr);
-    }
+    await triggerSlotRegeneration(userId);
     return result;
 }
 // Get exceptions in range

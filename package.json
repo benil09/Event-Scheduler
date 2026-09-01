@@ -17,7 +17,10 @@
     "prisma:studio": "npx prisma studio",
     "prisma:seed": "npx prisma db seed",
     "google:setup": "tsx src/utils/google-setup.ts",
-    "benchmark": "tsx scripts/benchmark.ts"
+    "benchmark": "tsx scripts/benchmark.ts",
+    "db:reset": "tsx scripts/db-reset.ts",
+    "db:reset:seed": "tsx scripts/db-reset.ts --seed",
+    "db:truncate": "tsx scripts/db-reset.ts --skip-migrate"
   },
   "keywords": [],
   "author": "",

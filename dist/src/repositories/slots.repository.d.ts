@@ -19,7 +19,7 @@ export declare function upsertAvailableSlotRepo(hostId: number, eventTypeId: num
     endAt: Date;
     status: string;
 }>;
-export declare function getFutureBookedOrBlockedSlotsRepo(eventTypeId: number, fromDate: Date): Promise<{
+export declare function getAllFutureSlotsForEventRepo(eventTypeId: number, fromDate: Date): Promise<{
     id: string;
     createdAt: Date;
     updatedAt: Date;
@@ -29,6 +29,16 @@ export declare function getFutureBookedOrBlockedSlotsRepo(eventTypeId: number, f
     endAt: Date;
     status: string;
 }[]>;
+export declare function deleteSlotRepo(id: string): Promise<{
+    id: string;
+    createdAt: Date;
+    updatedAt: Date;
+    hostId: number;
+    eventTypeId: number;
+    startAt: Date;
+    endAt: Date;
+    status: string;
+}>;
 export declare function updateSlotStatusRepo(id: string, status: 'AVAILABLE' | 'BOOKED' | 'BLOCKED'): Promise<{
     id: string;
     createdAt: Date;

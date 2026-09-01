@@ -1987,3 +1987,113 @@ Payload: undefined
 Error: Event type not found or inactive
 Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:100:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
 -------------------
+[2026-09-01T05:02:18.984Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:18.993Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:42.700Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:42.706Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:43.349Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:43.352Z] GET /api/public/users/3/event-types/adasasda-sdada
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:02:44.055Z] GET /api/users/3
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getUserByIdService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:18:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:13:22)"
+-------------------
+[2026-09-01T05:02:44.066Z] GET /api/users/3
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getUserByIdService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:18:16)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:13:22)"
+-------------------
+[2026-09-01T05:06:13.146Z] GET /api/availability/rules
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:06:13.154Z] GET /api/availability/exceptions
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:06:13.156Z] GET /api/bookings
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:06:13.174Z] GET /api/availability/exceptions
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:06:13.175Z] GET /api/availability/rules
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:06:13.187Z] GET /api/bookings
+Payload: undefined
+Error: User not found.
+Details: "ApiError: User not found.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:30:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+-------------------
+[2026-09-01T05:09:59.189Z] GET /api/public/users/3/event-types/resume-review
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T05:09:59.204Z] GET /api/public/users/3/event-types/resume-review
+Payload: undefined
+Error: User not found
+Details: "ApiError: User not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:95:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T06:34:22.873Z] DELETE /api/event-types/5
+Payload: undefined
+Error: Event not found
+Details: "ApiError: Event not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at deleteEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:239:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:58:22)"
+-------------------
+[2026-09-01T06:34:26.222Z] DELETE /api/event-types/5
+Payload: undefined
+Error: Event not found
+Details: "ApiError: Event not found\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at deleteEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:239:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async deleteEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:58:22)"
+-------------------
+[2026-09-01T06:34:52.415Z] GET /api/public/users/1/event-types/depression-therapy
+Payload: undefined
+Error: Event type not found or inactive
+Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:101:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T06:34:52.421Z] GET /api/public/users/1/event-types/depression-therapy
+Payload: undefined
+Error: Event type not found or inactive
+Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:101:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T06:36:51.845Z] GET /api/public/users/1/event-types/resume-review
+Payload: undefined
+Error: Event type not found or inactive
+Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:101:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------
+[2026-09-01T06:36:51.850Z] GET /api/public/users/1/event-types/resume-review
+Payload: undefined
+Error: Event type not found or inactive
+Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:101:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
+-------------------

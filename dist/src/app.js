@@ -7,6 +7,7 @@ import { publicEventRouter } from './routes/public-event.routes.js';
 import bookingRouter from './routes/booking.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import googleRouter from './routes/google.routes.js';
+import authRouter from './routes/auth.routes.js';
 app.use(express.json());
 app.use(express.text());
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +28,7 @@ app.get("/health", (_req, res) => {
         timestamp: new Date().toISOString()
     });
 });
+app.use("/api/auth", authRouter);
 app.use("/api/users", userRouter);
 app.use("/api/event-types", eventTypesRouter);
 app.use("/api/availability", availabilityRouter);

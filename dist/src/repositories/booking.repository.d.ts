@@ -81,6 +81,10 @@ export declare function findBookingById(bookingId: number): Promise<({
         slug: string;
         timezone: string;
         id: number;
+        passwordHash: string | null;
+        isVerified: boolean;
+        otpCode: string | null;
+        otpExpiresAt: Date | null;
         createdAt: Date;
         updatedAt: Date;
     };

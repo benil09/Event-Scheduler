@@ -24,6 +24,10 @@ export type UserMinAggregateOutputType = {
     name: string | null;
     slug: string | null;
     timezone: string | null;
+    passwordHash: string | null;
+    isVerified: boolean | null;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -33,6 +37,10 @@ export type UserMaxAggregateOutputType = {
     name: string | null;
     slug: string | null;
     timezone: string | null;
+    passwordHash: string | null;
+    isVerified: boolean | null;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date | null;
     updatedAt: Date | null;
 };
@@ -42,6 +50,10 @@ export type UserCountAggregateOutputType = {
     name: number;
     slug: number;
     timezone: number;
+    passwordHash: number;
+    isVerified: number;
+    otpCode: number;
+    otpExpiresAt: number;
     createdAt: number;
     updatedAt: number;
     _all: number;
@@ -58,6 +70,10 @@ export type UserMinAggregateInputType = {
     name?: true;
     slug?: true;
     timezone?: true;
+    passwordHash?: true;
+    isVerified?: true;
+    otpCode?: true;
+    otpExpiresAt?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -67,6 +83,10 @@ export type UserMaxAggregateInputType = {
     name?: true;
     slug?: true;
     timezone?: true;
+    passwordHash?: true;
+    isVerified?: true;
+    otpCode?: true;
+    otpExpiresAt?: true;
     createdAt?: true;
     updatedAt?: true;
 };
@@ -76,6 +96,10 @@ export type UserCountAggregateInputType = {
     name?: true;
     slug?: true;
     timezone?: true;
+    passwordHash?: true;
+    isVerified?: true;
+    otpCode?: true;
+    otpExpiresAt?: true;
     createdAt?: true;
     updatedAt?: true;
     _all?: true;
@@ -162,6 +186,10 @@ export type UserGroupByOutputType = {
     name: string;
     slug: string;
     timezone: string;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
     _count: UserCountAggregateOutputType | null;
@@ -182,6 +210,10 @@ export type UserWhereInput = {
     name?: Prisma.StringFilter<"User"> | string;
     slug?: Prisma.StringFilter<"User"> | string;
     timezone?: Prisma.StringFilter<"User"> | string;
+    passwordHash?: Prisma.StringNullableFilter<"User"> | string | null;
+    isVerified?: Prisma.BoolFilter<"User"> | boolean;
+    otpCode?: Prisma.StringNullableFilter<"User"> | string | null;
+    otpExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     EventTypes?: Prisma.EventTypesListRelationFilter;
@@ -196,6 +228,10 @@ export type UserOrderByWithRelationInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     timezone?: Prisma.SortOrder;
+    passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder;
+    isVerified?: Prisma.SortOrder;
+    otpCode?: Prisma.SortOrderInput | Prisma.SortOrder;
+    otpExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     EventTypes?: Prisma.EventTypesOrderByRelationAggregateInput;
@@ -213,6 +249,10 @@ export type UserWhereUniqueInput = Prisma.AtLeast<{
     NOT?: Prisma.UserWhereInput | Prisma.UserWhereInput[];
     name?: Prisma.StringFilter<"User"> | string;
     timezone?: Prisma.StringFilter<"User"> | string;
+    passwordHash?: Prisma.StringNullableFilter<"User"> | string | null;
+    isVerified?: Prisma.BoolFilter<"User"> | boolean;
+    otpCode?: Prisma.StringNullableFilter<"User"> | string | null;
+    otpExpiresAt?: Prisma.DateTimeNullableFilter<"User"> | Date | string | null;
     createdAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeFilter<"User"> | Date | string;
     EventTypes?: Prisma.EventTypesListRelationFilter;
@@ -227,6 +267,10 @@ export type UserOrderByWithAggregationInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     timezone?: Prisma.SortOrder;
+    passwordHash?: Prisma.SortOrderInput | Prisma.SortOrder;
+    isVerified?: Prisma.SortOrder;
+    otpCode?: Prisma.SortOrderInput | Prisma.SortOrder;
+    otpExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
     _count?: Prisma.UserCountOrderByAggregateInput;
@@ -244,6 +288,10 @@ export type UserScalarWhereWithAggregatesInput = {
     name?: Prisma.StringWithAggregatesFilter<"User"> | string;
     slug?: Prisma.StringWithAggregatesFilter<"User"> | string;
     timezone?: Prisma.StringWithAggregatesFilter<"User"> | string;
+    passwordHash?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    isVerified?: Prisma.BoolWithAggregatesFilter<"User"> | boolean;
+    otpCode?: Prisma.StringNullableWithAggregatesFilter<"User"> | string | null;
+    otpExpiresAt?: Prisma.DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null;
     createdAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
     updatedAt?: Prisma.DateTimeWithAggregatesFilter<"User"> | Date | string;
 };
@@ -252,6 +300,10 @@ export type UserCreateInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesCreateNestedManyWithoutHostInput;
@@ -266,6 +318,10 @@ export type UserUncheckedCreateInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesUncheckedCreateNestedManyWithoutHostInput;
@@ -279,6 +335,10 @@ export type UserUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUpdateManyWithoutHostNestedInput;
@@ -293,6 +353,10 @@ export type UserUncheckedUpdateInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUncheckedUpdateManyWithoutHostNestedInput;
@@ -307,6 +371,10 @@ export type UserCreateManyInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
 };
@@ -315,6 +383,10 @@ export type UserUpdateManyMutationInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -324,6 +396,10 @@ export type UserUncheckedUpdateManyInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
 };
@@ -333,6 +409,10 @@ export type UserCountOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     timezone?: Prisma.SortOrder;
+    passwordHash?: Prisma.SortOrder;
+    isVerified?: Prisma.SortOrder;
+    otpCode?: Prisma.SortOrder;
+    otpExpiresAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -345,6 +425,10 @@ export type UserMaxOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     timezone?: Prisma.SortOrder;
+    passwordHash?: Prisma.SortOrder;
+    isVerified?: Prisma.SortOrder;
+    otpCode?: Prisma.SortOrder;
+    otpExpiresAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -354,6 +438,10 @@ export type UserMinOrderByAggregateInput = {
     name?: Prisma.SortOrder;
     slug?: Prisma.SortOrder;
     timezone?: Prisma.SortOrder;
+    passwordHash?: Prisma.SortOrder;
+    isVerified?: Prisma.SortOrder;
+    otpCode?: Prisma.SortOrder;
+    otpExpiresAt?: Prisma.SortOrder;
     createdAt?: Prisma.SortOrder;
     updatedAt?: Prisma.SortOrder;
 };
@@ -366,6 +454,15 @@ export type UserScalarRelationFilter = {
 };
 export type StringFieldUpdateOperationsInput = {
     set?: string;
+};
+export type NullableStringFieldUpdateOperationsInput = {
+    set?: string | null;
+};
+export type BoolFieldUpdateOperationsInput = {
+    set?: boolean;
+};
+export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null;
 };
 export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string;
@@ -442,6 +539,10 @@ export type UserCreateWithoutEventTypesInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     AvailabilityRule?: Prisma.AvailabilityRuleCreateNestedManyWithoutUserInput;
@@ -455,6 +556,10 @@ export type UserUncheckedCreateWithoutEventTypesInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     AvailabilityRule?: Prisma.AvailabilityRuleUncheckedCreateNestedManyWithoutUserInput;
@@ -480,6 +585,10 @@ export type UserUpdateWithoutEventTypesInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     AvailabilityRule?: Prisma.AvailabilityRuleUpdateManyWithoutUserNestedInput;
@@ -493,6 +602,10 @@ export type UserUncheckedUpdateWithoutEventTypesInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     AvailabilityRule?: Prisma.AvailabilityRuleUncheckedUpdateManyWithoutUserNestedInput;
@@ -505,6 +618,10 @@ export type UserCreateWithoutAvailabilityRuleInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesCreateNestedManyWithoutHostInput;
@@ -518,6 +635,10 @@ export type UserUncheckedCreateWithoutAvailabilityRuleInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesUncheckedCreateNestedManyWithoutHostInput;
@@ -543,6 +664,10 @@ export type UserUpdateWithoutAvailabilityRuleInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUpdateManyWithoutHostNestedInput;
@@ -556,6 +681,10 @@ export type UserUncheckedUpdateWithoutAvailabilityRuleInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUncheckedUpdateManyWithoutHostNestedInput;
@@ -568,6 +697,10 @@ export type UserCreateWithoutAvailabilityExceptionInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesCreateNestedManyWithoutHostInput;
@@ -581,6 +714,10 @@ export type UserUncheckedCreateWithoutAvailabilityExceptionInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesUncheckedCreateNestedManyWithoutHostInput;
@@ -606,6 +743,10 @@ export type UserUpdateWithoutAvailabilityExceptionInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUpdateManyWithoutHostNestedInput;
@@ -619,6 +760,10 @@ export type UserUncheckedUpdateWithoutAvailabilityExceptionInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUncheckedUpdateManyWithoutHostNestedInput;
@@ -631,6 +776,10 @@ export type UserCreateWithoutSlotsInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesCreateNestedManyWithoutHostInput;
@@ -644,6 +793,10 @@ export type UserUncheckedCreateWithoutSlotsInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesUncheckedCreateNestedManyWithoutHostInput;
@@ -669,6 +822,10 @@ export type UserUpdateWithoutSlotsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUpdateManyWithoutHostNestedInput;
@@ -682,6 +839,10 @@ export type UserUncheckedUpdateWithoutSlotsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUncheckedUpdateManyWithoutHostNestedInput;
@@ -694,6 +855,10 @@ export type UserCreateWithoutBookingsInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesCreateNestedManyWithoutHostInput;
@@ -707,6 +872,10 @@ export type UserUncheckedCreateWithoutBookingsInput = {
     name: string;
     slug: string;
     timezone?: string;
+    passwordHash?: string | null;
+    isVerified?: boolean;
+    otpCode?: string | null;
+    otpExpiresAt?: Date | string | null;
     createdAt?: Date | string;
     updatedAt?: Date | string;
     EventTypes?: Prisma.EventTypesUncheckedCreateNestedManyWithoutHostInput;
@@ -732,6 +901,10 @@ export type UserUpdateWithoutBookingsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUpdateManyWithoutHostNestedInput;
@@ -745,6 +918,10 @@ export type UserUncheckedUpdateWithoutBookingsInput = {
     name?: Prisma.StringFieldUpdateOperationsInput | string;
     slug?: Prisma.StringFieldUpdateOperationsInput | string;
     timezone?: Prisma.StringFieldUpdateOperationsInput | string;
+    passwordHash?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    isVerified?: Prisma.BoolFieldUpdateOperationsInput | boolean;
+    otpCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null;
+    otpExpiresAt?: Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null;
     createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string;
     EventTypes?: Prisma.EventTypesUncheckedUpdateManyWithoutHostNestedInput;
@@ -814,6 +991,10 @@ export type UserSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
     name?: boolean;
     slug?: boolean;
     timezone?: boolean;
+    passwordHash?: boolean;
+    isVerified?: boolean;
+    otpCode?: boolean;
+    otpExpiresAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
     EventTypes?: boolean | Prisma.User$EventTypesArgs<ExtArgs>;
@@ -829,6 +1010,10 @@ export type UserSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     name?: boolean;
     slug?: boolean;
     timezone?: boolean;
+    passwordHash?: boolean;
+    isVerified?: boolean;
+    otpCode?: boolean;
+    otpExpiresAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 }, ExtArgs["result"]["user"]>;
@@ -838,6 +1023,10 @@ export type UserSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
     name?: boolean;
     slug?: boolean;
     timezone?: boolean;
+    passwordHash?: boolean;
+    isVerified?: boolean;
+    otpCode?: boolean;
+    otpExpiresAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 }, ExtArgs["result"]["user"]>;
@@ -847,10 +1036,14 @@ export type UserSelectScalar = {
     name?: boolean;
     slug?: boolean;
     timezone?: boolean;
+    passwordHash?: boolean;
+    isVerified?: boolean;
+    otpCode?: boolean;
+    otpExpiresAt?: boolean;
     createdAt?: boolean;
     updatedAt?: boolean;
 };
-export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "Email" | "name" | "slug" | "timezone" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
+export type UserOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "Email" | "name" | "slug" | "timezone" | "passwordHash" | "isVerified" | "otpCode" | "otpExpiresAt" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>;
 export type UserInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
     EventTypes?: boolean | Prisma.User$EventTypesArgs<ExtArgs>;
     AvailabilityRule?: boolean | Prisma.User$AvailabilityRuleArgs<ExtArgs>;
@@ -876,6 +1069,10 @@ export type $UserPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
         name: string;
         slug: string;
         timezone: string;
+        passwordHash: string | null;
+        isVerified: boolean;
+        otpCode: string | null;
+        otpExpiresAt: Date | null;
         createdAt: Date;
         updatedAt: Date;
     }, ExtArgs["result"]["user"]>;
@@ -1242,6 +1439,10 @@ export interface UserFieldRefs {
     readonly name: Prisma.FieldRef<"User", 'String'>;
     readonly slug: Prisma.FieldRef<"User", 'String'>;
     readonly timezone: Prisma.FieldRef<"User", 'String'>;
+    readonly passwordHash: Prisma.FieldRef<"User", 'String'>;
+    readonly isVerified: Prisma.FieldRef<"User", 'Boolean'>;
+    readonly otpCode: Prisma.FieldRef<"User", 'String'>;
+    readonly otpExpiresAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly createdAt: Prisma.FieldRef<"User", 'DateTime'>;
     readonly updatedAt: Prisma.FieldRef<"User", 'DateTime'>;
 }

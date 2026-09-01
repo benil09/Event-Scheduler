@@ -14,6 +14,14 @@ function normalizeUser(raw: any): User {
   };
 }
 
+interface AuthResponse {
+  success: boolean;
+  message: string;
+  user?: User;
+  email?: string;
+  isUnverified?: boolean;
+}
+
 interface UserState {
   currentUserId: number;
   currentUser: User | null;
@@ -29,6 +37,12 @@ interface UserState {
   fetchUserById: (id: number) => Promise<User | null>;
   createNewUser: (name: string, email: string) => Promise<User | null>;
   getGoogleAuthUrl: () => Promise<string | null>;
+
+  // Host Auth Actions
+  signupHost: (name: string, email: string, password: string) => Promise<AuthResponse>;
+  verifyOtp: (email: string, otp: string) => Promise<AuthResponse>;
+  resendOtp: (email: string) => Promise<AuthResponse>;
+  loginHost: (email: string, password: string) => Promise<AuthResponse>;
 }
 
 const rawSavedId = localStorage.getItem('event_scheduler_user_id');
@@ -161,6 +175,85 @@ export const useUserStore = create<UserState>((set, get) => ({
     } catch (err: any) {
       console.error('Failed to get Google Auth URL', err);
       return null;
+    }
+  },
+
+  // Auth Actions
+  signupHost: async (name: string, email: string, password: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await apiClient.post('/api/auth/signup', { name, email, password });
+      set({ isLoading: false });
+      return {
+        success: true,
+        message: res.data.message || 'Verification code sent to your email.',
+        email: res.data.email || email,
+      };
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to sign up';
+      set({ isLoading: false, error: errorMsg });
+      return { success: false, message: errorMsg };
+    }
+  },
+
+  verifyOtp: async (email: string, otp: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await apiClient.post('/api/auth/verify-otp', { email, otp });
+      const rawUser = res.data.user;
+      if (rawUser && rawUser.id) {
+        const user = normalizeUser(rawUser);
+        get().setCurrentUserId(user.id);
+        if (user.name) localStorage.setItem('event_scheduler_user_name', user.name);
+        if (user.email) localStorage.setItem('event_scheduler_user_email', user.email);
+        set({ isLoading: false, currentUser: user });
+        return { success: true, message: res.data.message || 'Verification successful', user };
+      }
+      set({ isLoading: false });
+      return { success: false, message: 'Invalid response from server' };
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to verify OTP';
+      set({ isLoading: false, error: errorMsg });
+      return { success: false, message: errorMsg };
+    }
+  },
+
+  resendOtp: async (email: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await apiClient.post('/api/auth/resend-otp', { email });
+      set({ isLoading: false });
+      return {
+        success: true,
+        message: res.data.message || 'Verification code resent successfully.',
+      };
+    } catch (err: any) {
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to resend OTP';
+      set({ isLoading: false, error: errorMsg });
+      return { success: false, message: errorMsg };
+    }
+  },
+
+  loginHost: async (email: string, password: string) => {
+    set({ isLoading: true, error: null });
+    try {
+      const res = await apiClient.post('/api/auth/login', { email, password });
+      const rawUser = res.data.user;
+      if (rawUser && rawUser.id) {
+        const user = normalizeUser(rawUser);
+        get().setCurrentUserId(user.id);
+        if (user.name) localStorage.setItem('event_scheduler_user_name', user.name);
+        if (user.email) localStorage.setItem('event_scheduler_user_email', user.email);
+        set({ isLoading: false, currentUser: user });
+        return { success: true, message: res.data.message || 'Login successful', user };
+      }
+      set({ isLoading: false });
+      return { success: false, message: 'Invalid response from server' };
+    } catch (err: any) {
+      const isUnverified = err.response?.data?.details?.isUnverified || false;
+      const errorMsg = err.response?.data?.message || err.message || 'Failed to log in';
+      set({ isLoading: false, error: errorMsg });
+      return { success: false, message: errorMsg, isUnverified, email };
     }
   },
 }));

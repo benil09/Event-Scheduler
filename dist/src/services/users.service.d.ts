@@ -5,6 +5,10 @@ export declare function getAllUsersService(): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }[]>;
@@ -14,6 +18,10 @@ export declare function getUserByIdService(id: number): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -23,6 +31,10 @@ export declare const createUserService: (data: createUserDto) => Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -32,6 +44,10 @@ export declare const updateUserService: (id: number, data: updateUserDto) => Pro
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -41,6 +57,10 @@ export declare const deleteUserService: (id: number) => Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;

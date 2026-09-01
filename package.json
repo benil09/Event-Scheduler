@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build":"prisma generate && tsc",
-    "start":"node --enable-source-maps dist/server.js",
-    "start:worker":"node --enable-source-maps dist/temporal/worker.js",
+    "build": "prisma generate && tsc",
+    "start": "node --enable-source-maps dist/server.js",
+    "start:worker": "node --enable-source-maps dist/temporal/worker.js",
     "dev": "nodemon --watch src --ext ts --exec 'tsx src/server.ts'",
     "dev:worker": "nodemon --watch src --ext ts --exec 'tsx src/temporal/worker.ts'",
     "prisma:format": "npx prisma format",
@@ -33,6 +33,7 @@
     "@temporalio/client": "^1.20.2",
     "@temporalio/worker": "^1.20.2",
     "@temporalio/workflow": "^1.20.2",
+    "bcryptjs": "^3.0.3",
     "dotenv": "^17.4.2",
     "express": "^5.2.1",
     "googleapis": "^173.0.0",
@@ -44,6 +45,7 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "@types/express": "^5.0.6",
     "@types/k6": "^2.0.0",
     "@types/luxon": "^3.7.2",

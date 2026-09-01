@@ -89,6 +89,10 @@ export const UserScalarFieldEnum = {
     name: 'name',
     slug: 'slug',
     timezone: 'timezone',
+    passwordHash: 'passwordHash',
+    isVerified: 'isVerified',
+    otpCode: 'otpCode',
+    otpExpiresAt: 'otpExpiresAt',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
 };

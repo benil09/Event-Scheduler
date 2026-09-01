@@ -552,12 +552,6 @@ export type EventTypesUncheckedUpdateManyWithoutHostNestedInput = {
     updateMany?: Prisma.EventTypesUpdateManyWithWhereWithoutHostInput | Prisma.EventTypesUpdateManyWithWhereWithoutHostInput[];
     deleteMany?: Prisma.EventTypesScalarWhereInput | Prisma.EventTypesScalarWhereInput[];
 };
-export type NullableStringFieldUpdateOperationsInput = {
-    set?: string | null;
-};
-export type BoolFieldUpdateOperationsInput = {
-    set?: boolean;
-};
 export type EventTypesCreateNestedOneWithoutSlotsInput = {
     create?: Prisma.XOR<Prisma.EventTypesCreateWithoutSlotsInput, Prisma.EventTypesUncheckedCreateWithoutSlotsInput>;
     connectOrCreate?: Prisma.EventTypesCreateOrConnectWithoutSlotsInput;

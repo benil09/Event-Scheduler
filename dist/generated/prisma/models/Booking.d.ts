@@ -602,9 +602,6 @@ export type BookingUncheckedUpdateManyWithoutSlotNestedInput = {
     updateMany?: Prisma.BookingUpdateManyWithWhereWithoutSlotInput | Prisma.BookingUpdateManyWithWhereWithoutSlotInput[];
     deleteMany?: Prisma.BookingScalarWhereInput | Prisma.BookingScalarWhereInput[];
 };
-export type NullableDateTimeFieldUpdateOperationsInput = {
-    set?: Date | string | null;
-};
 export type BookingCreateWithoutHostInput = {
     inviteeEmail: string;
     inviteeNote?: string | null;

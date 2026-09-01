@@ -47,6 +47,10 @@ export declare const UserScalarFieldEnum: {
     readonly name: "name";
     readonly slug: "slug";
     readonly timezone: "timezone";
+    readonly passwordHash: "passwordHash";
+    readonly isVerified: "isVerified";
+    readonly otpCode: "otpCode";
+    readonly otpExpiresAt: "otpExpiresAt";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };

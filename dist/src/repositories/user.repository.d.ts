@@ -5,6 +5,10 @@ export declare function getAllUsers(): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }[]>;
@@ -14,6 +18,10 @@ export declare function getUserById(id: number): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 } | null>;
@@ -23,6 +31,10 @@ export declare function findByEmail(email: string): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 } | null>;
@@ -34,6 +46,10 @@ export declare function createUserRep(data: createUserDto & {
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -43,6 +59,10 @@ export declare function updateUserRep(id: number, data: updateUserDto): Promise<
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;
@@ -52,6 +72,10 @@ export declare function deleteUserRep(id: number): Promise<{
     slug: string;
     timezone: string;
     id: number;
+    passwordHash: string | null;
+    isVerified: boolean;
+    otpCode: string | null;
+    otpExpiresAt: Date | null;
     createdAt: Date;
     updatedAt: Date;
 }>;

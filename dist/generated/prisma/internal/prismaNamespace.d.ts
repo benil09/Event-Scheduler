@@ -737,6 +737,10 @@ export declare const UserScalarFieldEnum: {
     readonly name: "name";
     readonly slug: "slug";
     readonly timezone: "timezone";
+    readonly passwordHash: "passwordHash";
+    readonly isVerified: "isVerified";
+    readonly otpCode: "otpCode";
+    readonly otpExpiresAt: "otpExpiresAt";
     readonly createdAt: "createdAt";
     readonly updatedAt: "updatedAt";
 };
@@ -844,6 +848,10 @@ export type StringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 
  */
 export type ListStringFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'String[]'>;
 /**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>;
+/**
  * Reference to a field of type 'DateTime'
  */
 export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>;
@@ -851,10 +859,6 @@ export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel
  * Reference to a field of type 'DateTime[]'
  */
 export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>;
-/**
- * Reference to a field of type 'Boolean'
- */
-export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>;
 /**
  * Reference to a field of type 'Float'
  */

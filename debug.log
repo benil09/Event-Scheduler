@@ -2097,3 +2097,304 @@ Payload: undefined
 Error: Event type not found or inactive
 Details: "ApiError: Event type not found or inactive\n    at notFound (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:16:65)\n    at getEventTypePublic (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:101:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async getPublicEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:69:22)"
 -------------------
+[2026-09-01T17:53:19.863Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:19.907Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:19.933Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:19.981Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:22.385Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:22.430Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:22.448Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:53:22.471Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-01T17:54:01.172Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal ","email":"niilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-01T17:54:03.598Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal ","email":"niilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-01T17:54:04.289Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal ","email":"niilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-01T17:54:04.808Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal ","email":"niilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-01T17:58:17.080Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:23.131Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:23.682Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:24.194Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:24.575Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:25.244Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:25.660Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:26.091Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:26.476Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:26.829Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:27.193Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:27.443Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:27.839Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:28.040Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:28.227Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:28.423Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:28.689Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:28.844Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:29.008Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:29.157Z] POST /api/event-types
+Payload: {"title":"resume review","description":"","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:57.980Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:58.674Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:59.291Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:59.674Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:58:59.908Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:59:00.145Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:59:00.373Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:59:00.609Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------
+[2026-09-01T17:59:00.842Z] POST /api/event-types
+Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"online","durationMin":30,"isActive":true,"slug":"resume-review"}
+Error: An event type with this URL slug already exists. Please use a different title or slug.
+Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
+-------------------

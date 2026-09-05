@@ -1,3 +1,6 @@
 .env
 node_modules
 /generated/prisma
+.k8s-vars.env
+Azure_AKS_Deployment_Guide.html
+.agents/

@@ -124,7 +124,7 @@ export function applyExceptionsForDate(date:DateTime , baseWindows:TimeWindow[] 
     let windows = [... baseWindows]
 
     for(const ex of exceptions){
-        if(ex.type === "BLOCK_FULL_DAY" ){
+        if (ex.type === "BLOCK_FULL_DAY" || ex.type === "UNAVAILABLE") {
             return []; // no slots for this date
         }
 

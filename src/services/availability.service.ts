@@ -21,6 +21,7 @@ import {
 import { forbidden, notFound } from "../utils/api-error.js";
 import { getUserById } from "../repositories/user.repository.js";
 import { regenerateHostSlotsWorkflow } from "../temporal/client.js";
+import { regenerateHostSlots } from "./slot.service.js";
 
 // Helper function to verify user existence
 async function verifyUserExists(userId: number) {
@@ -28,6 +29,17 @@ async function verifyUserExists(userId: number) {
     if (!user) {
         throw notFound("User not found");
     }
+}
+
+// Helper function to trigger slot regeneration (Temporal with direct fallback)
+async function triggerSlotRegeneration(userId: number) {
+    try {
+        await regenerateHostSlotsWorkflow({ hostId: userId });
+    } catch (temporalErr) {
+        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+    }
+    // Always execute direct slot regeneration so DB slots immediately reflect new rules/exceptions
+    await regenerateHostSlots({ hostId: userId });
 }
 
 // Get all availability rules for a user
@@ -46,7 +58,7 @@ export async function getActiveAvailabilityRulesByUserService(userId: number) {
 export async function createAvailabilityRuleService(userId: number, data: CreateAvailabilityRuleDto) {
     await verifyUserExists(userId);
     const result = await createAvailabilityRuleRepo(userId, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 
@@ -60,7 +72,7 @@ export async function updateAvailabilityRuleService(id: number, userId: number, 
         throw forbidden("Unauthorized");
     }
     const result = await updateAvailabilityRuleRepo(id, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 
@@ -74,7 +86,7 @@ export async function deleteAvailabilityRuleService(id: number, userId: number) 
         throw forbidden("Unauthorized");
     }
     const result = await removeAvailabilityRuleRepo(id);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 
@@ -88,7 +100,7 @@ export async function getExceptionsByUserService(userId: number) {
 export async function createExceptionService(userId: number, data: createAvailabilityExceptionDto) {
     await verifyUserExists(userId);
     const result = await createException(userId, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 
@@ -102,7 +114,7 @@ export async function updateExceptionService(id: number, userId: number, data: U
         throw forbidden("Unauthorized");
     }
     const result = await updateException(id, data);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 
@@ -116,7 +128,7 @@ export async function deleteExceptionService(id: number, userId: number) {
         throw forbidden("Unauthorized");
     }
     const result = await removeException(id);
-    await regenerateHostSlotsWorkflow({ hostId: userId });
+    await triggerSlotRegeneration(userId);
     return result;
 }
 

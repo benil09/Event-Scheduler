@@ -6,3 +6,6 @@ dist/
 build/
 .turbo/
 .vercel/
+.k8s-vars.env
+Azure_AKS_Deployment_Guide.html
+.agents/

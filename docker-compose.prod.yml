@@ -1,0 +1,85 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: nil
+      POSTGRES_PASSWORD: Nilkamal09
+      POSTGRES_DB: calenderly-db
+    ports:
+      - "127.0.0.1:5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nil -d calenderly-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:latest
+    container_name: redis_server
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+
+  temporal:
+    image: temporalio/auto-setup:latest
+    container_name: temporal_server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: nil
+      POSTGRES_PWD: Nilkamal09
+      POSTGRES_SEEDS: postgres
+      DYNAMIC_CONFIG_FILE_PATH: /etc/temporal/config/dynamicConfig/development-sql.yaml
+    ports:
+      - "127.0.0.1:7233:7233"
+    volumes:
+      - ./temporal/dynamicConfig:/etc/temporal/config/dynamicConfig
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    container_name: event_scheduler_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      temporal:
+        condition: service_started
+
+  worker:
+    build:
+      context: .
+      dockerfile: dockerfile.worker
+    container_name: event_scheduler_worker
+    restart: unless-stopped
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      temporal:
+        condition: service_started
+
+volumes:
+  postgres_data:
+  redis_data:
+

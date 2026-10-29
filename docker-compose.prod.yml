@@ -49,6 +49,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    pull_policy: build
     image: event-scheduler-app:latest
     container_name: event_scheduler_api
     restart: unless-stopped
@@ -68,6 +69,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    pull_policy: build
     image: event-scheduler-app:latest
     container_name: event_scheduler_worker
     restart: unless-stopped

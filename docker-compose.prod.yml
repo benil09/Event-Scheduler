@@ -65,6 +65,9 @@ services:
         condition: service_started
 
   worker:
+    build:
+      context: .
+      dockerfile: dockerfile
     image: event-scheduler-app:latest
     container_name: event_scheduler_worker
     restart: unless-stopped
@@ -72,8 +75,6 @@ services:
     env_file:
       - .env
     depends_on:
-      api:
-        condition: service_started
       postgres:
         condition: service_healthy
       redis:

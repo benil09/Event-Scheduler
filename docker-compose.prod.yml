@@ -49,6 +49,7 @@ services:
     build:
       context: .
       dockerfile: dockerfile
+    image: event-scheduler-app:latest
     container_name: event_scheduler_api
     restart: unless-stopped
     ports:
@@ -64,14 +65,15 @@ services:
         condition: service_started
 
   worker:
-    build:
-      context: .
-      dockerfile: dockerfile.worker
+    image: event-scheduler-app:latest
     container_name: event_scheduler_worker
     restart: unless-stopped
+    command: ["node", "dist/src/temporal/worker.js"]
     env_file:
       - .env
     depends_on:
+      api:
+        condition: service_started
       postgres:
         condition: service_healthy
       redis:
@@ -82,4 +84,3 @@ services:
 volumes:
   postgres_data:
   redis_data:
-

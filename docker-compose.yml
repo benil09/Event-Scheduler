@@ -2,12 +2,13 @@ services:
   postgres:
     image: postgres:16-alpine
     container_name: postgres_server
+    restart: unless-stopped
     environment:
       POSTGRES_USER: nil
       POSTGRES_PASSWORD: Nilkamal09
       POSTGRES_DB: calenderly-db
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
     healthcheck:
@@ -16,8 +17,19 @@ services:
       timeout: 5s
       retries: 10
 
+  redis:
+    image: redis:latest
+    container_name: redis_server
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - redis_data:/data
+
   temporal:
     image: temporalio/auto-setup:latest
+    container_name: temporal_server
+    restart: unless-stopped
     depends_on:
       postgres:
         condition: service_healthy
@@ -29,36 +41,47 @@ services:
       POSTGRES_SEEDS: postgres
       DYNAMIC_CONFIG_FILE_PATH: /etc/temporal/config/dynamicConfig/development-sql.yaml
     ports:
-      - "7233:7233"
+      - "127.0.0.1:7233:7233"
     volumes:
       - ./temporal/dynamicConfig:/etc/temporal/config/dynamicConfig
 
-  temporal-ui: 
-    image: temporalio/ui:latest
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: event-scheduler-app:latest
+    container_name: event_scheduler_api
+    restart: unless-stopped
+    ports:
+      - "8000:8000"
+    env_file:
+      - .env
     depends_on:
-      - temporal
-    environment:
-      TEMPORAL_ADDRESS: temporal:7233
-      TEMPORAL_CORS_ORIGIN: http://localhost:3000,http://localhost:5173
-    ports:
-      - "8080:8080"
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      temporal:
+        condition: service_started
 
-  redis:
-    image: redis:latest
-    container_name: redis_server
-    ports:
-      - "6379:6379"
-    volumes: 
-      - redis_data:/data
-
-  redisinsight:
-    image: redis/redisinsight:latest
-    container_name: redis_ui
-    ports:
-      - "5540:5540"
+  worker:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: event-scheduler-app:latest
+    container_name: event_scheduler_worker
+    restart: unless-stopped
+    command: ["node", "dist/src/temporal/worker.js"]
+    env_file:
+      - .env
     depends_on:
-      - redis
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_started
+      temporal:
+        condition: service_started
 
 volumes:
-  redis_data:
   postgres_data:
+  redis_data:

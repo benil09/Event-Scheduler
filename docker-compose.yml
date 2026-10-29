@@ -1,49 +1,64 @@
 services:
-    temporal:
-        image: temporalio/auto-setup:latest
-        extra_hosts:
-          - "host.docker.internal:host-gateway"
-        environment:
-          DB: postgres12
-          DB_PORT: 5432
-          POSTGRES_USER: nil
-          POSTGRES_PWD: Nilkamal09
-          POSTGRES_SEEDS: host.docker.internal
-          DYNAMIC_CONFIG_FILE_PATH: /etc/temporal/config/dynamicConfig/development-sql.yaml
-        ports:
-            - "7233:7233"
-        volumes:
-          - ./temporal/dynamicConfig:/etc/temporal/config/dynamicConfig
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_server
+    environment:
+      POSTGRES_USER: nil
+      POSTGRES_PASSWORD: Nilkamal09
+      POSTGRES_DB: calenderly-db
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U nil -d calenderly-db"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
 
-    temporal-ui: 
-        image: temporalio/ui:latest
-        depends_on:
-          - temporal
-        environment:
-          TEMPORAL_ADDRESS: temporal:7233
-          TEMPORAL_CORS_ORIGIN: http://localhost:3000,http://localhost:5173
-        ports:
-            - "8080:8080"
-    mailhog:
-      image: mailhog/mailhog:latest
-      ports:
-        - "8025:8025" # web 
-        - "1025:1025" #smtp
-      
-    redis:
-      image: redis:latest
-      container_name: redis_server
-      ports:
-        - "6379:6379"
-      volumes: 
-        - redis_data:/data
-    redisinsight:
-      image: redis/redisinsight:latest
-      container_name: redis_ui
-      ports:
-        - "5540:5540"
-      depends_on:
-        - redis
+  temporal:
+    image: temporalio/auto-setup:latest
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: nil
+      POSTGRES_PWD: Nilkamal09
+      POSTGRES_SEEDS: postgres
+      DYNAMIC_CONFIG_FILE_PATH: /etc/temporal/config/dynamicConfig/development-sql.yaml
+    ports:
+      - "7233:7233"
+    volumes:
+      - ./temporal/dynamicConfig:/etc/temporal/config/dynamicConfig
+
+  temporal-ui: 
+    image: temporalio/ui:latest
+    depends_on:
+      - temporal
+    environment:
+      TEMPORAL_ADDRESS: temporal:7233
+      TEMPORAL_CORS_ORIGIN: http://localhost:3000,http://localhost:5173
+    ports:
+      - "8080:8080"
+
+  redis:
+    image: redis:latest
+    container_name: redis_server
+    ports:
+      - "6379:6379"
+    volumes: 
+      - redis_data:/data
+
+  redisinsight:
+    image: redis/redisinsight:latest
+    container_name: redis_ui
+    ports:
+      - "5540:5540"
+    depends_on:
+      - redis
 
 volumes:
   redis_data:
+  postgres_data:

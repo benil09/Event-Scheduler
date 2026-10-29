@@ -6,6 +6,25 @@ export async function findUserByEmail(email: string) {
   });
 }
 
+export async function createVerifiedHostUser(data: {
+  name: string;
+  email: string;
+  slug: string;
+  passwordHash: string;
+}) {
+  return await prisma.user.create({
+    data: {
+      name: data.name,
+      Email: data.email,
+      slug: data.slug,
+      passwordHash: data.passwordHash,
+      isVerified: true,
+      otpCode: null,
+      otpExpiresAt: null,
+    },
+  });
+}
+
 export async function createUnverifiedHostUser(data: {
   name: string;
   email: string;

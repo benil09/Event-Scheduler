@@ -97,17 +97,18 @@ export const PublicLayout: React.FC<PublicLayoutProps> = ({ children }) => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-zinc-200 py-8 px-4 sm:px-6 lg:px-8 mt-12">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-semibold">
+      <footer className="bg-white border-t border-zinc-200 py-6 px-4 sm:px-6 lg:px-8 mt-12">
+        <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-zinc-500 font-medium">
           <div className="flex items-center gap-2">
-            <Calendar className="w-4 h-4 text-black" />
+            <div className="w-6 h-6 rounded-lg bg-black text-white flex items-center justify-center font-bold text-xs">
+              <Calendar className="w-3.5 h-3.5" />
+            </div>
             <span className="font-extrabold text-black">EventScheduler</span>
-            <span>— High-Performance Appointment Engine</span>
+            <span>· Instant Meeting Booking</span>
           </div>
           <div className="flex items-center gap-6">
-            <Link to="/" className="hover:text-black transition-colors">Home & Host Directory</Link>
-            <Link to="/login" className="hover:text-black transition-colors">Host Portal Login</Link>
-            <a href="http://localhost:8080" target="_blank" rel="noopener noreferrer" className="hover:text-black transition-colors">Temporal UI</a>
+            <Link to="/" className="hover:text-black transition-colors font-semibold">Explore Hosts</Link>
+            <Link to="/login" className="hover:text-black transition-colors font-semibold">Host Portal</Link>
           </div>
         </div>
       </footer>

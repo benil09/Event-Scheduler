@@ -220,21 +220,32 @@ export const LoginPage: React.FC = () => {
   };
 
   return (
-    <div className="min-h-[85vh] flex items-center justify-center py-12 px-4 bg-[#fafafa] relative">
-      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-zinc-200 shadow-2xl transition-all duration-300">
+    <div className="min-h-[85vh] flex flex-col items-center justify-center py-12 px-4 bg-[#fafafa] relative">
+      <div className="max-w-md w-full mb-4">
+        <button
+          type="button"
+          onClick={() => navigate('/')}
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-black transition-colors cursor-pointer"
+        >
+          <ArrowRight className="w-3.5 h-3.5 rotate-180" />
+          <span>Back to Host Directory</span>
+        </button>
+      </div>
+
+      <div className="max-w-md w-full space-y-6 bg-white p-8 sm:p-10 rounded-3xl border border-zinc-200 shadow-xl transition-all duration-300">
         {/* Header */}
         <div className="text-center space-y-3">
-          <div className="w-14 h-14 rounded-2xl bg-black text-white flex items-center justify-center mx-auto shadow-lg shadow-black/20">
-            <Calendar className="w-7 h-7" />
+          <div className="w-12 h-12 rounded-2xl bg-black text-white flex items-center justify-center mx-auto shadow-md">
+            <Calendar className="w-6 h-6" />
           </div>
           <div>
             <h1 className="text-2xl font-black text-black tracking-tight">
-              {activeTab === 'login' ? 'Host Portal Sign In' : 'Host Portal Sign Up'}
+              {activeTab === 'login' ? 'Host Sign In' : 'Create Host Account'}
             </h1>
             <p className="text-xs font-medium text-zinc-500 mt-1">
               {activeTab === 'login'
-                ? 'Sign in to access your dashboard, availability, and event types.'
-                : 'Create your host account to start scheduling meetings.'}
+                ? 'Sign in to manage your availability, event types, and bookings.'
+                : 'Create your account to start scheduling meetings.'}
             </p>
           </div>
         </div>
@@ -459,8 +470,8 @@ export const LoginPage: React.FC = () => {
               </svg>
               <span>
                 {isGoogleAuthDisabled
-                  ? 'Google Sign-In (Disabled in Production)'
-                  : 'Sign in with Google'}
+                  ? 'Google Sign-In Unavailable'
+                  : 'Continue with Google'}
               </span>
             </>
           )}

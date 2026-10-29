@@ -5,9 +5,6 @@ import { useEventStore } from '../store/useEventStore';
 import { useBookingStore } from '../store/useBookingStore';
 import type { EventType, User as UserModel, SlotItem } from '../store/types';
 
-
-
-
 export const PublicBookingPage: React.FC = () => {
   const { userId, slug } = useParams<{ userId: string; slug: string }>();
   const navigate = useNavigate();
@@ -131,8 +128,8 @@ export const PublicBookingPage: React.FC = () => {
     return (
       <div className="min-h-[60vh] flex items-center justify-center">
         <div className="text-center space-y-3">
-          <div className="w-10 h-10 border-4 border-black border-t-transparent rounded-full animate-spin mx-auto" />
-          <p className="text-xs font-bold text-zinc-500">Loading schedule options...</p>
+          <div className="w-8 h-8 border-3 border-black border-t-transparent rounded-full animate-spin mx-auto" />
+          <p className="text-xs font-semibold text-zinc-500">Loading available times...</p>
         </div>
       </div>
     );
@@ -141,14 +138,14 @@ export const PublicBookingPage: React.FC = () => {
   if (errorMsg && !eventType) {
     return (
       <div className="max-w-md mx-auto py-12 text-center space-y-4">
-        <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
+        <div className="w-12 h-12 rounded-xl bg-rose-50 text-rose-600 flex items-center justify-center mx-auto">
           <AlertCircle className="w-6 h-6" />
         </div>
-        <h3 className="text-lg font-bold text-black">Event Not Found</h3>
+        <h3 className="text-base font-bold text-black">Event Not Found</h3>
         <p className="text-xs text-zinc-500">{errorMsg}</p>
         <button
           onClick={() => navigate(userId ? `/profile/${userId}` : '/')}
-          className="px-4 py-2 rounded-xl bg-black text-white font-bold text-xs"
+          className="px-5 py-2.5 rounded-xl bg-black text-white font-bold text-xs cursor-pointer"
         >
           Return to Host Profile
         </button>
@@ -163,114 +160,109 @@ export const PublicBookingPage: React.FC = () => {
   const firstDayOfWeek = new Date(year, month, 1).getDay();
 
   return (
-    <div className="max-w-5xl mx-auto py-6 px-4 space-y-4">
-      {/* Back to Host Profile Navigation */}
+    <div className="max-w-5xl mx-auto py-6 px-4 sm:px-6 space-y-4">
+      {/* Back button */}
       <div>
         <button
           type="button"
           onClick={() => navigate(userId ? `/profile/${userId}` : '/')}
-          className="inline-flex items-center gap-2 text-xs font-extrabold text-zinc-600 hover:text-black transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-zinc-500 hover:text-black transition-colors cursor-pointer"
         >
           <ChevronLeft className="w-4 h-4" />
-          Back to Host Profile & All Events
+          <span>Back to Host Profile</span>
         </button>
       </div>
 
-      <div className="bg-white rounded-3xl border border-[#e2e2e2] shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[580px]">
+      <div className="bg-white rounded-3xl border border-zinc-200 shadow-sm overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[540px]">
         
-        {/* Left Column: Host Info matching Image 3 */}
-        <div className="md:col-span-5 p-8 bg-white border-r border-[#e2e2e2] flex flex-col justify-between space-y-6">
+        {/* Left Column: Event & Host Info */}
+        <div className="md:col-span-5 p-6 sm:p-8 bg-zinc-50/50 border-r border-zinc-200 flex flex-col justify-between space-y-6">
           <div className="space-y-6">
             
-            {/* Host Avatar with active status green dot */}
+            {/* Host Avatar and Name */}
             <div className="flex items-center gap-3">
               <div className="relative">
                 {host?.avatar ? (
-                  <img src={host.avatar} alt={host.name} className="w-16 h-16 rounded-full object-cover border-2 border-white shadow-md" />
+                  <img src={host.avatar} alt={host.name} className="w-13 h-13 rounded-full object-cover border border-zinc-200 shadow-xs" />
                 ) : (
-                  <div className="w-16 h-16 rounded-full bg-black text-white font-extrabold text-xl flex items-center justify-center border-2 border-white shadow-md">
-                    {host?.name ? host.name.charAt(0).toUpperCase() : 'A'}
+                  <div className="w-13 h-13 rounded-full bg-black text-white font-extrabold text-lg flex items-center justify-center shadow-xs">
+                    {host?.name ? host.name.charAt(0).toUpperCase() : 'H'}
                   </div>
                 )}
-                <div className="w-4 h-4 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0" />
+                <div className="w-3 h-3 rounded-full bg-emerald-500 border-2 border-white absolute bottom-0 right-0" />
               </div>
 
               <div>
-                <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#525252]">HOST</span>
-                <h3 className="text-xl font-extrabold text-black">{host?.name || 'Alexander Reed'}</h3>
+                <span className="text-[10px] font-extrabold uppercase tracking-widest text-zinc-400">HOST</span>
+                <h3 className="text-base font-extrabold text-black leading-tight">{host?.name}</h3>
               </div>
             </div>
 
             {/* Event Title & Description */}
-            <div>
-              <h2 className="text-2xl font-extrabold text-black leading-snug">
-                {eventType?.title || '30 Minute Strategy Session'}
+            <div className="space-y-2">
+              <h2 className="text-xl sm:text-2xl font-extrabold text-black leading-snug">
+                {eventType?.title}
               </h2>
-              <p className="text-xs text-[#525252] leading-relaxed mt-2">
-                {eventType?.description || 'A focused, high-impact session to audit your current workflow, identify bottlenecks, and map out a 90-day execution plan.'}
-              </p>
+              {eventType?.description && (
+                <p className="text-xs text-zinc-600 leading-relaxed">
+                  {eventType.description}
+                </p>
+              )}
             </div>
 
-            {/* Meta Rows matching Image 3 */}
-            <div className="space-y-3 pt-2 text-xs font-semibold text-[#1b1b1b]">
-              <div className="flex items-center gap-3">
-                <Clock className="w-4 h-4 text-[#525252]" />
-                <span>{eventType?.duration} min</span>
+            {/* Metadata Rows */}
+            <div className="space-y-2.5 pt-2 text-xs font-semibold text-zinc-700">
+              <div className="flex items-center gap-2.5">
+                <Clock className="w-4 h-4 text-zinc-400" />
+                <span>{eventType?.duration} minutes</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Video className="w-4 h-4 text-[#525252]" />
+              <div className="flex items-center gap-2.5">
+                <Video className="w-4 h-4 text-zinc-400" />
                 <span>Google Meet</span>
               </div>
-              <div className="flex items-center gap-3">
-                <Globe className="w-4 h-4 text-[#525252]" />
-                <span>GMT +0:00 (London)</span>
+              <div className="flex items-center gap-2.5">
+                <Globe className="w-4 h-4 text-zinc-400" />
+                <span>{host?.timezone || 'UTC'} Timezone</span>
               </div>
-            </div>
-
-            {/* Quote Block matching Image 3 */}
-            <div className="pt-4 border-t border-[#f3f3f3]">
-              <p className="text-xs text-[#525252] italic">
-                "The goal is clarity, not just conversation."
-              </p>
             </div>
           </div>
         </div>
 
-        {/* Right Column: Interactive Date & Slot Selector matching Image 3 */}
-        <div className="md:col-span-7 p-8 bg-white flex flex-col justify-between space-y-6">
+        {/* Right Column: Date & Slot Picker or Guest Form */}
+        <div className="md:col-span-7 p-6 sm:p-8 flex flex-col justify-between space-y-6">
           <div className="space-y-6">
             
             {/* Header */}
-            <div className="flex items-center justify-between border-b border-[#f3f3f3] pb-3">
-              <h3 className="text-xl font-extrabold text-black">
-                {selectedSlot ? 'Confirm Booking Details' : 'Select a Date'}
+            <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
+              <h3 className="text-base font-extrabold text-black">
+                {selectedSlot ? 'Enter Your Details' : 'Select a Date & Time'}
               </h3>
               {selectedSlot && (
                 <button
                   onClick={() => setSelectedSlot(null)}
-                  className="text-xs font-extrabold text-[#525252] hover:text-black flex items-center gap-1"
+                  className="text-xs font-bold text-zinc-500 hover:text-black flex items-center gap-1 cursor-pointer"
                 >
-                  <ChevronLeft className="w-3.5 h-3.5" /> Back to Calendar
+                  <ChevronLeft className="w-3.5 h-3.5" /> Back to times
                 </button>
               )}
             </div>
 
             {!selectedSlot ? (
               <div className="space-y-6">
-                {/* Month Navigator Header matching Image 3 */}
+                {/* Month Navigator Header */}
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-extrabold text-black">{currentMonthName}</span>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <button 
                       onClick={handlePrevMonth}
-                      className="p-1.5 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5] transition-colors" 
+                      className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 transition-colors cursor-pointer" 
                       title="Previous Month"
                     >
                       <ChevronLeft className="w-4 h-4 text-black" />
                     </button>
                     <button 
                       onClick={handleNextMonth}
-                      className="p-1.5 rounded-lg border border-[#e2e2e2] hover:bg-[#F5F5F5] transition-colors" 
+                      className="p-1.5 rounded-lg border border-zinc-200 hover:bg-zinc-100 transition-colors cursor-pointer" 
                       title="Next Month"
                     >
                       <ChevronRight className="w-4 h-4 text-black" />
@@ -278,16 +270,15 @@ export const PublicBookingPage: React.FC = () => {
                   </div>
                 </div>
 
-                {/* Day Headers (S M T W T F S) matching Image 3 */}
-                <div className="grid grid-cols-7 gap-2 text-center text-xs font-bold text-[#525252]">
+                {/* Day Headers (S M T W T F S) */}
+                <div className="grid grid-cols-7 gap-1 text-center text-xs font-bold text-zinc-400">
                   <span>S</span><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span>
                 </div>
 
-                {/* Circular Date Grid matching Image 3 */}
-                <div className="grid grid-cols-7 gap-2 text-center">
-                  {/* Empty offset cells for days before day 1 */}
+                {/* Calendar Days */}
+                <div className="grid grid-cols-7 gap-1 text-center">
                   {Array.from({ length: firstDayOfWeek }).map((_, i) => (
-                    <div key={`offset-${i}`} className="w-9 h-9 mx-auto" />
+                    <div key={`offset-${i}`} className="w-8 h-8 mx-auto" />
                   ))}
 
                   {Array.from({ length: daysInCurrentMonth }, (_, i) => i + 1).map((dayNum) => {
@@ -299,10 +290,10 @@ export const PublicBookingPage: React.FC = () => {
                         key={dayNum}
                         type="button"
                         onClick={() => setSelectedDate(dateObj)}
-                        className={`w-9 h-9 rounded-full mx-auto text-xs font-bold transition-all flex items-center justify-center ${
+                        className={`w-8 h-8 rounded-full mx-auto text-xs font-bold transition-all flex items-center justify-center cursor-pointer ${
                           isSelected
-                            ? 'bg-black text-white shadow-md scale-105'
-                            : 'bg-transparent text-black hover:bg-[#F5F5F5]'
+                            ? 'bg-black text-white shadow-xs'
+                            : 'text-black hover:bg-zinc-100'
                         }`}
                       >
                         {dayNum}
@@ -311,18 +302,18 @@ export const PublicBookingPage: React.FC = () => {
                   })}
                 </div>
 
-                {/* Available Slots Section for Selected Date */}
-                <div className="pt-4 border-t border-[#f3f3f3] space-y-3">
-                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider">
-                    Available Slots for {selectedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}
-                  </label>
+                {/* Available Slots */}
+                <div className="pt-4 border-t border-zinc-100 space-y-3">
+                  <span className="block text-xs font-extrabold text-black uppercase tracking-wider">
+                    Slots for {selectedDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}
+                  </span>
 
                   {filteredSlots.length === 0 ? (
-                    <p className="text-xs text-[#525252] italic">
-                      No slots available for this date. Select another date on the calendar.
+                    <p className="text-xs text-zinc-400 italic">
+                      No open slots on this date. Please select another date.
                     </p>
                   ) : (
-                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5 max-h-48 overflow-y-auto pr-1">
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 max-h-48 overflow-y-auto pr-1">
                       {filteredSlots.map((slot) => {
                         const isBooked = slot.status === 'BOOKED' || slot.status === 'BLOCKED';
                         const startTime = new Date(slot.startAt).toLocaleTimeString([], { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false });
@@ -331,16 +322,9 @@ export const PublicBookingPage: React.FC = () => {
                           return (
                             <div
                               key={slot.id}
-                              className="py-2.5 px-3 rounded-xl text-xs font-bold border border-zinc-200 bg-zinc-100 text-zinc-400 cursor-not-allowed flex items-center justify-between opacity-70 select-none"
-                              title="This slot has already been booked"
+                              className="py-2.5 px-3 rounded-xl text-xs font-bold border border-zinc-100 bg-zinc-50 text-zinc-300 line-through cursor-not-allowed text-center select-none"
                             >
-                              <span className="line-through flex items-center gap-1.5">
-                                <Clock className="w-3.5 h-3.5 text-zinc-400" />
-                                {startTime}
-                              </span>
-                              <span className="text-[10px] font-black uppercase tracking-wider text-rose-600 bg-rose-50 border border-rose-200 px-1.5 py-0.5 rounded">
-                                Booked
-                              </span>
+                              {startTime}
                             </div>
                           );
                         }
@@ -350,9 +334,9 @@ export const PublicBookingPage: React.FC = () => {
                             key={slot.id}
                             type="button"
                             onClick={() => setSelectedSlot(slot)}
-                            className="py-3 px-3 rounded-xl text-xs font-extrabold border border-[#e2e2e2] hover:border-black hover:bg-black hover:text-white text-black transition-all flex items-center justify-center gap-1.5 shadow-2xs group"
+                            className="py-2.5 px-3 rounded-xl text-xs font-bold border border-zinc-200 hover:border-black hover:bg-black hover:text-white text-black transition-all flex items-center justify-center gap-1.5 cursor-pointer group"
                           >
-                            <Clock className="w-3.5 h-3.5 text-[#525252] group-hover:text-white" />
+                            <Clock className="w-3.5 h-3.5 text-zinc-400 group-hover:text-white" />
                             <span>{startTime}</span>
                           </button>
                         );
@@ -362,59 +346,59 @@ export const PublicBookingPage: React.FC = () => {
                 </div>
               </div>
             ) : (
-              /* Guest Booking Form matching Image 3 style */
+              /* Guest Booking Form */
               <form onSubmit={handleBookingSubmit} className="space-y-4">
-                <div className="p-4 rounded-xl bg-black text-white flex items-center justify-between">
+                <div className="p-3.5 rounded-xl bg-zinc-900 text-white flex items-center justify-between text-xs">
                   <div>
-                    <span className="text-[10px] uppercase font-bold text-[#848484] block">Selected Appointment</span>
-                    <span className="text-sm font-extrabold">
+                    <span className="text-[10px] uppercase font-bold text-zinc-400 block">Selected Slot</span>
+                    <span className="font-bold">
                       {new Date(selectedSlot.startAt).toLocaleDateString(undefined, { timeZone: 'UTC', weekday: 'short', month: 'short', day: 'numeric' })} at {new Date(selectedSlot.startAt).toLocaleTimeString([], { timeZone: 'UTC', hour: '2-digit', minute: '2-digit', hour12: false })}
                     </span>
                   </div>
-                  <CheckCircle2 className="w-5 h-5 text-emerald-400" />
+                  <CheckCircle2 className="w-4 h-4 text-emerald-400" />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Your Full Name *</label>
+                  <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1">Your Name *</label>
                   <input
                     type="text"
                     required
-                    placeholder="John Doe"
+                    placeholder="Jane Doe"
                     value={guestName}
                     onChange={(e) => setGuestName(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-sm font-semibold text-black focus:outline-none focus:border-black bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 text-xs font-semibold text-black focus:outline-none focus:border-black bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Email Address *</label>
+                  <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1">Your Email *</label>
                   <input
                     type="email"
                     required
-                    placeholder="john@example.com"
+                    placeholder="jane@example.com"
                     value={guestEmail}
                     onChange={(e) => setGuestEmail(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-sm font-semibold text-black focus:outline-none focus:border-black bg-white"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 text-xs font-semibold text-black focus:outline-none focus:border-black bg-white"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-xs font-extrabold text-black uppercase tracking-wider mb-1">Notes / Objectives</label>
+                  <label className="block text-xs font-bold text-zinc-700 uppercase tracking-wider mb-1">Notes (Optional)</label>
                   <textarea
                     rows={3}
-                    placeholder="Please share anything that will help prepare for our meeting."
+                    placeholder="Anything the host should know before the meeting..."
                     value={guestNotes}
                     onChange={(e) => setGuestNotes(e.target.value)}
-                    className="w-full px-4 py-3 rounded-xl border border-[#e2e2e2] text-xs font-medium text-black focus:outline-none focus:border-black bg-white resize-none"
+                    className="w-full px-3.5 py-2.5 rounded-xl border border-zinc-200 text-xs font-medium text-black focus:outline-none focus:border-black bg-white resize-none"
                   />
                 </div>
 
                 <button
                   type="submit"
                   disabled={submitting}
-                  className="w-full py-3.5 rounded-xl bg-black hover:bg-[#262626] text-white font-extrabold text-xs uppercase tracking-wider shadow-md flex items-center justify-center gap-2 transition-transform hover:scale-[1.01]"
+                  className="w-full py-3 rounded-xl bg-black hover:bg-zinc-800 text-white font-extrabold text-xs uppercase tracking-wider shadow-sm transition-all cursor-pointer disabled:opacity-60"
                 >
-                  {submitting ? 'Processing Booking...' : 'Confirm & Schedule Appointment'}
+                  {submitting ? 'Confirming...' : 'Confirm Booking'}
                 </button>
               </form>
             )}

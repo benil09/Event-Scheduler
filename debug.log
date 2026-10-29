@@ -2398,3 +2398,593 @@ Payload: {"title":"resume review","description":"ewnjrwbwjkrw","locationType":"o
 Error: An event type with this URL slug already exists. Please use a different title or slug.
 Details: "ApiError: An event type with this URL slug already exists. Please use a different title or slug.\n    at conflict (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:20:65)\n    at createEventTypeService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/event-types.service.ts:189:19)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async createEventType (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/event-type.controller.ts:36:22)"
 -------------------
+[2026-09-05T06:38:26.008Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.013Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.025Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.042Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.059Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.066Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.476Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.515Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.529Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.535Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.549Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.572Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.656Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.659Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.670Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.674Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.689Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.706Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.837Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.884Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.889Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.897Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.903Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:26.954Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.000Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.002Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.005Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.010Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.020Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.024Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.131Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.133Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.135Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.149Z] GET /api/bookings
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.155Z] GET /api/availability/rules
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:27.158Z] GET /api/availability/exceptions
+Payload: undefined
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35
+
+   9 
+  10 // find user by id
+  11 export async function getUserById(id:number){
+→ 12    const user = await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:35\n\n   9 \n  10 // find user by id\n  11 export async function getUserById(id:number){\n→ 12    const user = await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getUserById (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:12:17)\n    at async authenticate (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/middlewares/auth.ts:28:16)"
+-------------------
+[2026-09-05T06:38:36.775Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-05T06:38:36.845Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-05T06:38:41.936Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-05T06:38:41.953Z] GET /api/users
+Payload: undefined
+Error: 
+Invalid `prisma.user.findMany()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35
+
+  3 
+  4 // find all users
+  5 export async function getAllUsers(){
+→ 6    const user = await prisma.user.findMany(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findMany()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:35\n\n  3 \n  4 // find all users\n  5 export async function getAllUsers(){\n→ 6    const user = await prisma.user.findMany(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/user.repository.ts:6:17)\n    at async getAllUsersService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/users.service.ts:9:17)\n    at async getAllUsers (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/user.controller.ts:7:22)"
+-------------------
+[2026-09-05T06:39:33.468Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal","email":"nilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-05T06:39:42.262Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal","email":"nilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-05T06:39:42.887Z] POST /api/auth/signup
+Payload: {"name":"Nilkamal","email":"nilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-05T06:42:37.087Z] POST /api/auth/signup
+Payload: {"name":"Test User","email":"test@example.com","password":"password123"}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-05T06:42:37.137Z] POST /api/auth/signup
+Payload: {"name":"Test User","email":"test@example.com","password":"password123"}
+Error: 
+Invalid `prisma.user.findUnique()` invocation in
+/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28
+
+  1 import { prisma } from "../config/database.js";
+  2 
+  3 export async function findUserByEmail(email: string) {
+→ 4   return await prisma.user.findUnique(
+The column `users.passwordHash` does not exist in the current database.
+Details: "PrismaClientKnownRequestError: \nInvalid `prisma.user.findUnique()` invocation in\n/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:28\n\n  1 import { prisma } from \"../config/database.js\";\n  2 \n  3 export async function findUserByEmail(email: string) {\n→ 4   return await prisma.user.findUnique(\nThe column `users.passwordHash` does not exist in the current database.\n    at zr.handleRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:237:13)\n    at zr.handleAndLogRequestError (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:183:12)\n    at zr.request (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/RequestHandler.ts:152:12)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async a (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:963:24)\n    at async findUserByEmail (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/repositories/auth.repository.ts:4:10)\n    at async signupHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:23:24)\n    at async signupController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:13:20)"
+-------------------
+[2026-09-05T06:43:18.300Z] POST /api/auth/login
+Payload: {"email":"test@example.com","password":"password123"}
+Error: Your email is not verified yet. Please verify the OTP sent to your email.
+Details: {"isUnverified":true,"email":"test@example.com"}
+-------------------

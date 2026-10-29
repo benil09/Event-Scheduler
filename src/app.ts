@@ -1,5 +1,5 @@
-import express,{Express} from 'express'
-const app:Express = express();
+import express, { Express } from 'express';
+const app: Express = express();
 import userRouter from './routes/user.routes.js';
 import eventTypesRouter from './routes/event-types.routes.js';
 import availabilityRouter from './routes/availability.routes.js';
@@ -7,17 +7,15 @@ import { publicEventRouter } from './routes/public-event.routes.js';
 import bookingRouter from './routes/booking.routes.js';
 import { errorHandler } from './middlewares/error-handler.js';
 import googleRouter from './routes/google.routes.js';
+import authRouter from './routes/auth.routes.js';
 
-
-
-
-app.use(express.json()); // <-- this will help express to deserialize the request body (JSON) into a JavaScript object (i.e. helps express to read the data that what type of data is coming)
+app.use(express.json());
 app.use(express.text());
-app.use(express.urlencoded());
+app.use(express.urlencoded({ extended: true }));
 
-// CORS Middleware
+// Dynamic CORS Middleware for dev Vite ports
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", "http://localhost:5173");
+    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
     res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-user-id");
     res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
     if (req.method === "OPTIONS") {
@@ -27,20 +25,21 @@ app.use((req, res, next) => {
     next();
 });
 
+app.get("/health", (_req, res) => {
+    res.json({
+        status: 'ok',
+        timestamp: new Date().toISOString()
+    });
+});
 
-
-app.get("/health",(_req,res)=>{
-        res.json({
-            status:'ok',
-            timestamp:new Date().toISOString()
-        })
-})
-
-app.use("/api/users",userRouter);// if the route starts with users the express app will handle it 
+app.use("/api/auth", authRouter);
+app.use("/api/users", userRouter);
 app.use("/api/event-types", eventTypesRouter);
 app.use("/api/availability", availabilityRouter);
 app.use("/api/public", publicEventRouter);
 app.use("/api/bookings", bookingRouter);
+app.use("/api/auth/google", googleRouter);
 app.use("/api/integrations/google", googleRouter);
 app.use(errorHandler);
+
 export { app };

@@ -1,0 +1,108 @@
+import { CreateEventTypeDto, UpdateEventTypeDto } from "../dtos/event-type.dto.js";
+export declare function getEventTypesByUserIdService(hostId: number): Promise<{
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}[]>;
+export declare function getEventTypeByEventIdService(eventId: number): Promise<{
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}>;
+export declare function getEventTypePublic(userId: number, eventSlug: string): Promise<{
+    host: {
+        id: number;
+        name: string;
+        Email: string;
+        timezone: string;
+    };
+    availableSlots: {
+        id: string;
+        createdAt: Date;
+        updatedAt: Date;
+        hostId: number;
+        eventTypeId: number;
+        startAt: Date;
+        endAt: Date;
+        status: string;
+    }[];
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}>;
+export declare function createEventTypeService(hostId: number, data: CreateEventTypeDto): Promise<{
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}>;
+export declare function updateEventTypeService(eventId: number, data: UpdateEventTypeDto, hostId: number): Promise<{
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}>;
+export declare function deleteEventTypeService(eventId: number, hostId: number): Promise<{
+    slug: string;
+    id: number;
+    createdAt: Date;
+    updatedAt: Date;
+    title: string;
+    description: string | null;
+    locationType: string;
+    locationValue: string | null;
+    durationMin: number;
+    isActive: boolean;
+    bufferBeforeMin: number;
+    bufferAfterMin: number;
+    hostId: number;
+}>;
+//# sourceMappingURL=event-types.service.d.ts.map

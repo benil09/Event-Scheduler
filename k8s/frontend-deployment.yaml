@@ -1,0 +1,55 @@
+# ---- Frontend Deployment ----
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: event-scheduler-frontend
+  namespace: event-scheduler
+  labels:
+    app: event-scheduler-frontend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: event-scheduler-frontend
+  template:
+    metadata:
+      labels:
+        app: event-scheduler-frontend
+    spec:
+      imagePullSecrets:
+      - name: acr-secret
+      containers:
+      - name: frontend
+        image: eventscheduleracr24944.azurecr.io/event-scheduler-frontend:v1
+        imagePullPolicy: Always
+        ports:
+        - name: http
+          containerPort: 80
+        resources:
+          requests:
+            cpu: "50m"
+            memory: "64Mi"
+          limits:
+            cpu: "200m"
+            memory: "256Mi"
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 80
+          initialDelaySeconds: 5
+          periodSeconds: 5
+---
+# ---- Frontend Service (Public LoadBalancer) ----
+apiVersion: v1
+kind: Service
+metadata:
+  name: event-scheduler-frontend-service
+  namespace: event-scheduler
+spec:
+  type: LoadBalancer
+  selector:
+    app: event-scheduler-frontend
+  ports:
+  - name: http
+    port: 80
+    targetPort: 80

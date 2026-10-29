@@ -1,0 +1,22 @@
+import 'dotenv/config';
+export declare const PORT: string | number;
+export declare const DATABASE_URL: string | undefined;
+export declare const NODE_ENV: string;
+export declare const SLOT_GENERATION_DAYS: number;
+export declare const TEMPORAL_ADDRESS: string;
+export declare const TEMPORAL_NAMESPACE: string;
+export declare const TEMPORAL_TASK_QUEUE: string;
+export declare const TEMPORAL_ENABLED: boolean;
+export declare const SMTP_HOST: string;
+export declare const SMTP_PORT: number;
+export declare const SMTP_USER: string;
+export declare const SMTP_PASSWORD: string;
+export declare const EMAIL_FROM: string;
+export declare const GOOGLE_CLIENT_ID: string;
+export declare const GOOGLE_CLIENT_SECRET: string;
+export declare const GOOGLE_REDIRECT_URI: string;
+export declare const GOOGLE_SENDER_EMAIL: string;
+export declare const GOOGLE_REFRESH_TOKEN: string;
+export declare const GOOGLE_CALENDAR_ID: string;
+export declare const REDIS_URI: string;
+//# sourceMappingURL=env.d.ts.map

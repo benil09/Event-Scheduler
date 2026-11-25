@@ -13,7 +13,7 @@ RUN npm install
 
 COPY . .
 RUN npx prisma generate
-RUN NODE_OPTIONS="--max-old-space-size=1024" npx tsc
+RUN NODE_OPTIONS="--max-old-space-size=1536" npx tsc
 
 FROM node:22-bookworm-slim AS runner
 

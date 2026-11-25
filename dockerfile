@@ -1,4 +1,4 @@
-FROM node:20-bookworm-slim AS build
+FROM node:22-bookworm-slim AS build
 
 WORKDIR /app
 
@@ -9,13 +9,13 @@ COPY package*.json ./
 COPY tsconfig*.json ./
 COPY prisma ./prisma/
 
-RUN npm ci
+RUN npm install
 
 COPY . .
 RUN npx prisma generate
 RUN NODE_OPTIONS="--max-old-space-size=1024" npx tsc
 
-FROM node:20-bookworm-slim AS runner
+FROM node:22-bookworm-slim AS runner
 
 WORKDIR /app
 ENV NODE_ENV=production
@@ -27,7 +27,7 @@ RUN apt-get update -y && apt-get install -y --no-install-recommends openssl \
 COPY package*.json ./
 COPY prisma ./prisma/
 
-RUN npm ci --omit=dev && npm cache clean --force
+RUN npm install --omit=dev && npm cache clean --force
 
 COPY --from=build /app/dist ./dist
 COPY --from=build /app/generated ./generated

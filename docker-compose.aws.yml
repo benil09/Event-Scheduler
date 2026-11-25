@@ -1,7 +1,6 @@
 # Resource-optimized Docker Compose for AWS Free Tier (t2.micro / t3.micro - 1 GB RAM)
-# By default, Temporal & Worker are disabled (profiles: ["temporal"]) so the entire
-# backend (Postgres + Redis + API) fits comfortably in ~450 MB RAM.
-# The API automatically falls back to direct execution when TEMPORAL_ENABLED=false.
+# Configured for external Postgres (e.g. NeonDB) + local Redis + Node API (~250 MB RAM total).
+# Temporal, Worker, and local Postgres are optional via profiles.
 
 x-logging: &default-logging
   driver: "json-file"
@@ -10,7 +9,10 @@ x-logging: &default-logging
     max-file: "3"
 
 services:
+  # Optional: Only started if using local Postgres instead of NeonDB
+  # (docker compose -f docker-compose.aws.yml --profile local-db up -d)
   postgres:
+    profiles: ["local-db"]
     image: postgres:16-alpine
     container_name: postgres_server
     restart: unless-stopped
@@ -69,8 +71,6 @@ services:
       TEMPORAL_ENABLED: ${TEMPORAL_ENABLED:-false}
       DB_POOL_MAX: ${DB_POOL_MAX:-5}
     depends_on:
-      postgres:
-        condition: service_healthy
       redis:
         condition: service_healthy
     mem_limit: 384m

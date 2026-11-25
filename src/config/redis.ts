@@ -16,3 +16,9 @@ export async function connectRedis() {
         console.log("[Redis]    Redis Connected Successfully");
     }
 }
+
+export async function disconnectRedis() {
+    if (redis.isOpen) {
+        await redis.quit();
+    }
+}

@@ -203,6 +203,11 @@ The API will be available at `http://localhost:8000`.
 
 ## 🔮 Future Implementation & Roadmap
 
+* 🤖 **AI-Powered Intelligent Scheduling Layer**: Detailed technical blueprint available in [AI_INTEGRATION_ROADMAP.md](./AI_INTEGRATION_ROADMAP.md):
+  * **Natural Language Availability Search**: Semantic discovery across thousands of hosts and slots using function calling and vector embeddings/Elasticsearch.
+  * **Temporal-Orchestrated Meeting Briefs**: Async background pipeline preparing structured agendas and tailored host questions before meetings.
+  * **Smart Conflict Resolver & Rescheduler**: Autonomous agent reconciling calendar clashes and recommending alternative slot options to attendees.
+  * **Post-Meeting Summaries**: Automatic transcription processing and action item distribution.
 * 🔐 **OAuth 2.0 for Invitees**: Support social login (Google, Microsoft) for invitees during booking.
 * 👥 **Team & Collective Bookings**: Support multi-host availability matching and round-robin host assignment.
 * 🔔 **Webhook Subscriptions**: Enable real-time webhook notifications for external systems when events are booked, rescheduled, or cancelled.

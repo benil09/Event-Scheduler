@@ -195,13 +195,7 @@ export async function createEventTypeService(hostId: number, data: CreateEventTy
         
         // Auto-generate slots right after creation
         await autoGenerateSlotsIfEmpty(hostId, eventType.id, eventType.durationMin);
-
-        try {
-            await regenerateHostSlotsWorkflow({ hostId });
-        } catch (temporalErr) {
-            console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
-            await regenerateHostSlots({ hostId });
-        }
+        await triggerHostSlotRegeneration(hostId);
 
         return eventType;
     } catch (err: any) {
@@ -209,6 +203,18 @@ export async function createEventTypeService(hostId: number, data: CreateEventTy
             throw conflict("An event type with this URL slug already exists. Please choose a different slug.");
         }
         throw err;
+    }
+}
+
+async function triggerHostSlotRegeneration(hostId: number) {
+    try {
+        const wfId = await regenerateHostSlotsWorkflow({ hostId });
+        if (!wfId) {
+            await regenerateHostSlots({ hostId });
+        }
+    } catch (temporalErr) {
+        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
+        await regenerateHostSlots({ hostId });
     }
 }
 
@@ -231,13 +237,7 @@ export async function updateEventTypeService(eventId: number, data: UpdateEventT
 
     const updatedEvent = await updateEventTypeRepo(eventId, data);
     await autoGenerateSlotsIfEmpty(hostId, updatedEvent.id, updatedEvent.durationMin);
-
-    try {
-        await regenerateHostSlotsWorkflow({ hostId });
-    } catch (temporalErr) {
-        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
-        await regenerateHostSlots({ hostId });
-    }
+    await triggerHostSlotRegeneration(hostId);
     return updatedEvent;
 }
 
@@ -252,11 +252,6 @@ export async function deleteEventTypeService(eventId: number, hostId: number) {
     }
 
     const deletedEvent = await deleteEventTypeRepo(eventId);
-    try {
-        await regenerateHostSlotsWorkflow({ hostId });
-    } catch (temporalErr) {
-        console.warn("Temporal workflow skipped/failed, running direct slot regeneration:", temporalErr);
-        await regenerateHostSlots({ hostId });
-    }
+    await triggerHostSlotRegeneration(hostId);
     return deletedEvent;
 }

@@ -1,7 +1,12 @@
 node_modules
 dist
+generated
+frontend
+scripts
 .env
+.env.*
 .git
 .DS_Store
 *.log
+*.md
 .notes

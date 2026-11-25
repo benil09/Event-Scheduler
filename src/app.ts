@@ -9,15 +9,26 @@ import { errorHandler } from './middlewares/error-handler.js';
 import googleRouter from './routes/google.routes.js';
 import authRouter from './routes/auth.routes.js';
 
-app.use(express.json());
-app.use(express.text());
-app.use(express.urlencoded({ extended: true }));
+app.set("trust proxy", 1);
 
-// Dynamic CORS Middleware for dev Vite ports
+app.use(express.json({ limit: "1mb" }));
+app.use(express.text({ limit: "1mb" }));
+app.use(express.urlencoded({ extended: true, limit: "1mb" }));
+
+const allowedOrigins = (process.env.FRONTEND_URL || "")
+    .split(",")
+    .map((o) => o.trim())
+    .filter(Boolean);
+
+// Dynamic CORS Middleware (allows configured FRONTEND_URL(s) and local dev origins)
 app.use((req, res, next) => {
-    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, x-user-id");
-    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    const origin = req.headers.origin;
+    if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        res.header("Access-Control-Allow-Origin", origin || "*");
+    }
+    res.header("Vary", "Origin");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization, x-user-id");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, PATCH, DELETE, OPTIONS");
     if (req.method === "OPTIONS") {
         res.sendStatus(200);
         return;

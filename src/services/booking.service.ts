@@ -16,18 +16,23 @@ import {
 } from "../temporal/client.js";
 import { sendBookingConfirmationEmail, sendCancellationEmail } from "../mailer/booking.mailer.js";
 import { createGoogleCalenderEvent } from "./googleCalneder.service.js";
+import { regenerateHostSlots } from "./slot.service.js";
 
 // Re-run slot availability function and regenerate slots for that day
 async function triggerSlotRegen(hostId: number, slotStartAt: Date) {
+    const date = slotStartAt.toISOString().split('T')[0];
     try {
-        const date = slotStartAt.toISOString().split('T')[0];
-        await regenerateHostSlotsWorkflow({
+        const wfId = await regenerateHostSlotsWorkflow({
             hostId,
             from: date,
             to: date
         });
+        if (!wfId) {
+            await regenerateHostSlots({ hostId, from: date, to: date });
+        }
     } catch (err) {
-        console.warn("[Temporal] Slot regen workflow skipped/failed:", err);
+        console.warn("Slot regeneration workflow failed, running directly:", err);
+        await regenerateHostSlots({ hostId, from: date, to: date }).catch(console.error);
     }
 }
 

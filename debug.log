@@ -1,0 +1,15 @@
+[2026-11-02T10:37:19.880Z] POST /api/auth/login
+Payload: {"email":"nilkamal0624@gmail.com","password":"@Nilkamal09."}
+Error: Invalid email or password.
+Details: "ApiError: Invalid email or password.\n    at unauthorized (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:18:69)\n    at loginHostService (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/auth.service.ts:334:11)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async loginController (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/auth.controller.ts:43:20)"
+-------------------
+[2026-11-13T09:38:03.687Z] POST /api/bookings
+Payload: {"slotId":"cmvb3yncp004u155o2ms89mc1","inviteeEmail":"nilkamal0624@gmail.com","inviteeNotes":"akjdnka","inviteeName":"hskdhf"}
+Error: Slot is not available
+Details: "ApiError: Slot is not available\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at validateSlotForBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:40:15)\n    at <anonymous> (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:73:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:66:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------
+[2026-11-13T09:38:13.004Z] POST /api/bookings
+Payload: {"slotId":"cmvb3yncp004u155o2ms89mc1","inviteeEmail":"nilkamal0624@gmail.com","inviteeNotes":"akjdnka","inviteeName":"hskdhf"}
+Error: Slot is not available
+Details: "ApiError: Slot is not available\n    at badRequest (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/utils/api-error.ts:15:67)\n    at validateSlotForBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:40:15)\n    at <anonymous> (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:73:22)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)\n    at async Proxy._transactionWithCallback (/Users/nil09/Desktop/Lambda5/Event-Scheduler/node_modules/@prisma/client/src/runtime/getPrismaClient.ts:810:18)\n    at async createBookingOptimistically (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/services/booking.service.ts:66:21)\n    at async createBooking (/Users/nil09/Desktop/Lambda5/Event-Scheduler/src/controllers/booking.controller.ts:9:22)"
+-------------------

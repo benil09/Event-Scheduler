@@ -1,0 +1,119 @@
+# Resource-optimized Docker Compose for AWS Free Tier (t2.micro / t3.micro - 1 GB RAM)
+# By default, Temporal & Worker are disabled (profiles: ["temporal"]) so the entire
+# backend (Postgres + Redis + API) fits comfortably in ~450 MB RAM.
+# The API automatically falls back to direct execution when TEMPORAL_ENABLED=false.
+
+x-logging: &default-logging
+  driver: "json-file"
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: postgres_server
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-nil}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-Nilkamal09}
+      POSTGRES_DB: ${POSTGRES_DB:-calenderly-db}
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=128MB"
+      - "-c"
+      - "max_connections=30"
+      - "-c"
+      - "work_mem=4MB"
+      - "-c"
+      - "maintenance_work_mem=32MB"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    mem_limit: 256m
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-nil} -d ${POSTGRES_DB:-calenderly-db}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis_server
+    restart: unless-stopped
+    command: ["redis-server", "--maxmemory", "64mb", "--maxmemory-policy", "allkeys-lru", "--save", ""]
+    volumes:
+      - redis_data:/data
+    mem_limit: 96m
+    logging: *default-logging
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  api:
+    build:
+      context: .
+      dockerfile: dockerfile
+    image: event-scheduler-app:latest
+    container_name: event_scheduler_api
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8000:8000"
+    env_file:
+      - .env
+    environment:
+      NODE_ENV: production
+      TEMPORAL_ENABLED: ${TEMPORAL_ENABLED:-false}
+      DB_POOL_MAX: ${DB_POOL_MAX:-5}
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    mem_limit: 384m
+    logging: *default-logging
+
+  # Optional: Only enable on instances with >= 2 GB RAM (docker compose -f docker-compose.aws.yml --profile temporal up -d)
+  temporal:
+    profiles: ["temporal"]
+    image: temporalio/auto-setup:latest
+    container_name: temporal_server
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DB: postgres12
+      DB_PORT: 5432
+      POSTGRES_USER: ${POSTGRES_USER:-nil}
+      POSTGRES_PWD: ${POSTGRES_PASSWORD:-Nilkamal09}
+      POSTGRES_SEEDS: postgres
+      DYNAMIC_CONFIG_FILE_PATH: /etc/temporal/config/dynamicConfig/development-sql.yaml
+    volumes:
+      - ./temporal/dynamicConfig:/etc/temporal/config/dynamicConfig
+    logging: *default-logging
+
+  worker:
+    profiles: ["temporal"]
+    image: event-scheduler-app:latest
+    container_name: event_scheduler_worker
+    restart: unless-stopped
+    command: ["node", "--enable-source-maps", "dist/src/temporal/worker.js"]
+    env_file:
+      - .env
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      temporal:
+        condition: service_started
+    mem_limit: 256m
+    logging: *default-logging
+
+volumes:
+  postgres_data:
+  redis_data:

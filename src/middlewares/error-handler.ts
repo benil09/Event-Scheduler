@@ -10,11 +10,13 @@ import path from "path";
 
 
 export function errorHandler(err:Error , _req:Request , res:Response,_next:NextFunction){
-     const logMsg = `[${new Date().toISOString()}] ${_req.method} ${_req.originalUrl}\nPayload: ${JSON.stringify(_req.body)}\nError: ${err.message}\nDetails: ${JSON.stringify((err as any).details || err.stack)}\n-------------------\n`;
-     try {
-         fs.appendFileSync(path.join(process.cwd(), "debug.log"), logMsg);
-     } catch (e) {
-         console.error("Failed to write to debug.log", e);
+     if (NODE_ENV === "development") {
+         const logMsg = `[${new Date().toISOString()}] ${_req.method} ${_req.originalUrl}\nPayload: ${JSON.stringify(_req.body)}\nError: ${err.message}\nDetails: ${JSON.stringify((err as any).details || err.stack)}\n-------------------\n`;
+         try {
+             fs.appendFileSync(path.join(process.cwd(), "debug.log"), logMsg);
+         } catch (e) {
+             console.error("Failed to write to debug.log", e);
+         }
      }
 
      if(err instanceof ApiError){
